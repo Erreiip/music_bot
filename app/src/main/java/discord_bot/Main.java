@@ -14,8 +14,10 @@ import net.dv8tion.jda.api.requests.RestAction;
 
 public class Main {
 
-    private static final String token = "YOUR_BOT_TOKEN";
-    
+    private static final String token = "MTIzMTI0MDY1MDc1NDg4MzYzNg.GuknKo.7KpzcPeKWDrmZEXaI0ol65x02BzbxuHTyqk4Gc";
+
+    public static final String PLAY_OPTION = "url";
+
     public static void main(String[] args) throws LoginException, InterruptedException {
 
         JDA jda = JDABuilder.createDefault(token).build().awaitReady();
@@ -28,13 +30,17 @@ public class Main {
                     System.out.println(command.getName());
                 }
             });
-            
-            /*
-            guild.updateCommands().addCommands(
-                    Commands.slash("fortnite", "Create build fight")
-                            .addOption(OptionType.CHANNEL, "channel", "The channel to create the build fight in", true))
+
+            guild.updateCommands().addCommands
+            (
+                Commands.slash("play", "Play a song in your voice channel")
+                .addOption(OptionType.STRING, PLAY_OPTION, "url or title of the video", true),
+                Commands.slash("skip", "Skip the current song"),
+                Commands.slash("loop", "Set or unset the loop mode")
+            )
                     .queue();
-            */
         }
+        
+        jda.addEventListener(new Kawaine());
     } 
 }

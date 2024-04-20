@@ -14,6 +14,8 @@ plugins {
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
+    maven("https://m2.dv8tion.net/releases")
+    maven ("https://jitpack.io")
 }
 
 dependencies {
@@ -26,14 +28,17 @@ dependencies {
     // https://mvnrepository.com/artifact/org.json/json
     implementation("org.json:json:20090211")
 
-
+    // jda
     implementation("net.dv8tion:JDA:5.0.0-beta.20")
 
+    // google
     implementation("com.google.api-client:google-api-client:1.32.1")
     implementation("com.google.oauth-client:google-oauth-client-jetty:1.23.0")
     implementation("com.google.apis:google-api-services-youtube:v3-rev222-1.25.0")
     implementation("com.google.api-client:google-api-client-jackson2:1.28.1")
-    implementation("dev.arbjerg:lavaplayer:2.1.1")
+
+    // lava player
+    implementation("com.github.idpromnut:lavaplayer:youtube_details_parse_bug-SNAPSHOT")
 }
 
 application {
