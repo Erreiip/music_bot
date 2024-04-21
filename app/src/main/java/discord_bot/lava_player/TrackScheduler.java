@@ -2,10 +2,6 @@ package discord_bot.lava_player;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
-
-import org.checkerframework.checker.units.qual.A;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
@@ -60,6 +56,14 @@ public class TrackScheduler extends AudioEventAdapter {
         this.queue.add(currentTrack);
     }
 
+    public AudioTrack getCurrentTrack() {
+        return this.currentTrack;
+    }
+
+    public List<AudioTrack> getQueue() {
+        return this.queue;
+    }
+
     @Override
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
 
@@ -73,14 +77,16 @@ public class TrackScheduler extends AudioEventAdapter {
         return setLoop(!this.loop);
     }
 
-    public boolean setLoop( boolean state) {
+    public boolean setLoop(boolean state) {
+        
+        boolean change = this.loop != state;
         this.loop = state;
 
-        if (this.loop) {
+        if (change && this.loop) {
             if (this.currentTrack != null) {
                 this.queue.add(0, this.currentTrack);
             }
-        } else {
+        } else if ( change && !this.loop) {
             if (this.currentTrack != null) {
                 this.queue.remove(0);
             }

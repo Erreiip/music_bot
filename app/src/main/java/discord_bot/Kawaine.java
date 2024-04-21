@@ -3,7 +3,7 @@ package discord_bot;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
@@ -41,6 +41,8 @@ public class Kawaine extends ListenerAdapter {
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
 
         if (!event.isFromGuild()) return;
+        
+        GuildMusicManager musicManager = this.getGuildAudioPlayer(event.getGuild());
 
         if (event.getName().equals("play")) {
 
@@ -71,7 +73,6 @@ public class Kawaine extends ListenerAdapter {
         
         if (event.getName().equals("loop")) {
 
-
             boolean loop = this.getGuildAudioPlayer(event.getGuild()).scheduler.switchLoop();
             event.reply("Loop is now " + (loop ? "enabled" : "disabled")).queue();
         }
@@ -84,10 +85,44 @@ public class Kawaine extends ListenerAdapter {
             event.reply("Stopped the player and left the voice channel.").queue();
         }
 
-        if ( event.getName().equals("last") ) {
+        if (event.getName().equals("last")) {
 
-            GuildMusicManager musicManager = this.getGuildAudioPlayer(event.getGuild());
             musicManager.scheduler.addLastTrack();
+
+            AudioTrack currentTrack = musicManager.scheduler.getCurrentTrack();
+
+            event.reply("Added the last played song to the queue: " + currentTrack.getInfo().title).queue();
+        }
+
+        if (event.getName().equals("queue")) {
+
+            List<AudioTrack> queue = musicManager.scheduler.getQueue();
+            AudioTrack currentTrack = musicManager.scheduler.getCurrentTrack();
+
+            if (queue.isEmpty() && currentTrack == null) {
+                event.reply("The queue is empty.").queue();
+                return;
+            }
+
+            StringBuilder builder = new StringBuilder();
+
+            if (currentTrack != null) {
+                builder.append("Current track: ").append(currentTrack.getInfo().title).append("\n");
+            }
+
+            for (int i = 0; i < queue.size(); i++) {
+                AudioTrack track = queue.get(i);
+                builder.append(i + 1).append(". ").append(track.getInfo().title).append("\n");
+            }
+
+            event.reply(builder.toString()).queue();
+        }
+        
+        if (event.getName().equals("pause")) {
+
+            musicManager.player.setPaused(!musicManager.player.isPaused());
+
+            event.reply("Player is now " + (musicManager.player.isPaused() ? "paused" : "resumed")).queue();
         }
     }
     
