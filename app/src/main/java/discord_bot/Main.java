@@ -38,7 +38,8 @@ public class Main {
                 Commands.slash("skip", "Skip the current song"),
                 Commands.slash("loop", "Set or unset the loop mode"),
                 Commands.slash("queue", "Display the queue"),
-                Commands.slash("stop", "Stop the music")
+                Commands.slash("stop", "Stop the music"),
+                Commands.slash("last", "Add last played song to the queue")
             )
                     .queue();
         }
