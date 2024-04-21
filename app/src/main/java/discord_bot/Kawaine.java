@@ -15,6 +15,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
 import discord_bot.common.Couple;
+import discord_bot.lava_player.AudioLoadResultHandlerImpl;
 import discord_bot.lava_player.GuildMusicManager;
 import discord_bot.youtube.ApiYoutube;
 import net.dv8tion.jda.api.entities.Guild;
@@ -40,11 +41,6 @@ public class Kawaine extends ListenerAdapter {
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
 
         if (!event.isFromGuild()) return;
-        
-        Guild guild = event.getGuild();
-
-        if (guild != event.getMember().getGuild())
-            System.out.println("shesh");
 
         if (event.getName().equals("play")) {
 
@@ -52,7 +48,8 @@ public class Kawaine extends ListenerAdapter {
 
             if (patternURL.matcher(songIdentifier).matches()) {
 
-                this.joinChannel(event.getMember());
+                AudioManager audioChannel = this.joinChannel(event);
+                if (audioChannel == null) return;
 
                 this.addSong(event, songIdentifier, playerManager);
                 return;
@@ -60,28 +57,50 @@ public class Kawaine extends ListenerAdapter {
 
             Couple<String, String> video = this.queryByName(songIdentifier);
             String URL = video.second;
-            String title = video.first;
 
-            this.joinChannel(event.getMember());
+            AudioManager audioChannel = this.joinChannel(event);
+            if (audioChannel == null) return;
 
             this.addSong(event, URL, playerManager);
         }
 
         if (event.getName().equals("skip")) {
-                
+
             this.skipTrack(event);
+        }
+        
+        if (event.getName().equals("loop")) {
+
+
+            boolean loop = this.getGuildAudioPlayer(event.getGuild()).scheduler.switchLoop();
+            event.reply("Loop is now " + (loop ? "enabled" : "disabled")).queue();
+        }
+        
+        if (event.getName().equals("stop")) {
+
+            AudioManager audioManager = event.getMember().getGuild().getAudioManager();
+            audioManager.closeAudioConnection();
+
+            event.reply("Stopped the player and left the voice channel.").queue();
+        }
+
+        if ( event.getName().equals("last") ) {
+
+            GuildMusicManager musicManager = this.getGuildAudioPlayer(event.getGuild());
+            musicManager.scheduler.addLastTrack();
         }
     }
     
-    private AudioManager joinChannel(Member member) {
+    private AudioManager joinChannel(SlashCommandInteractionEvent event) {
 
-        AudioChannel memberChannel = member.getVoiceState().getChannel();
+        AudioChannel memberChannel = event.getMember().getVoiceState().getChannel();
 
         if (memberChannel == null) {
-            fatalMessages("You are not in a voice channel.");
+            event.reply("You are not in a voice channel.");
+            return null;
         }
 
-        AudioManager audioManager = member.getGuild().getAudioManager();
+        AudioManager audioManager = event.getMember().getGuild().getAudioManager();
         audioManager.openAudioConnection(memberChannel);
 
         return audioManager;
@@ -91,53 +110,22 @@ public class Kawaine extends ListenerAdapter {
 
         GuildMusicManager musicManager = getGuildAudioPlayer(event.getGuild());
 
-        playerManager.loadItemOrdered(musicManager, songIdentifier, new AudioLoadResultHandler() {
-            @Override
-            public void trackLoaded(AudioTrack track) {
+        AudioLoadResultHandler handler = new AudioLoadResultHandlerImpl(musicManager, songIdentifier, this, event);
 
-                event.reply("Adding to queue " + track.getInfo().title).queue();
-
-                play(event.getMember(), musicManager, track);
-            }
-
-            @Override
-            public void playlistLoaded(AudioPlaylist playlist) {
-
-                AudioTrack firstTrack = playlist.getSelectedTrack();
-
-                if (firstTrack == null) {
-                firstTrack = playlist.getTracks().get(0);
-                }
-
-                event.reply("Adding to queue " + firstTrack.getInfo().title + " (first track of playlist " + playlist.getName() + ")").queue();
-
-                play(event.getMember(), musicManager, firstTrack);
-            }
-
-            @Override
-            public void noMatches() {
-
-                event.reply("Nothing found by " + songIdentifier).queue();
-            }
-
-            @Override
-            public void loadFailed(FriendlyException exception) {
-
-                event.reply("Could not play: " + exception.getMessage()).queue();
-                exception.printStackTrace();
-            }
-        });
+        playerManager.loadItemOrdered(musicManager, songIdentifier, handler);
     }
 
-    private void play(Member member, GuildMusicManager musicManager, AudioTrack track) {
-        joinChannel(member);
+    public void play(SlashCommandInteractionEvent event, GuildMusicManager musicManager, AudioTrack track) {
+        joinChannel(event);
 
         musicManager.scheduler.queue(track);
     }
     
     private void skipTrack(SlashCommandInteractionEvent event) {
 
-        GuildMusicManager musicManager = getGuildAudioPlayer(event.getGuild());    
+        GuildMusicManager musicManager = getGuildAudioPlayer(event.getGuild());
+           
+        musicManager.scheduler.setLoop(false);
         musicManager.scheduler.nextTrack();
     
         event.reply("Skipped to next track.").queue();

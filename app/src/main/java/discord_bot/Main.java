@@ -36,7 +36,9 @@ public class Main {
                 Commands.slash("play", "Play a song in your voice channel")
                 .addOption(OptionType.STRING, PLAY_OPTION, "url or title of the video", true),
                 Commands.slash("skip", "Skip the current song"),
-                Commands.slash("loop", "Set or unset the loop mode")
+                Commands.slash("loop", "Set or unset the loop mode"),
+                Commands.slash("queue", "Display the queue"),
+                Commands.slash("stop", "Stop the music")
             )
                     .queue();
         }
