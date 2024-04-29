@@ -1,6 +1,5 @@
 package discord_bot;
 
-import java.lang.StackWalker.Option;
 import java.util.List;
 
 import javax.security.auth.login.LoginException;
