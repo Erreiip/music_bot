@@ -1,5 +1,6 @@
 package discord_bot;
 
+import java.lang.StackWalker.Option;
 import java.util.List;
 
 import javax.security.auth.login.LoginException;
@@ -14,9 +15,41 @@ import net.dv8tion.jda.api.requests.RestAction;
 
 public class Main {
 
-    private static final String token = "MTIzMTI0MDY1MDc1NDg4MzYzNg.GuknKo.7KpzcPeKWDrmZEXaI0ol65x02BzbxuHTyqk4Gc";
+    //private static final String token = "MTIzMTI0MDY1MDc1NDg4MzYzNg.GuknKo.7KpzcPeKWDrmZEXaI0ol65x02BzbxuHTyqk4Gc";
+    private static final String token = "MTIzNDU0OTc4MDUwNDY0NTcwNQ.GTovkH.vuuCrG9oDdY20J3WN0cE2MFB8yXuQ67h3nIOnk"; // debug
 
-    public static final String PLAY_OPTION = "url";
+    public static final String PLAY = "play";
+    public static final String PLAY_OPTION_URL = "url";
+    public static final String PLAY_OPTION_SPEED = "speed";
+
+    public static final String PLAYLIST_RECORD = "playlist_record";
+    public static final String PLAYLIST_RECORD_OPTION_NAME = "name";
+
+    public static final String PLAYLIST_LOAD = "playlist_load";
+    public static final String PLAYLIST_LOAD_OPTION_NAME = "name";
+
+    public static final String PLAYLISTS = "playlists";
+
+    public static final String PLAYLISTS_SEE = "playlists_see";
+    public static final String PLAYLISTS_SEE_OPTION_NAME = "name";
+
+    public static final String PLAYLIST_CREATE = "playlist_create";
+    public static final String PLAYLIST_CREATE_OPTION_NAME = "name";
+
+    public static final String PLAYLIST_ADD = "playlist_add";
+    public static final String PLAYLIST_REMOVE = "playlist_remove";
+    public static final String PLAYLIST_ADD_REMOVE_OPTION_NAME = "name";
+    public static final String PLAYLIST_ADD_OPTION_URL = "url";
+    public static final String PLAYLIST_REMOVE_OPTION_TITLE = "title";
+
+    public static final String SKIP = "skip";
+    public static final String LOOP = "loop";
+    public static final String QUEUE = "queue";
+    public static final String STOP = "stop";
+    public static final String LAST = "last";
+    public static final String PAUSE = "pause";    
+    public static final String PLAYLIST_SAVE = "playlist_save";
+    public static final String CLEAR_QUEUE = "clear_queue";
 
     public static void main(String[] args) throws LoginException, InterruptedException {
 
@@ -27,25 +60,53 @@ public class Main {
             RestAction<List<Command>> commands = guild.retrieveCommands(true);
             commands.submit().thenAccept(registeredCommands -> {
                 for (Command command : registeredCommands) {
-                    System.out.println(command.getName());
+                    // faire des choses
                 }
             });
-
+            
             guild.updateCommands().addCommands
             (
-                Commands.slash("play", "Play a song in your voice channel")
-                .addOption(OptionType.STRING, PLAY_OPTION, "url or title of the video", true),
-                Commands.slash("skip", "Skip the current song"),
-                Commands.slash("loop", "Set or unset the loop mode"),
-                Commands.slash("queue", "Display the queue"),
-                Commands.slash("stop", "Stop the music"),
-                Commands.slash("last", "Add last played song to the queue"),
-                Commands.slash("pause", "Pause the music"),
-                Commands.slash("playlist_record", "Record all the music added")
+                Commands.slash(PLAY, "Play a song in your voice channel")
+                    .addOption(OptionType.STRING, PLAY_OPTION_URL, "url or title of the video", true)
+                    .addOption(OptionType.STRING, PLAY_OPTION_SPEED, "speed of the song", false),
+                Commands.slash(SKIP, "Skip the current song"),
+                Commands.slash(LOOP, "Set or unset the loop mode"),
+                Commands.slash(QUEUE, "Display the queue"),
+                Commands.slash(STOP, "Stop the music"),
+                Commands.slash(LAST, "Add last played song to the queue"),
+                Commands.slash(PAUSE, "Pause the music"),
+                Commands.slash(PLAYLIST_RECORD, "Record all the music added")
+                    .addOption(OptionType.STRING, PLAYLIST_RECORD_OPTION_NAME, "name of the playlist", true),
+                Commands.slash(PLAYLIST_SAVE, "Save the current playlist"),
+                Commands.slash(CLEAR_QUEUE, "Clear the queue"),
+                Commands.slash(PLAYLIST_LOAD, "Load a playlist")
+                    .addOption(OptionType.STRING, PLAYLIST_LOAD_OPTION_NAME, "name of the playlist", true),
+                Commands.slash(PLAYLISTS, "Display all the playlists"),
+                Commands.slash(PLAYLISTS_SEE, "Display a playlist")
+                    .addOption(OptionType.STRING, PLAYLISTS_SEE_OPTION_NAME, "name of the playlist", true),
+                Commands.slash(PLAYLIST_ADD, "Add a song to a playlist")
+                    .addOption(OptionType.STRING, PLAYLIST_ADD_REMOVE_OPTION_NAME, "name of the playlist", true)
+                    .addOption(OptionType.STRING, PLAYLIST_ADD_OPTION_URL, "url or title of the video", true),
+                Commands.slash(PLAYLIST_REMOVE, "Remove a song from a playlist")
+                    .addOption(OptionType.STRING, PLAYLIST_ADD_REMOVE_OPTION_NAME, "name of the playlist", true)
+                    .addOption(OptionType.STRING, PLAYLIST_REMOVE_OPTION_TITLE, "title or index of the video", true)
             )
                     .queue();
         }
         
-        jda.addEventListener(new Kawaine());
+        Kawaine kawaine = new Kawaine();
+        jda.addEventListener(kawaine);
+        jda.addEventListener(new ButtonListener(kawaine));
     } 
+
+    public static boolean isInteger(String s) {
+
+        try {
+            Integer.parseInt(s);
+        } catch (NumberFormatException e) {
+            return false;
+        }
+
+        return true;
+    }
 }

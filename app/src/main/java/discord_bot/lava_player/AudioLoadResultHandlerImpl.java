@@ -5,30 +5,30 @@ import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
-import discord_bot.Kawaine;
+import discord_bot.common.IProcessAudio;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 public class AudioLoadResultHandlerImpl implements AudioLoadResultHandler {
 
     private final GuildMusicManager musicManager;
     private final String songIdentifier;
-    private final Kawaine kawai;
+    private final IProcessAudio callback;
     private final SlashCommandInteractionEvent event;
+    private final Float speed;
 
-    public AudioLoadResultHandlerImpl(GuildMusicManager musicManager, String songIdentifier, Kawaine kawai, SlashCommandInteractionEvent event) {
+    public AudioLoadResultHandlerImpl(GuildMusicManager musicManager, String songIdentifier, IProcessAudio callback, SlashCommandInteractionEvent event, Float speed) {
 
         this.musicManager = musicManager;
         this.songIdentifier = songIdentifier;
-        this.kawai = kawai;
+        this.callback = callback;
         this.event = event;
+        this.speed = speed;
     }
 
     @Override
     public void trackLoaded(AudioTrack track) {
 
-        event.reply("Adding to queue " + track.getInfo().title).queue();
-
-        kawai.play(event, musicManager, track);
+        callback.onTrackGet(event, musicManager, track, this.speed);
     }
 
     @Override
@@ -40,9 +40,7 @@ public class AudioLoadResultHandlerImpl implements AudioLoadResultHandler {
             firstTrack = playlist.getTracks().get(0);
         }
 
-        event.reply("Adding to queue " + firstTrack.getInfo().title + " (first track of playlist " + playlist.getName() + ")").queue();
-
-        kawai.play(event, musicManager, firstTrack);
+        callback.onTrackGet(event, musicManager, firstTrack, this.speed);
     }
 
     @Override

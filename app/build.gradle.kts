@@ -16,6 +16,7 @@ repositories {
     mavenCentral()
     maven("https://m2.dv8tion.net/releases")
     maven ("https://jitpack.io")
+    jcenter()
 }
 
 dependencies {
@@ -39,6 +40,8 @@ dependencies {
 
     // lava player
     implementation("com.github.idpromnut:lavaplayer:youtube_details_parse_bug-SNAPSHOT")
+    implementation("com.github.natanbc:lavadsp:0.7.7")
+    implementation("com.github.JustRed23:lavadsp:0.7.7")
 }
 
 application {

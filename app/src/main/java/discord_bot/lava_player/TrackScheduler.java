@@ -1,59 +1,75 @@
 package discord_bot.lava_player;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import com.github.natanbc.lavadsp.timescale.TimescalePcmAudioFilter;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
+import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 
+import discord_bot.common.Couple;
+
 public class TrackScheduler extends AudioEventAdapter {
 
     private final AudioPlayer player;
-    private final List<AudioTrack> queue;
+    private final AudioPlayer secondPlayer;
+    private final List<Couple<AudioTrack, Float>> queue;
     private boolean loop;
-    private AudioTrack currentTrack;
 
-    public TrackScheduler(AudioPlayer player) {
+    private AudioTrack currentTrack;
+    private Float currentTrackSpeed;
+
+    public TrackScheduler(AudioPlayer player, AudioPlayer secondPlayer) {
 
         this.player = player;
+        this.secondPlayer = secondPlayer;
         this.loop = false;
+
         this.queue = new ArrayList<>();
     }
 
-    public void queue(AudioTrack track) {
+    public void queue(AudioTrack track, Float speed) {
 
         if (!player.startTrack(track, true)) {
-            queue.add(track);
+            queue.add(new Couple<AudioTrack, Float>(track, speed));
             return;
         }
 
-        this.currentTrack = track.makeClone();
+        changePlayerSpeed(speed);
 
-        // if this is the only one track
-        if ( this.loop ) this.queue.add(this.currentTrack);
+        this.currentTrack = track.makeClone();
+        this.currentTrackSpeed = speed;
     }
 
     public void nextTrack() {
 
-        if (queue.isEmpty()) {
-            player.stopTrack();
+        if (queue.isEmpty() && ! this.loop) {
+            this.player.stopTrack();
             return;
         }
 
-        this.currentTrack = queue.get(0).makeClone();
+        if (this.loop) {
 
-        player.startTrack(this.currentTrack, false);
+            this.currentTrack = this.currentTrack.makeClone();
+        } else {
 
-        if (!this.loop) {
-            this.queue.remove(0);
+            Couple<AudioTrack, Float> queue = this.queue.remove(0);
+
+            this.currentTrack = queue.first.makeClone();
+            this.currentTrackSpeed = queue.second;
         }
+        
+        changePlayerSpeed(currentTrackSpeed);
+        player.startTrack(this.currentTrack, false);
     }
     
     public void addLastTrack() {
 
-        this.queue.add(currentTrack);
+        this.queue(currentTrack, currentTrackSpeed);
     }
 
     public AudioTrack getCurrentTrack() {
@@ -61,7 +77,30 @@ public class TrackScheduler extends AudioEventAdapter {
     }
 
     public List<AudioTrack> getQueue() {
-        return this.queue;
+
+        List<AudioTrack> tracks = new ArrayList<>();
+
+        for (Couple<AudioTrack, Float> couple : this.queue) {
+            tracks.add(couple.first);
+        }
+
+        return tracks;
+    }
+    
+    private void changePlayerSpeed(Float speed) {
+
+        player.setFilterFactory((trackPlayed, format, output) -> {
+
+            TimescalePcmAudioFilter audioFilter = new TimescalePcmAudioFilter(output, format.channelCount, format.sampleRate);
+            audioFilter.setSpeed(speed);
+            return Collections.singletonList(audioFilter);
+        });
+    }
+    
+    public void clearQueue() {
+     
+        this.setLoop(false);
+        this.queue.clear();
     }
 
     @Override
@@ -73,26 +112,15 @@ public class TrackScheduler extends AudioEventAdapter {
         }
     }
 
-    public boolean switchLoop() {
-        return setLoop(!this.loop);
-    }
-
-    public boolean setLoop(boolean state) {
-        
-        boolean change = this.loop != state;
-        this.loop = state;
-
-        if (change && this.loop) {
-            if (this.currentTrack != null) {
-                this.queue.add(0, this.currentTrack);
-            }
-        } else if ( change && !this.loop) {
-            if (this.currentTrack != null) {
-                this.queue.remove(0);
-            }
-        }
-
+    public boolean isLooped() {
         return this.loop;
     }
-    
+
+    public void switchLoop() {
+        setLoop(!this.loop);
+    }
+
+    public void setLoop(boolean state) {
+        this.loop = state;
+    }
 }
