@@ -4,14 +4,21 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 
 import discord_bot.Kawaine;
 import discord_bot.Main;
+import discord_bot.TrackScheduler;
 import discord_bot.commands.Commands;
 import discord_bot.playlist_writer.Playlist;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 
-public class Add implements Commands {
+public class Add extends Commands {
     
+    public Add(TrackScheduler scheduler) {
+        super(scheduler);
+        //TODO Auto-generated constructor stub
+    }
+
     @Override
-    public void execute(SlashCommandInteractionEvent event, AudioPlayerManager playerManager, Kawaine kawaine) {
+    public void execute(SlashCommandInteractionEvent event, Kawaine kawaine) {
         
         String name = event.getOption(Main.PLAYLIST_ADD_REMOVE_OPTION_NAME).getAsString();
         String url = event.getOption(Main.PLAYLIST_ADD_OPTION_URL).getAsString();
@@ -21,8 +28,14 @@ public class Add implements Commands {
         Playlist playlist;
 
         try { playlist = Playlist.readPlaylist(name); } 
-        catch (Exception e) { event.reply("An error occurred while loading the playlist : " + e.getMessage()).queue(); return; }
+        catch (Exception e) { event.getHook().sendMessage("An error occurred while loading the playlist : " + e.getMessage()).queue(); return; }
 
-        kawaine.addSong(event, url, playerManager, null, playlist);
+        kawaine.addSong(event, url, null, playlist);
+    }
+
+    @Override
+    public void execute(ButtonInteractionEvent event, Kawaine kawaine) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'execute'");
     }
 }

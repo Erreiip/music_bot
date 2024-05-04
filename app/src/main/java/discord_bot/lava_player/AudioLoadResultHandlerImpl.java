@@ -5,7 +5,9 @@ import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
+import discord_bot.GuildMusicManager;
 import discord_bot.common.IProcessAudio;
+import discord_bot.embded.MusicEmbded;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 public class AudioLoadResultHandlerImpl implements AudioLoadResultHandler {
@@ -46,13 +48,13 @@ public class AudioLoadResultHandlerImpl implements AudioLoadResultHandler {
     @Override
     public void noMatches() {
 
-        event.reply("Nothing found by " + songIdentifier).queue();
+        event.getHook().sendMessageEmbeds(MusicEmbded.createEmbdedResponse("Nothing found by " + songIdentifier)).queue();
     }
 
     @Override
     public void loadFailed(FriendlyException exception) {
 
-        event.reply("Could not play: " + exception.getMessage()).queue();
+        event.getHook().sendMessageEmbeds(MusicEmbded.createEmbdedResponse("Could not play: " + exception.getMessage())).queue();
         exception.printStackTrace();
     }
     

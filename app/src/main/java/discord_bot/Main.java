@@ -18,7 +18,7 @@ public class Main {
     private static final String token = "MTIzNDU0OTc4MDUwNDY0NTcwNQ.GTovkH.vuuCrG9oDdY20J3WN0cE2MFB8yXuQ67h3nIOnk"; // debug
 
     public static final String PLAY = "play";
-    public static final String PLAY_OPTION_URL = "url";
+    public static final String PLAY_OPTION_QUERY = "query";
     public static final String PLAY_OPTION_SPEED = "speed";
 
     public static final String PLAYLIST_RECORD = "playlist_record";
@@ -55,18 +55,11 @@ public class Main {
         JDA jda = JDABuilder.createDefault(token).build().awaitReady();
 
         for (Guild guild : jda.getGuilds()) {
-
-            RestAction<List<Command>> commands = guild.retrieveCommands(true);
-            commands.submit().thenAccept(registeredCommands -> {
-                for (Command command : registeredCommands) {
-                    // faire des choses
-                }
-            });
             
             guild.updateCommands().addCommands
             (
                 Commands.slash(PLAY, "Play a song in your voice channel")
-                    .addOption(OptionType.STRING, PLAY_OPTION_URL, "url or title of the video", true)
+                    .addOption(OptionType.STRING, PLAY_OPTION_QUERY, "url or title of the video", true)
                     .addOption(OptionType.STRING, PLAY_OPTION_SPEED, "speed of the song", false),
                 Commands.slash(SKIP, "Skip the current song"),
                 Commands.slash(LOOP, "Set or unset the loop mode"),
@@ -89,8 +82,8 @@ public class Main {
                 Commands.slash(PLAYLIST_REMOVE, "Remove a song from a playlist")
                     .addOption(OptionType.STRING, PLAYLIST_ADD_REMOVE_OPTION_NAME, "name of the playlist", true)
                     .addOption(OptionType.STRING, PLAYLIST_REMOVE_OPTION_TITLE, "title or index of the video", true)
-            )
-                    .queue();
+            ).queue();
+            
         }
         
         Kawaine kawaine = new Kawaine();

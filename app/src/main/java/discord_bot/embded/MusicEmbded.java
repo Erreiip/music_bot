@@ -1,7 +1,9 @@
 package discord_bot.embded;
 
 import java.awt.Color;
+import java.util.List;
 
+import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -31,17 +33,80 @@ public class MusicEmbded {
         EmbedBuilder eb  = new EmbedBuilder();
         setColor(eb);
 
+        eb.setAuthor("PLAY", "http://erreip.ciliste.games/shesh/", GIF_SONG);
+
         eb.setTitle(track.title);
         eb.setUrl(track.uri);
 
         eb.addField("Author", track.author, true);
         eb.addField("Duration", getTimestamp(track.length), true);
         
-        eb.setThumbnail(GIF_SONG);
-        eb.setImage(getThumbnail(track.identifier));
+        eb.setThumbnail(getThumbnail(track.identifier));
 
         return eb.build();
     } 
+
+    public static MessageEmbed createEmbdedResponse(String response) {
+
+        EmbedBuilder eb = new EmbedBuilder();
+        setColor(eb);
+
+        eb.setAuthor("INFO", "http://erreip.ciliste.games/shesh/", GIF_SONG);
+
+        eb.setDescription(response);
+
+        return eb.build();
+    }
+
+    public static MessageEmbed createEmbdedError(String error) {
+
+        EmbedBuilder eb = new EmbedBuilder();
+        setColor(eb);
+
+        eb.setAuthor("INFO", "http://erreip.ciliste.games/shesh/", GIF_SONG);
+
+        eb.setDescription("ERREUR : " + error);
+
+        return eb.build();
+    }
+
+    public static MessageEmbed createEmbdedQueue(List<AudioTrack> queue) {
+
+        EmbedBuilder eb = new EmbedBuilder();
+        setColor(eb);
+
+        eb.setAuthor("QUEUE", "http://erreip.ciliste.games/shesh/", GIF_SONG);
+
+        String description = "";
+        for (AudioTrack track : queue) {
+
+            description += "➡️ " + track.getInfo().title + "\n";
+        }
+
+        eb.setDescription(description);
+        
+        return eb.build();
+    }
+
+    public static MessageEmbed createEmbdedHelp() {
+    
+        EmbedBuilder eb = new EmbedBuilder();
+        setColor(eb);
+
+        eb.setAuthor("HELP", "http://erreip.ciliste.games/shesh/", GIF_SONG);
+
+        eb.setDescription(" ➡️ ```play [query] : play a song\n ```" +
+            " ➡️ ```stop : stop the music\n ```" +
+            " ➡️ ```skip : skip the current song\n ```" +
+            " ➡️ ```loop : loop the current song\n ```" +
+            " ➡️ ```queue : display the queue\n ```" +
+            " ➡️ ```last : display the last song\n ```" +
+            " ➡️ ```pause : pause the music\n ```" +
+            " ➡️ ```clear_queue : clear the queue\n ```"
+            );
+
+        return eb.build();
+    }
 
     private static String getThumbnail(String identifier) {
 

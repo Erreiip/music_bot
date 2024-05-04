@@ -2,21 +2,28 @@ package discord_bot.commands.playlists;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 
+import discord_bot.GuildMusicManager;
 import discord_bot.Kawaine;
+import discord_bot.TrackScheduler;
 import discord_bot.commands.Commands;
-import discord_bot.lava_player.GuildMusicManager;
 import discord_bot.playlist_writer.Playlist;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 
-public class Save implements Commands {
+public class Save extends Commands {
+
+    public Save(TrackScheduler scheduler) {
+        super(scheduler);
+        //TODO Auto-generated constructor stub
+    }
 
     @Override
-    public void execute(SlashCommandInteractionEvent event, AudioPlayerManager playerManager, Kawaine kawaine) {
+    public void execute(SlashCommandInteractionEvent event, Kawaine kawaine) {
         
         GuildMusicManager musicManager = kawaine.getGuildAudioPlayer(event.getGuild());
 
         if ( ! musicManager.record ) {
-            event.reply("No playlist is being recorded.").queue();
+            event.getHook().sendMessage("No playlist is being recorded.").queue();
             return;
         }
 
@@ -25,11 +32,17 @@ public class Save implements Commands {
         try {
             Playlist.writePlaylist(musicManager.playlist);
         } catch (Exception e) {
-            event.reply("An error occurred while saving the playlist.").queue();
+            event.getHook().sendMessage("An error occurred while saving the playlist.").queue();
             return;
         }
 
-        event.reply("Playlist saved.").queue();
+        event.getHook().sendMessage("Playlist saved.").queue();
+    }
+
+    @Override
+    public void execute(ButtonInteractionEvent event, Kawaine kawaine) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'execute'");
     }
     
 }

@@ -12,9 +12,9 @@ import java.util.List;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 
+import discord_bot.GuildMusicManager;
 import discord_bot.common.Couple;
 import discord_bot.common.IProcessAudio;
-import discord_bot.lava_player.GuildMusicManager;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 public class Playlist implements IProcessAudio {
@@ -167,10 +167,10 @@ public class Playlist implements IProcessAudio {
 
         try { Playlist.writePlaylist(this); }
         catch (Exception e) { 
-            event.reply("An error occurred while saving the playlist.").queue();
+            event.getHook().sendMessage("An error occurred while saving the playlist.").queue();
             return;
         }
 
-        event.reply("Track " + track.getInfo().title + "to " + this.name).queue();
+        event.getHook().sendMessage("Track " + track.getInfo().title + "to " + this.name).queue();
     }
 }
