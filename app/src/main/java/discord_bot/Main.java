@@ -1,21 +1,16 @@
 package discord_bot;
 
-import java.util.List;
-
 import javax.security.auth.login.LoginException;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
-import net.dv8tion.jda.api.requests.RestAction;
 
 public class Main {
 
-    //private static final String token = "MTIzMTI0MDY1MDc1NDg4MzYzNg.GuknKo.7KpzcPeKWDrmZEXaI0ol65x02BzbxuHTyqk4Gc";
-    private static final String token = "MTIzNDU0OTc4MDUwNDY0NTcwNQ.GTovkH.vuuCrG9oDdY20J3WN0cE2MFB8yXuQ67h3nIOnk"; // debug
+    private static final String token = Secret.getToken();
 
     public static final String PLAY = "play";
     public static final String PLAY_OPTION_QUERY = "query";
