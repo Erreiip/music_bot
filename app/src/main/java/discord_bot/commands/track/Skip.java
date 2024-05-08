@@ -25,7 +25,7 @@ public class Skip extends Commands implements ISkipListener {
         
         MessageEmbed mb = MusicEmbded.createEmbded(scheduler.getCurrentTrack().getInfo());
 
-        event.getHook().sendMessageEmbeds(mb).setActionRow(ButtonEnum.items()).queue();
+        event.getHook().sendMessageEmbeds(mb).setActionRow(ButtonEnum.getPlayButton()).queue();
     }
 
     @Override

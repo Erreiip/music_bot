@@ -157,6 +157,9 @@ public class TrackScheduler extends AudioEventAdapter implements ISkipListenable
     }
 
     public void setLoop(boolean state) {
+        
+        if ( loop == state ) return;
+
         this.loop = state;
         this.fireLoop((IDeferrableCallback) event, this);
     }
