@@ -1,13 +1,24 @@
 package discord_bot;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import discord_bot.commands.Commands;
-import discord_bot.commands.track.Skip;
 import discord_bot.enumerate.ButtonEnum;
-import net.dv8tion.jda.api.entities.Invite.Guild;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class ButtonListener extends ListenerAdapter {
+
+    private final static Map<Integer, Integer> buttonMap = new HashMap<>();
+
+    static {
+
+        buttonMap.put(ButtonEnum.SKIP.id, Commands.SKIP);
+        buttonMap.put(ButtonEnum.PAUSE.id, Commands.PAUSE);
+        buttonMap.put(ButtonEnum.LOOP.id, Commands.LOOP);
+        buttonMap.put(ButtonEnum.LAST.id, Commands.LAST);
+    }
 
     private Kawaine kawaine;
 
@@ -23,20 +34,11 @@ public class ButtonListener extends ListenerAdapter {
 
         event.deferEdit().queue();
 
-        if ( Integer.valueOf(event.getButton().getId()) == ButtonEnum.SKIP.id) {
+        Integer id = Integer.valueOf(event.getButton().getId());
 
-            musicManager.getCommand(Commands.SKIP).execute(event, kawaine);
-        }
+        Commands command = musicManager.getCommand(buttonMap.get(id));
 
-        if ( Integer.valueOf(event.getButton().getId()) == ButtonEnum.PAUSE.id) {
-
-            musicManager.getCommand(Commands.PAUSE).execute(event, kawaine);
-        }
-
-        if ( Integer.valueOf(event.getButton().getId()) == ButtonEnum.LOOP.id) {
-
-            musicManager.getCommand(Commands.LOOP).execute(event, kawaine);
-        }
+        command.execute(event, kawaine);
     }
     
 }

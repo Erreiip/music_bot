@@ -6,4 +6,4 @@ build
 
 *.class
 
-app/src/main/java/discord_bot/secret.txt
+secret.txt

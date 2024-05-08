@@ -4,7 +4,6 @@ cp -r ./music_bot/playlists/ .
 rm -rf ./music_bot 
 git clone https://github.com/Erreiip/music_bot.git
 cd music_bot
-git checkout master
 
 cd ..
 cp ./secret.txt ./music_bot
