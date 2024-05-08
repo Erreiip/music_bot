@@ -1,4 +1,4 @@
-cp -r ./music_bot/playlists/ .
+cp -r ./music_bot/app/playlists/ .
 #cp -r ./music_bot/songs/ .
 
 rm -rf ./music_bot 
@@ -7,6 +7,7 @@ cd music_bot
 
 cd ..
 cp ./secret.txt ./music_bot
+cp -r ./playlists ./music_bot/app
 
 rm -rf ./playlists
 

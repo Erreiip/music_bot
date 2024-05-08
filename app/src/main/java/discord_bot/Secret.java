@@ -11,7 +11,7 @@ public class Secret {
     public static String getToken() {
 
         try {
-            return Files.readString(Paths.get(SECRET_PATH));
+            return Files.readString(Paths.get(SECRET_PATH)).trim();
         } catch (IOException e) {
             e.printStackTrace();
             return null;
