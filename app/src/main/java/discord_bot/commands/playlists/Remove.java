@@ -6,6 +6,7 @@ import discord_bot.Kawaine;
 import discord_bot.Main;
 import discord_bot.TrackScheduler;
 import discord_bot.commands.Commands;
+import discord_bot.embded.MusicEmbded;
 import discord_bot.playlist_writer.Playlist;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
@@ -26,7 +27,7 @@ public class Remove extends Commands {
         Playlist playlist;
 
         try { playlist = Playlist.readPlaylist(name); } 
-        catch (Exception e) { event.getHook().sendMessage("An error occurred while loading the playlist : " + e.getMessage()).queue(); return; }
+        catch (Exception e) { event.getHook().sendMessageEmbeds(MusicEmbded.createEmbdedResponse("An error occurred while loading the playlist : " + e.getMessage())).queue(); return; }
 
         boolean removed = false; 
 
@@ -40,17 +41,17 @@ public class Remove extends Commands {
         }
 
         if ( ! removed ) {
-            event.getHook().sendMessage("Track not found.").queue();
+            event.getHook().sendMessageEmbeds(MusicEmbded.createEmbdedResponse("Track not found.")).queue();
             return;
         }
 
         try { Playlist.writePlaylist(playlist); } 
         catch (Exception e) { 
-            event.getHook().sendMessage("An error occurred while saving the playlist.").queue();
+            event.getHook().sendMessageEmbeds(MusicEmbded.createEmbdedResponse("An error occurred while saving the playlist.")).queue();
             return;
         }
 
-        event.getHook().sendMessage("Track removed.").queue();
+        event.getHook().sendMessageEmbeds(MusicEmbded.createEmbdedResponse("Track removed.")).queue();
     }
 
     @Override

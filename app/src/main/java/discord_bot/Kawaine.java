@@ -27,6 +27,8 @@ public class Kawaine extends ListenerAdapter {
 
     private static final AudioPlayerManager playerManager;
 
+    private static final Map<String, Integer> commands = new HashMap<>();
+
     private final Map<Float, GuildMusicManager> musicManagers = new HashMap<>();
 
     static {
@@ -35,6 +37,24 @@ public class Kawaine extends ListenerAdapter {
         playerManager = new DefaultAudioPlayerManager();
 
         AudioSourceManagers.registerRemoteSources(playerManager);
+
+        commands.put(Main.PLAY, Commands.PLAY);
+        commands.put(Main.SKIP, Commands.SKIP);
+        commands.put(Main.LOOP, Commands.LOOP);
+        commands.put(Main.STOP, Commands.STOP);
+        commands.put(Main.LAST, Commands.LAST);
+        commands.put(Main.QUEUE, Commands.QUEUE);
+        commands.put(Main.PAUSE, Commands.PAUSE);
+        commands.put(Main.CLEAR_QUEUE, Commands.CLEAR_QUEUE);
+        commands.put(Main.PLAYLIST_CREATE, Commands.CREATE);
+        commands.put(Main.PLAYLIST_RECORD, Commands.RECORD);
+        commands.put(Main.PLAYLIST_SAVE, Commands.SAVE);
+        commands.put(Main.PLAYLIST_LOAD, Commands.LOAD);
+        commands.put(Main.PLAYLISTS, Commands.PLAYLISTS);
+        commands.put(Main.PLAYLISTS_SEE, Commands.SEE);
+        commands.put(Main.PLAYLIST_ADD, Commands.ADD);
+        commands.put(Main.PLAYLIST_REMOVE, Commands.REMOVE);
+        commands.put(Main.HELP, Commands.HELP);
     }
 
     @Override
@@ -49,89 +69,9 @@ public class Kawaine extends ListenerAdapter {
 
     public void fireEvent(SlashCommandInteractionEvent event) {
 
-        Commands command = null;
-
         GuildMusicManager musicManager = getGuildAudioPlayer(event.getGuild());
 
-        if (event.getName().equals(Main.PLAY)) {
-
-            command = musicManager.getCommand(Commands.PLAY);
-        }
-
-        if (event.getName().equals(Main.SKIP)) {
-
-            command = musicManager.getCommand(Commands.SKIP);   
-        }
-        
-        if (event.getName().equals(Main.LOOP)) {
-
-            command = musicManager.getCommand(Commands.LOOP);
-        }
-        
-        if (event.getName().equals(Main.STOP)) {
-
-            command = musicManager.getCommand(Commands.STOP);
-        }
-
-        if (event.getName().equals(Main.LAST)) {
-
-            command = musicManager.getCommand(Commands.LAST);
-        }
-
-        if (event.getName().equals(Main.QUEUE)) {
-
-            command = musicManager.getCommand(Commands.QUEUE);
-        }
-        
-        if (event.getName().equals(Main.PAUSE)) {
-
-            command = musicManager.getCommand(Commands.PAUSE);
-        }
-
-        if (event.getName().equals(Main.CLEAR_QUEUE)) {
-
-            command = musicManager.getCommand(Commands.CLEAR_QUEUE);
-        }
-
-        if(event.getName().equals(Main.PLAYLIST_CREATE)) {
-
-            command = musicManager.getCommand(Commands.CREATE);
-        }
-
-        if (event.getName().equals(Main.PLAYLIST_RECORD)) {
-
-            command = musicManager.getCommand(Commands.RECORD);
-        }
-
-        if (event.getName().equals(Main.PLAYLIST_SAVE)) {
-
-            command = musicManager.getCommand(Commands.SAVE);
-        }
-
-        if (event.getName().equals(Main.PLAYLIST_LOAD)) {
-
-            command = musicManager.getCommand(Commands.LOAD);
-        }
-
-        if (event.getName().equals(Main.PLAYLISTS)) {
-
-            command = musicManager.getCommand(Commands.PLAYLISTS);
-        }
-
-        if (event.getName().equals(Main.PLAYLISTS_SEE)) {
-
-            command = musicManager.getCommand(Commands.SEE);
-        }
-
-        if ( event.getName().equals(Main.PLAYLIST_ADD) ) {
-
-            command = musicManager.getCommand(Commands.ADD);
-        }
-
-        if ( event.getName().equals(Main.PLAYLIST_REMOVE) ) {
-
-            command = musicManager.getCommand(Commands.REMOVE);
-        }
+        Commands command = musicManager.getCommand(commands.get(event.getName()));
 
         command.execute(event, this);
     }

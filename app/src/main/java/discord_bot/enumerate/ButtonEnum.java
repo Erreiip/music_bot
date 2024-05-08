@@ -8,15 +8,16 @@ import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
 public enum ButtonEnum {
 
-    ADD_PLAYLIST(0, "Ajouter à la playlist"),
-    SKIP(1, "Suivant"),
-    PAUSE(2, "Pause"),
-    LOOP(3, "Loop"),
+    ADD_PLAYLIST(0, "➕"),
+    SKIP(1, "⏭️"),
+    PAUSE(2, "⏯️"),
+    LOOP(3, "🔃"),
     LAST(4, "Ajouter le dernier"),
-    PLAYLISTS(5, "Playlists"),
-    HELP(6, "Aide"),
+    PLAYLISTS(5, "🎶"),
+    HELP(6, "❓"),
     CLEAR_QUEUE(7, "Vider la queue"),
-    STOP(8, "Stop");
+    STOP(8, "🛑"),
+    SHUFFLE(9, "🔀");
 
     public final int id;
     public final String label;
@@ -31,8 +32,6 @@ public enum ButtonEnum {
         List<ItemComponent> items = new ArrayList<>();
         
         for ( ButtonEnum button : ButtonEnum.values() ) {
-            
-            if (button.id > 4) break;  
 
             items.add( Button.success(button.id + "", button.label) );
         }
@@ -40,17 +39,18 @@ public enum ButtonEnum {
         return items;
     }
 
-    public static List<ItemComponent> getQueueButton() {
+
+
+    public static List<ItemComponent> getPlayButton() {
 
         List<ItemComponent> items = new ArrayList<>();
 
+        items.add( Button.primary(PAUSE.id + "", PAUSE.label) );
         items.add( Button.primary(SKIP.id + "", SKIP.label) );
-        // loop
-        // clear
-        // shuffle
-        // createPlaylistByThis
+        items.add( Button.primary(LOOP.id + "", LOOP.label));
+        items.add( Button.primary(LAST.id + "", LAST.label) );
+        items.add( Button.primary(CLEAR_QUEUE.id + "", CLEAR_QUEUE.label));
         
-
         return items;
     }
 
@@ -58,8 +58,7 @@ public enum ButtonEnum {
 
         List<ItemComponent> items = new ArrayList<>();
 
-        items.add( Button.primary(PLAYLISTS.id + "", PLAYLISTS.label) );
-        items.add( Button.primary(HELP.id + "", HELP.label) );
+        items.add( Button.danger(PLAYLISTS.id + "", PLAYLISTS.label) );
         items.add( Button.primary(STOP.id + "", STOP.label) );
         items.add( Button.primary(CLEAR_QUEUE.id + "", CLEAR_QUEUE.label) );
         items.add( Button.primary(LOOP.id + "", LOOP.label) );

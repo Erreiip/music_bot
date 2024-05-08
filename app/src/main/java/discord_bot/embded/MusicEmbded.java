@@ -6,6 +6,7 @@ import java.util.List;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 
+import discord_bot.enumerate.ButtonEnum;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 
@@ -95,14 +96,15 @@ public class MusicEmbded {
 
         eb.setAuthor("HELP", "http://erreip.ciliste.games/shesh/", GIF_SONG);
 
-        eb.setDescription(" ➡️ ```play [query] : play a song\n ```" +
-            " ➡️ ```stop : stop the music\n ```" +
-            " ➡️ ```skip : skip the current song\n ```" +
-            " ➡️ ```loop : loop the current song\n ```" +
-            " ➡️ ```queue : display the queue\n ```" +
-            " ➡️ ```last : display the last song\n ```" +
-            " ➡️ ```pause : pause the music\n ```" +
-            " ➡️ ```clear_queue : clear the queue\n ```"
+        eb.setDescription(
+            " ➡️ play [query] : play a song\n " +
+            ButtonEnum.STOP.label + " stop : stop the music\n " +
+            ButtonEnum.SKIP.label + " skip : skip the current song\n " +
+            ButtonEnum.LOOP.label + " loop : loop the current song\n " +
+            " ➡️ queue : display the queue\n " +
+            ButtonEnum.LAST.label + " last : display the last song\n " +
+            ButtonEnum.PAUSE.label + " pause : pause the music\n " +
+            " ➡️ clear_queue : clear the queue\n "
             );
 
         return eb.build();
@@ -122,9 +124,12 @@ public class MusicEmbded {
 
         long time = timestamp / 1000;
 
+        long eSeconds = time / 60;
+        long eMinutes = time / 3600;
+
         long seconds = time % 60;
-        long minutes = Math.floorDiv(time, 60);
-        long hours = Math.floorDiv(minutes, 60);
+        long minutes = eSeconds % 60;
+        long hours = eMinutes % 60;
 
         if ( hours == 0 ) return String.format("%d:%02d", minutes, seconds);
 

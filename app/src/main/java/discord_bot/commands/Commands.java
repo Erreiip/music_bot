@@ -1,8 +1,5 @@
 package discord_bot.commands;
 
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
-
-import discord_bot.GuildMusicManager;
 import discord_bot.Kawaine;
 import discord_bot.TrackScheduler;
 import discord_bot.commands.playlists.Add;
@@ -25,6 +22,8 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 
 public abstract class Commands implements ButtonCommands {
+
+    public static final int HELP = 16;
 
     public static final int PLAY = 0;
     public static final int SKIP = 1;
@@ -74,7 +73,9 @@ public abstract class Commands implements ButtonCommands {
             new Save(scheduler),
             new See(scheduler),
             new Record(scheduler),
-            new Playlists(scheduler)
+            new Playlists(scheduler),
+            
+            new Help(scheduler)
         };
     }
 }

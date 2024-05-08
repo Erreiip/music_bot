@@ -67,7 +67,7 @@ public class Play extends Commands implements IProcessAudio, IPlayListener {
         
         MessageEmbed mb = MusicEmbded.createEmbded(scheduler.getCurrentTrack().getInfo());
 
-        event.getHook().sendMessageEmbeds(mb).setActionRow(ButtonEnum.items()).queue();
+        event.getHook().sendMessageEmbeds(mb).setActionRow(ButtonEnum.getPlayButton()).queue();
     }
 
     @Override
@@ -75,7 +75,7 @@ public class Play extends Commands implements IProcessAudio, IPlayListener {
 
         MessageEmbed mb = MusicEmbded.createEmbdedQueue(scheduler.getQueue());
 
-        event.getHook().sendMessageEmbeds(mb).setActionRow(ButtonEnum.getQueueButton()).queue();
+        event.getHook().sendMessageEmbeds(mb).setActionRow(ButtonEnum.getPlayButton()).queue();
     }
 
     @Override

@@ -9,6 +9,7 @@ import discord_bot.TrackScheduler;
 import discord_bot.commands.Commands;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
+import net.dv8tion.jda.api.interactions.callbacks.IDeferrableCallback;
 
 public class Last extends Commands {
     
@@ -19,6 +20,17 @@ public class Last extends Commands {
     @Override
     public void execute(SlashCommandInteractionEvent event, Kawaine kawaine) {
         
+        addLastTrack((IDeferrableCallback) event, kawaine);
+    }
+
+    @Override
+    public void execute(ButtonInteractionEvent event, Kawaine kawaine) {
+        
+        addLastTrack((IDeferrableCallback) event, kawaine);
+    }
+
+    public void addLastTrack(IDeferrableCallback event, Kawaine kawaine) {
+
         GuildMusicManager musicManager = kawaine.getGuildAudioPlayer(event.getGuild());
 
         musicManager.scheduler.addLastTrack();
@@ -26,11 +38,5 @@ public class Last extends Commands {
         AudioTrack currentTrack = musicManager.scheduler.getCurrentTrack();
 
         event.getHook().sendMessage("Added the last played song to the queue: " + currentTrack.getInfo().title).queue();
-    }
-
-    @Override
-    public void execute(ButtonInteractionEvent event, Kawaine kawaine) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'execute'");
     }
 }

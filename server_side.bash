@@ -7,6 +7,8 @@ cd music_bot
 git checkout master
 
 cd ..
-cp ./secret.txt ./music_bot/src/main/java/discord_bot/
+cp ./secret.txt ./music_bot
 
 rm -rf ./playlists
+
+screen -dmS Chef "cd music_bot" && "./gradlew run"

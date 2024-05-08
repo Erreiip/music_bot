@@ -9,6 +9,7 @@ import discord_bot.Kawaine;
 import discord_bot.Main;
 import discord_bot.TrackScheduler;
 import discord_bot.commands.Commands;
+import discord_bot.embded.MusicEmbded;
 import discord_bot.playlist_writer.Playlist;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
@@ -17,7 +18,6 @@ public class See extends Commands {
     
     public See(TrackScheduler scheduler) {
         super(scheduler);
-        //TODO Auto-generated constructor stub
     }
 
     @Override
@@ -40,7 +40,7 @@ public class See extends Commands {
 
             tracks.forEach(track -> builder.append(":arrow_forward: ").append(track.title).append("\n"));
 
-            event.getHook().sendMessage(builder.toString()).queue();
+            event.getHook().sendMessageEmbeds(MusicEmbded.createEmbdedResponse(builder.toString())).queue();
     }
 
     @Override

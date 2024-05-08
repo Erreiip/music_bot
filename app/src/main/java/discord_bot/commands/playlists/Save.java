@@ -6,6 +6,7 @@ import discord_bot.GuildMusicManager;
 import discord_bot.Kawaine;
 import discord_bot.TrackScheduler;
 import discord_bot.commands.Commands;
+import discord_bot.embded.MusicEmbded;
 import discord_bot.playlist_writer.Playlist;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
@@ -23,7 +24,7 @@ public class Save extends Commands {
         GuildMusicManager musicManager = kawaine.getGuildAudioPlayer(event.getGuild());
 
         if ( ! musicManager.record ) {
-            event.getHook().sendMessage("No playlist is being recorded.").queue();
+            event.getHook().sendMessageEmbeds(MusicEmbded.createEmbdedResponse("No playlist is being recorded.")).queue();
             return;
         }
 
@@ -32,11 +33,11 @@ public class Save extends Commands {
         try {
             Playlist.writePlaylist(musicManager.playlist);
         } catch (Exception e) {
-            event.getHook().sendMessage("An error occurred while saving the playlist.").queue();
+            event.getHook().sendMessageEmbeds(MusicEmbded.createEmbdedResponse("An error occurred while saving the playlist.")).queue();
             return;
         }
 
-        event.getHook().sendMessage("Playlist saved.").queue();
+        event.getHook().sendMessageEmbeds(MusicEmbded.createEmbdedResponse("Playlist saved.")).queue();
     }
 
     @Override

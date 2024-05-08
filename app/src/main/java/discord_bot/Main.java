@@ -12,6 +12,8 @@ public class Main {
 
     private static final String token = Secret.getToken();
 
+    public static final String HELP = "help";
+
     public static final String PLAY = "play";
     public static final String PLAY_OPTION_QUERY = "query";
     public static final String PLAY_OPTION_SPEED = "speed";
@@ -53,6 +55,7 @@ public class Main {
             
             guild.updateCommands().addCommands
             (
+                Commands.slash(HELP, "Display the help"),
                 Commands.slash(PLAY, "Play a song in your voice channel")
                     .addOption(OptionType.STRING, PLAY_OPTION_QUERY, "url or title of the video", true)
                     .addOption(OptionType.STRING, PLAY_OPTION_SPEED, "speed of the song", false),

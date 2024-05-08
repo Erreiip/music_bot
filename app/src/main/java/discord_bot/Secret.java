@@ -6,7 +6,7 @@ import java.nio.file.Paths;
 
 public class Secret {
 
-    public static final String SECRET_PATH = "./secret.txt";
+    public static final String SECRET_PATH = "secret.txt";
 
     public static String getToken() {
 
@@ -17,5 +17,4 @@ public class Secret {
             return null;
         }
     }
-    
 }

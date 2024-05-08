@@ -1,8 +1,7 @@
-package discord_bot.commands.track;
+package discord_bot.commands;
 
 import discord_bot.Kawaine;
 import discord_bot.TrackScheduler;
-import discord_bot.commands.Commands;
 import discord_bot.embded.MusicEmbded;
 import discord_bot.enumerate.ButtonEnum;
 import net.dv8tion.jda.api.entities.MessageEmbed;
