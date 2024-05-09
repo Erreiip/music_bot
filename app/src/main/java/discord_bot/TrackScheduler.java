@@ -42,20 +42,36 @@ public class TrackScheduler extends AudioEventAdapter implements ISkipListenable
         this.queue = new ArrayList<>();
     }
 
-    public void queue(AudioTrack track, Float speed) {
+    public boolean queueWithoutFire(AudioTrack track, float speed) {
 
         boolean canStart = player.startTrack(track, true);
 
         if (!canStart) {
             queue.add(new Couple<AudioTrack, Float>(track, speed));
-            this.firePlayQueue((IDeferrableCallback)event, this);
-            return;
+            return false;
         }
 
         changePlayerSpeed(speed);
 
         this.currentTrack = track;
         this.currentTrackSpeed = speed;
+
+        return true;
+    }
+
+    public void queueWithoutFire(AudioTrack track, Float speed, GenericInteractionCreateEvent event) {
+            
+        this.event = event;
+
+        this.queueWithoutFire(track, speed);
+    }
+
+    public void queue(AudioTrack track, Float speed) {
+
+        if ( ! this.queueWithoutFire(track, speed) ) {
+            this.firePlayQueue((IDeferrableCallback)event, this);
+            return;
+        }
     
         this.firePlay((IDeferrableCallback)event, this);
     }

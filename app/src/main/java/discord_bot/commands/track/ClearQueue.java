@@ -6,8 +6,10 @@ import discord_bot.GuildMusicManager;
 import discord_bot.Kawaine;
 import discord_bot.TrackScheduler;
 import discord_bot.commands.Commands;
+import discord_bot.embded.MusicEmbded;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
+import net.dv8tion.jda.api.interactions.callbacks.IDeferrableCallback;
 
 public class ClearQueue extends Commands {
 
@@ -18,17 +20,22 @@ public class ClearQueue extends Commands {
     @Override
     public void execute(SlashCommandInteractionEvent event, Kawaine kawaine) {
         
-        GuildMusicManager musicManager = kawaine.getGuildAudioPlayer(event.getGuild());
-        
-        musicManager.scheduler.clearQueue();
-
-        event.getHook().sendMessage("Cleared the queue.").queue();
+        clearQueue((IDeferrableCallback) event, kawaine);
     }
 
     @Override
     public void execute(ButtonInteractionEvent event, Kawaine kawaine) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'execute'");
+        
+        clearQueue((IDeferrableCallback) event, kawaine);
+    }
+
+    public void clearQueue(IDeferrableCallback event, Kawaine kawaine) {
+
+        GuildMusicManager musicManager = kawaine.getGuildAudioPlayer(event.getGuild());
+
+        musicManager.scheduler.clearQueue();
+
+        event.getHook().sendMessageEmbeds(MusicEmbded.createEmbdedResponse("Queue cleared")).queue();
     }
     
 }

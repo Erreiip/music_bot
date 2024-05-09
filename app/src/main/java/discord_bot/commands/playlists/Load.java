@@ -20,7 +20,7 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 
 public class Load extends Commands implements IProcessAudio {
-    
+
     public Load(TrackScheduler scheduler) {
         super(scheduler);
     }
@@ -36,7 +36,7 @@ public class Load extends Commands implements IProcessAudio {
             playlist = Playlist.readPlaylist(name);
         } catch (Exception e) {
             e.printStackTrace();
-            event.getHook().sendMessage("An error occurred while loading the playlist.").queue();
+            event.getHook().sendMessageEmbeds(MusicEmbded.createEmbdedResponse("An error occurred while loading the playlist.")).queue();
             return;
         }
         
@@ -60,7 +60,6 @@ public class Load extends Commands implements IProcessAudio {
     public void onTrackGet(SlashCommandInteractionEvent event, GuildMusicManager musicManager, AudioTrack track,
             Float speed) {
         
-
-        musicManager.scheduler.queue(track, speed != null ? speed : 1, event);
+        musicManager.scheduler.queueWithoutFire(track, speed != null ? speed : 1, event);
     }
 }

@@ -18,6 +18,9 @@ public class ButtonListener extends ListenerAdapter {
         buttonMap.put(ButtonEnum.PAUSE.id, Commands.PAUSE);
         buttonMap.put(ButtonEnum.LOOP.id, Commands.LOOP);
         buttonMap.put(ButtonEnum.LAST.id, Commands.LAST);
+        buttonMap.put(ButtonEnum.CLEAR_QUEUE.id, Commands.CLEAR_QUEUE);
+        buttonMap.put(ButtonEnum.STOP.id, Commands.STOP);
+        buttonMap.put(ButtonEnum.PLAYLISTS.id, Commands.PLAYLISTS);
     }
 
     private Kawaine kawaine;

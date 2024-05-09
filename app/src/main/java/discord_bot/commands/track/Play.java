@@ -62,8 +62,6 @@ public class Play extends Commands implements IProcessAudio, IPlayListener {
 
     @Override
     public void onPlay(IDeferrableCallback event, TrackScheduler scheduler) {
-
-        
         
         MessageEmbed mb = MusicEmbded.createEmbded(scheduler.getCurrentTrack().getInfo());
 
@@ -72,9 +70,10 @@ public class Play extends Commands implements IProcessAudio, IPlayListener {
 
     @Override
     public void onPlayQueue(IDeferrableCallback event, TrackScheduler scheduler) {
-
+        
         MessageEmbed mb = MusicEmbded.createEmbdedQueue(scheduler.getQueue());
 
+        //event.getHook().getId();
         event.getHook().sendMessageEmbeds(mb).setActionRow(ButtonEnum.getPlayButton()).queue();
     }
 

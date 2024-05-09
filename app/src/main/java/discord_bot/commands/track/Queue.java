@@ -9,6 +9,9 @@ import discord_bot.GuildMusicManager;
 import discord_bot.Kawaine;
 import discord_bot.TrackScheduler;
 import discord_bot.commands.Commands;
+import discord_bot.embded.MusicEmbded;
+import discord_bot.enumerate.ButtonEnum;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 
@@ -24,34 +27,9 @@ public class Queue extends Commands {
         
         GuildMusicManager musicManager = kawaine.getGuildAudioPlayer(event.getGuild());
 
-        List<AudioTrack> queue = musicManager.scheduler.getQueue();
-        AudioTrack currentTrack = musicManager.scheduler.getCurrentTrack();
+        MessageEmbed mb = MusicEmbded.createEmbdedQueue(musicManager.scheduler.getQueue());
 
-        if (queue.isEmpty() && currentTrack == null) {
-            event.getHook().sendMessage("The queue is empty.").queue();
-            return;
-        }
-
-        StringBuilder builder = new StringBuilder();
-
-        if (currentTrack != null) {
-
-            if (musicManager.scheduler.isLooped()) {
-                builder.append(":arrows_counterclockwise: ");
-            } else {
-                builder.append(":arrow_forward: ");
-            }
-
-            builder.append(currentTrack.getInfo().title).append("\n");
-        }
-
-        for (int i = 0; i < queue.size(); i++) {
-            
-            AudioTrack track = queue.get(i);
-            builder.append(i + 1).append(". ").append(track.getInfo().title).append("\n");
-        }
-
-        event.getHook().sendMessage(builder.toString()).queue();
+        event.getHook().sendMessageEmbeds(mb).setActionRow(ButtonEnum.getPlayButton()).queue();
     }
 
     @Override

@@ -70,15 +70,15 @@ public class Main {
                 Commands.slash(PLAYLIST_SAVE, "Save the current playlist"),
                 Commands.slash(CLEAR_QUEUE, "Clear the queue"),
                 Commands.slash(PLAYLIST_LOAD, "Load a playlist")
-                    .addOption(OptionType.STRING, PLAYLIST_LOAD_OPTION_NAME, "name of the playlist", true),
+                    .addOption(OptionType.STRING, PLAYLIST_LOAD_OPTION_NAME, "name of the playlist", true, true),
                 Commands.slash(PLAYLISTS, "Display all the playlists"),
                 Commands.slash(PLAYLISTS_SEE, "Display a playlist")
-                    .addOption(OptionType.STRING, PLAYLISTS_SEE_OPTION_NAME, "name of the playlist", true),
+                    .addOption(OptionType.STRING, PLAYLISTS_SEE_OPTION_NAME, "name of the playlist", true, true),
                 Commands.slash(PLAYLIST_ADD, "Add a song to a playlist")
-                    .addOption(OptionType.STRING, PLAYLIST_ADD_REMOVE_OPTION_NAME, "name of the playlist", true)
+                    .addOption(OptionType.STRING, PLAYLIST_ADD_REMOVE_OPTION_NAME, "name of the playlist", true, true)
                     .addOption(OptionType.STRING, PLAYLIST_ADD_OPTION_URL, "url or title of the video", true),
                 Commands.slash(PLAYLIST_REMOVE, "Remove a song from a playlist")
-                    .addOption(OptionType.STRING, PLAYLIST_ADD_REMOVE_OPTION_NAME, "name of the playlist", true)
+                    .addOption(OptionType.STRING, PLAYLIST_ADD_REMOVE_OPTION_NAME, "name of the playlist", true, true)
                     .addOption(OptionType.STRING, PLAYLIST_REMOVE_OPTION_TITLE, "title or index of the video", true)
             ).queue();
             
@@ -87,6 +87,7 @@ public class Main {
         Kawaine kawaine = new Kawaine();
         jda.addEventListener(kawaine);
         jda.addEventListener(new ButtonListener(kawaine));
+        jda.addEventListener(new CompletionListener(kawaine));
     } 
 
     public static boolean isInteger(String s) {

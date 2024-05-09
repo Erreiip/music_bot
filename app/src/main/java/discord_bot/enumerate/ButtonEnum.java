@@ -39,17 +39,15 @@ public enum ButtonEnum {
         return items;
     }
 
-
-
     public static List<ItemComponent> getPlayButton() {
 
         List<ItemComponent> items = new ArrayList<>();
 
-        items.add( Button.primary(PAUSE.id + "", PAUSE.label) );
-        items.add( Button.primary(SKIP.id + "", SKIP.label) );
-        items.add( Button.primary(LOOP.id + "", LOOP.label));
-        items.add( Button.primary(LAST.id + "", LAST.label) );
-        items.add( Button.primary(CLEAR_QUEUE.id + "", CLEAR_QUEUE.label));
+        items.add( Button.success(PAUSE.id + "", PAUSE.label) );
+        items.add( Button.success(SKIP.id + "", SKIP.label) );
+        items.add( Button.success(LOOP.id + "", LOOP.label));
+        items.add( Button.success(LAST.id + "", LAST.label) );
+        items.add( Button.success(CLEAR_QUEUE.id + "", CLEAR_QUEUE.label));
         
         return items;
     }
@@ -58,11 +56,7 @@ public enum ButtonEnum {
 
         List<ItemComponent> items = new ArrayList<>();
 
-        items.add( Button.danger(PLAYLISTS.id + "", PLAYLISTS.label) );
-        items.add( Button.primary(STOP.id + "", STOP.label) );
-        items.add( Button.primary(CLEAR_QUEUE.id + "", CLEAR_QUEUE.label) );
-        items.add( Button.primary(LOOP.id + "", LOOP.label) );
-        items.add( Button.primary(PAUSE.id + "", PAUSE.label) );
+        items.add( Button.success(PLAYLISTS.id + "", PLAYLISTS.label) );
 
         return items;
 
