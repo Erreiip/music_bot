@@ -1,4 +1,4 @@
-package discord_bot;
+package discord_bot.jda_listener;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -10,11 +10,14 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 
+import discord_bot.Main;
 import discord_bot.commands.Commands;
 import discord_bot.common.Couple;
 import discord_bot.common.IProcessAudio;
+import discord_bot.embded.MusicEmbded;
+import discord_bot.jda_listener.model.GuildMusicManager;
 import discord_bot.lava_player.AudioLoadResultHandlerImpl;
-import discord_bot.youtube.ApiYoutube;
+import discord_bot.utils.youtube.ApiYoutube;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -67,6 +70,17 @@ public class Kawaine extends ListenerAdapter {
         if (!event.isFromGuild()) return;
 
         event.deferReply().queue();
+
+        /*
+        TextInput input = TextInput.create("shesh", "shesh", TextInputStyle.UNKNOWN).build();
+
+        Modal modal = Modal.create("modmail", "Modmail")
+                 .addComponents(ActionRow.of(input))
+                 .build();
+
+        event.replyModal(modal).queue();
+
+        */
         
         fireEvent(event);
     }
@@ -85,7 +99,7 @@ public class Kawaine extends ListenerAdapter {
         AudioChannel memberChannel = event.getMember().getVoiceState().getChannel();
 
         if (memberChannel == null) {
-            event.getHook().sendMessage("You are not in a voice channel.");
+            event.getHook().sendMessageEmbeds(MusicEmbded.createEmbdedResponse("You are not in a voice channel."));
             return null;
         }
                                         

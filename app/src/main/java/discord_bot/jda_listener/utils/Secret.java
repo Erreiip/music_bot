@@ -1,4 +1,4 @@
-package discord_bot;
+package discord_bot.jda_listener.utils;
 
 import java.io.IOException;
 import java.nio.file.Files;

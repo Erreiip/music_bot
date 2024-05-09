@@ -1,10 +1,12 @@
-package discord_bot;
+package discord_bot.jda_listener;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.processing.Completion;
 
+import discord_bot.Main;
+import discord_bot.jda_listener.model.GuildMusicManager;
 import discord_bot.playlist_writer.Playlist;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;

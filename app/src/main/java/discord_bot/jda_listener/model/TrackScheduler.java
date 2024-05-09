@@ -1,4 +1,4 @@
-package discord_bot;
+package discord_bot.jda_listener.model;
 
 import java.util.ArrayList;
 import java.util.Collections;

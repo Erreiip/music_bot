@@ -2,12 +2,12 @@ package discord_bot.commands.track;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 
-import discord_bot.GuildMusicManager;
-import discord_bot.Kawaine;
-import discord_bot.TrackScheduler;
 import discord_bot.commands.Commands;
 import discord_bot.embded.MusicEmbded;
 import discord_bot.enumerate.ButtonEnum;
+import discord_bot.jda_listener.Kawaine;
+import discord_bot.jda_listener.model.GuildMusicManager;
+import discord_bot.jda_listener.model.TrackScheduler;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent;
 import net.dv8tion.jda.api.events.interaction.command.GenericCommandInteractionEvent;

@@ -1,7 +1,5 @@
 package discord_bot.commands;
 
-import discord_bot.Kawaine;
-import discord_bot.TrackScheduler;
 import discord_bot.commands.playlists.Add;
 import discord_bot.commands.playlists.Create;
 import discord_bot.commands.playlists.Load;
@@ -18,6 +16,8 @@ import discord_bot.commands.track.Play;
 import discord_bot.commands.track.Queue;
 import discord_bot.commands.track.Skip;
 import discord_bot.commands.track.Stop;
+import discord_bot.jda_listener.Kawaine;
+import discord_bot.jda_listener.model.TrackScheduler;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 

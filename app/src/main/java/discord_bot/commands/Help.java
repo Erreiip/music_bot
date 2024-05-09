@@ -1,9 +1,9 @@
 package discord_bot.commands;
 
-import discord_bot.Kawaine;
-import discord_bot.TrackScheduler;
 import discord_bot.embded.MusicEmbded;
 import discord_bot.enumerate.ButtonEnum;
+import discord_bot.jda_listener.Kawaine;
+import discord_bot.jda_listener.model.TrackScheduler;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;

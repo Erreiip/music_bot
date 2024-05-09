@@ -1,13 +1,12 @@
 package discord_bot.commands.track;
 
-import discord_bot.GuildMusicManager;
-import discord_bot.Kawaine;
-import discord_bot.TrackScheduler;
 import discord_bot.commands.Commands;
 import discord_bot.commands_listeners.loop.ILoopListener;
 import discord_bot.embded.MusicEmbded;
+import discord_bot.jda_listener.Kawaine;
+import discord_bot.jda_listener.model.GuildMusicManager;
+import discord_bot.jda_listener.model.TrackScheduler;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.events.interaction.command.GenericCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.interactions.callbacks.IDeferrableCallback;

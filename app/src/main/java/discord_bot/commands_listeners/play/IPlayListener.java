@@ -1,6 +1,6 @@
 package discord_bot.commands_listeners.play;
 
-import discord_bot.TrackScheduler;
+import discord_bot.jda_listener.model.TrackScheduler;
 import net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent;
 import net.dv8tion.jda.api.interactions.callbacks.IDeferrableCallback;
 

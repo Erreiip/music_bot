@@ -1,4 +1,4 @@
-package discord_bot;
+package discord_bot.jda_listener.model;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;

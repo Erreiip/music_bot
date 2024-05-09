@@ -3,10 +3,10 @@ package discord_bot.commands.track;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
-import discord_bot.GuildMusicManager;
-import discord_bot.Kawaine;
-import discord_bot.TrackScheduler;
 import discord_bot.commands.Commands;
+import discord_bot.jda_listener.Kawaine;
+import discord_bot.jda_listener.model.GuildMusicManager;
+import discord_bot.jda_listener.model.TrackScheduler;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.interactions.callbacks.IDeferrableCallback;

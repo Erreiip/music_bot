@@ -1,4 +1,4 @@
-package discord_bot.youtube;
+package discord_bot.utils.youtube;
 
 /**
  * Sample Java code for youtube.search.list

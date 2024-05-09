@@ -5,9 +5,9 @@ import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
-import discord_bot.GuildMusicManager;
 import discord_bot.common.IProcessAudio;
 import discord_bot.embded.MusicEmbded;
+import discord_bot.jda_listener.model.GuildMusicManager;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 public class AudioLoadResultHandlerImpl implements AudioLoadResultHandler {

@@ -12,9 +12,9 @@ import java.util.List;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 
-import discord_bot.GuildMusicManager;
 import discord_bot.common.Couple;
 import discord_bot.common.IProcessAudio;
+import discord_bot.jda_listener.model.GuildMusicManager;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 public class Playlist implements IProcessAudio {

@@ -2,6 +2,10 @@ package discord_bot;
 
 import javax.security.auth.login.LoginException;
 
+import discord_bot.jda_listener.ButtonListener;
+import discord_bot.jda_listener.CompletionListener;
+import discord_bot.jda_listener.Kawaine;
+import discord_bot.jda_listener.utils.Secret;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Guild;
@@ -91,6 +95,7 @@ public class Main {
         jda.addEventListener(kawaine);
         jda.addEventListener(new ButtonListener(kawaine));
         jda.addEventListener(new CompletionListener(kawaine));
+        jda.addEventListener();
     } 
 
     public static boolean isInteger(String s) {
