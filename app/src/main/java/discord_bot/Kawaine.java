@@ -19,6 +19,10 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.interactions.components.ActionRow;
+import net.dv8tion.jda.api.interactions.components.text.TextInput;
+import net.dv8tion.jda.api.interactions.components.text.TextInputStyle;
+import net.dv8tion.jda.api.interactions.modals.Modal;
 import net.dv8tion.jda.api.managers.AudioManager;
 
 public class Kawaine extends ListenerAdapter {
@@ -63,10 +67,10 @@ public class Kawaine extends ListenerAdapter {
         if (!event.isFromGuild()) return;
 
         event.deferReply().queue();
-
+        
         fireEvent(event);
     }
-
+    
     public void fireEvent(SlashCommandInteractionEvent event) {
 
         GuildMusicManager musicManager = getGuildAudioPlayer(event.getGuild());

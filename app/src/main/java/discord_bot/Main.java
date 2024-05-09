@@ -18,25 +18,27 @@ public class Main {
     public static final String PLAY_OPTION_QUERY = "query";
     public static final String PLAY_OPTION_SPEED = "speed";
 
-    public static final String PLAYLIST_RECORD = "playlist_record";
+    public static final String PLAYLIST_RECORD = "p_record";
     public static final String PLAYLIST_RECORD_OPTION_NAME = "name";
 
-    public static final String PLAYLIST_LOAD = "playlist_load";
+    public static final String PLAYLIST_LOAD = "p_load";
     public static final String PLAYLIST_LOAD_OPTION_NAME = "name";
 
     public static final String PLAYLISTS = "playlists";
 
-    public static final String PLAYLISTS_SEE = "playlists_see";
+    public static final String PLAYLISTS_SEE = "p_see";
     public static final String PLAYLISTS_SEE_OPTION_NAME = "name";
 
-    public static final String PLAYLIST_CREATE = "playlist_create";
+    public static final String PLAYLIST_CREATE = "p_create";
     public static final String PLAYLIST_CREATE_OPTION_NAME = "name";
 
-    public static final String PLAYLIST_ADD = "playlist_add";
-    public static final String PLAYLIST_REMOVE = "playlist_remove";
+    public static final String PLAYLIST_ADD = "p_add";
+    public static final String PLAYLIST_REMOVE = "p_remove";
     public static final String PLAYLIST_ADD_REMOVE_OPTION_NAME = "name";
     public static final String PLAYLIST_ADD_OPTION_URL = "url";
     public static final String PLAYLIST_REMOVE_OPTION_TITLE = "title";
+
+    public static final String PLAYLIST_SAVE = "p_save";
 
     public static final String SKIP = "skip";
     public static final String LOOP = "loop";
@@ -44,7 +46,6 @@ public class Main {
     public static final String STOP = "stop";
     public static final String LAST = "last";
     public static final String PAUSE = "pause";    
-    public static final String PLAYLIST_SAVE = "playlist_save";
     public static final String CLEAR_QUEUE = "clear_queue";
 
     public static void main(String[] args) throws LoginException, InterruptedException {
@@ -79,7 +80,9 @@ public class Main {
                     .addOption(OptionType.STRING, PLAYLIST_ADD_OPTION_URL, "url or title of the video", true),
                 Commands.slash(PLAYLIST_REMOVE, "Remove a song from a playlist")
                     .addOption(OptionType.STRING, PLAYLIST_ADD_REMOVE_OPTION_NAME, "name of the playlist", true, true)
-                    .addOption(OptionType.STRING, PLAYLIST_REMOVE_OPTION_TITLE, "title or index of the video", true)
+                    .addOption(OptionType.STRING, PLAYLIST_REMOVE_OPTION_TITLE, "title or index of the video", true),
+                Commands.slash(PLAYLIST_CREATE, "Create a playlist")
+                    .addOption(OptionType.STRING, PLAYLIST_CREATE_OPTION_NAME, "name of the playlist", true)
             ).queue();
             
         }

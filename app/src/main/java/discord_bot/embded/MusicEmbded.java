@@ -9,6 +9,10 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import discord_bot.enumerate.ButtonEnum;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.interactions.components.ActionRow;
+import net.dv8tion.jda.api.interactions.components.text.TextInput;
+import net.dv8tion.jda.api.interactions.components.text.TextInputStyle;
+import net.dv8tion.jda.api.interactions.modals.Modal;
 
 public class MusicEmbded {
 

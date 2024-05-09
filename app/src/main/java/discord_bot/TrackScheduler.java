@@ -198,8 +198,6 @@ public class TrackScheduler extends AudioEventAdapter implements ISkipListenable
 
     @Override
     public void fireSkip(IDeferrableCallback event, TrackScheduler scheduler) {
-        
-        System.out.println("fireSkip " + listenersSkip);
 
         for (ISkipListener listener : listenersSkip) {
             listener.onSkip(event, scheduler);
