@@ -6,27 +6,25 @@
  * User Manual available at https://docs.gradle.org/7.6.4/userguide/building_java_projects.html
  */
 
+group = "discord_bot"
+version = "1.0-SNAPSHOT"
+
 plugins {
-    // Apply the application plugin to add support for building a CLI application in Java.
-    application
+    id("java")
+    id("application")
 }
 
 repositories {
-    // Use Maven Central for resolving dependencies.
     mavenCentral()
     maven("https://m2.dv8tion.net/releases")
     maven ("https://jitpack.io")
-    jcenter()
 }
 
 dependencies {
-    // Use JUnit test framework.
     testImplementation("junit:junit:4.13.2")
 
-    // This dependency is used by the application.
     implementation("com.google.guava:guava:32.1.3-jre")
     
-    // https://mvnrepository.com/artifact/org.json/json
     implementation("org.json:json:20090211")
 
     // jda
@@ -42,9 +40,28 @@ dependencies {
     implementation("com.github.idpromnut:lavaplayer:youtube_details_parse_bug-SNAPSHOT")
     implementation("com.github.natanbc:lavadsp:0.7.7")
     implementation("com.github.JustRed23:lavadsp:0.7.7")
+
+    // jdbc
+    implementation("org.postgresql:postgresql:42.3.3")
 }
 
 application {
     // Define the main class for the application.
     mainClass.set("discord_bot.Main")
+}
+
+tasks.withType<JavaCompile> {
+    options.encoding = "UTF-8"
+}
+
+tasks.jar {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    destinationDirectory = file("$rootDir/docker/java")
+    archiveBaseName.set("discord_bot")
+    manifest {
+        attributes["Main-Class"] = "discord_bot.Main"
+    }
+    from(configurations.runtimeClasspath.get().filter { it.name.endsWith(".jar") }.map { zipTree(it) }) {
+        exclude("META-INF/*.MF")
+    }
 }

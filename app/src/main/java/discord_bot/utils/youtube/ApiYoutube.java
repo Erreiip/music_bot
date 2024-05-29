@@ -1,5 +1,11 @@
 package discord_bot.utils.youtube;
 
+import com.google.api.client.auth.oauth2.Credential;
+import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
+import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
+import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
+import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
+
 /**
  * Sample Java code for youtube.search.list
  * See instructions for running these code samples locally:
@@ -12,16 +18,21 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 
 import com.google.api.services.youtube.YouTube;
+import com.google.api.services.youtube.model.PlaylistItem;
+import com.google.api.services.youtube.model.PlaylistItemListResponse;
 import com.google.api.services.youtube.model.SearchListResponse;
 
-import discord_bot.common.Couple;
+import discord_bot.utils.Couple;
+import discord_bot.utils.Env;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ApiYoutube {
 
-    private static final String DEVELOPER_KEY = "AIzaSyAq0yKDe2x_Wb5Yb6quZvR9gVIr2WazcNU";
+    private static final String DEVELOPER_KEY = Env.getYtbToken();
 
     private static final String APPLICATION_NAME = "DiscordBot";
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
@@ -40,6 +51,7 @@ public class ApiYoutube {
         }
     }
 
+
     /**
      * Build and return an authorized API client service.
     *
@@ -50,8 +62,8 @@ public class ApiYoutube {
 
         final NetHttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
         return new YouTube.Builder(httpTransport, JSON_FACTORY, null)
-                .setApplicationName(APPLICATION_NAME)
-                .build();
+            .setApplicationName(APPLICATION_NAME)
+            .build();
     }
     
     public static Couple<String, String> search(String query) throws IOException {
@@ -66,4 +78,26 @@ public class ApiYoutube {
 
         return new Couple<>(title, URL);
     }
+
+    public static List<String> getPlaylistItems(String songIdentifier) throws IOException {
+        
+        YouTube.PlaylistItems.List request = youtubeService.playlistItems()
+            .list("snippet");
+
+        songIdentifier = songIdentifier.substring(songIdentifier.indexOf("list=") + 5);
+        songIdentifier = songIdentifier.substring(0, songIdentifier.indexOf("&") == -1 ? songIdentifier.length() : songIdentifier.indexOf("&"));
+
+        PlaylistItemListResponse response = request
+            .setKey(DEVELOPER_KEY)
+            .setPlaylistId(songIdentifier)
+            .execute();
+
+        List<String> ret = new ArrayList<>();
+
+        for (PlaylistItem item : response.getItems()) {
+            ret.add(item.getSnippet().getResourceId().getVideoId());
+        }
+
+        return ret;
+    } 
 }

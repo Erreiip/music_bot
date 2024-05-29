@@ -8,23 +8,22 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 
 import discord_bot.Main;
 import discord_bot.commands.Commands;
-import discord_bot.common.IProcessAudio;
-import discord_bot.embded.MusicEmbded;
-import discord_bot.jda_listener.Kawaine;
-import discord_bot.jda_listener.model.GuildMusicManager;
-import discord_bot.jda_listener.model.TrackScheduler;
-import discord_bot.playlist_writer.Playlist;
+import discord_bot.jda.Kawaine;
+import discord_bot.model.GuildMusicManager;
+import discord_bot.model.MessageSender;
+import discord_bot.model.TrackScheduler;
+import discord_bot.model.playlist_writer.Playlist;
+import discord_bot.utils.IProcessAudio;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
-
 public class Load extends Commands implements IProcessAudio {
 
-    public Load(TrackScheduler scheduler) {
-        super(scheduler);
+    public Load(GuildMusicManager musicManager) {
+        super(musicManager);
     }
 
     @Override
-    public void execute(SlashCommandInteractionEvent event, Kawaine kawaine) {
+    public void execute(SlashCommandInteractionEvent event) {
      
         String name = event.getOption(Main.PLAYLIST_LOAD_OPTION_NAME).getAsString();
 
@@ -33,31 +32,30 @@ public class Load extends Commands implements IProcessAudio {
         try {
             playlist = Playlist.readPlaylist(name);
         } catch (Exception e) {
-            e.printStackTrace();
-            event.getHook().sendMessageEmbeds(MusicEmbded.createEmbdedResponse("An error occurred while loading the playlist.")).queue();
+            MessageSender.errorEvent(musicManager.getMessageSender(), "An error occurred while loading the playlist : " + e.getMessage(), event);
             return;
         }
         
         List<AudioTrackInfo> tracks = playlist.getTracks();
         Collections.shuffle(tracks);
 
-        kawaine.joinChannel(event);
+        musicManager.joinChannel(event);
 
-        playlist.getTracks().forEach(track -> kawaine.addSong(event, track.identifier, null, this));
+        playlist.getTracks().forEach(track -> musicManager.addSong(event, track.identifier, null, this));
 
-        event.getHook().sendMessageEmbeds(MusicEmbded.createEmbdedResponse("Playlist loaded.")).queue();
+        MessageSender.infoEvent(musicManager.getMessageSender(), "Playlist loaded.", event);
     }
 
     @Override
-    public void execute(ButtonInteractionEvent event, Kawaine kawaine) {
+    public void execute(ButtonInteractionEvent event) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'execute'");
     }
 
     @Override
-    public void onTrackGet(SlashCommandInteractionEvent event, GuildMusicManager musicManager, AudioTrack track,
+    public void onTrackGet(SlashCommandInteractionEvent event, AudioTrack track,
             Float speed) {
-        
-        musicManager.scheduler.queueWithoutFire(track, speed != null ? speed : 1, event);
+
+        musicManager.getScheduler().queue(track, speed != null ? speed : 1, event);
     }
 }

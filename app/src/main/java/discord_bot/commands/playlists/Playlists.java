@@ -2,37 +2,33 @@ package discord_bot.commands.playlists;
 
 import java.util.List;
 
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
-
 import discord_bot.commands.Commands;
-import discord_bot.embded.MusicEmbded;
-import discord_bot.jda_listener.Kawaine;
-import discord_bot.jda_listener.model.TrackScheduler;
-import discord_bot.playlist_writer.Playlist;
-import net.dv8tion.jda.api.entities.MessageEmbed;
+import discord_bot.model.GuildMusicManager;
+import discord_bot.model.MessageSender;
+import discord_bot.model.playlist_writer.Playlist;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.interactions.callbacks.IDeferrableCallback;
 
 public class Playlists extends Commands {
     
-    public Playlists(TrackScheduler scheduler) {
-        super(scheduler);
+    public Playlists(GuildMusicManager musicManager) {
+        super(musicManager);
     }
 
     @Override
-    public void execute(SlashCommandInteractionEvent event, Kawaine kawaine) {
+    public void execute(SlashCommandInteractionEvent event) {
         try {
-            getPlaylists((IDeferrableCallback) event);
+            getPlaylists(event);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    public void execute(ButtonInteractionEvent event, Kawaine kawaine) {
+    public void execute(ButtonInteractionEvent event) {
         try {
-            getPlaylists((IDeferrableCallback) event);
+            getPlaylists(event);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -45,7 +41,8 @@ public class Playlists extends Commands {
         playlists = Playlist.getPlaylistsNames();
 
         if (playlists.isEmpty()) {
-            event.getHook().sendMessageEmbeds(MusicEmbded.createEmbdedResponse("No playlist found.")).queue();
+
+            MessageSender.errorEvent(musicManager.getMessageSender(), "No playlist found.", event);
             return;
         }
 
@@ -53,6 +50,6 @@ public class Playlists extends Commands {
 
         playlists.forEach(playlist -> builder.append(":arrow_forward: ").append(playlist).append("\n"));
 
-        event.getHook().sendMessageEmbeds(MusicEmbded.createEmbdedResponse(builder.toString()) ).queue();
+        MessageSender.infoEvent(musicManager.getMessageSender(), builder.toString(), event);
     }
 }

@@ -4,42 +4,46 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 
 import discord_bot.Main;
 import discord_bot.commands.Commands;
-import discord_bot.embded.MusicEmbded;
-import discord_bot.jda_listener.Kawaine;
-import discord_bot.jda_listener.model.GuildMusicManager;
-import discord_bot.jda_listener.model.TrackScheduler;
-import discord_bot.playlist_writer.Playlist;
+import discord_bot.enumerate.ButtonEnum;
+import discord_bot.jda.Kawaine;
+import discord_bot.model.GuildMusicManager;
+import discord_bot.model.MessageSender;
+import discord_bot.model.MusicEmbded;
+import discord_bot.model.MusicModal;
+import discord_bot.model.TrackScheduler;
+import discord_bot.model.playlist_writer.Playlist;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
+import net.dv8tion.jda.api.requests.restaction.WebhookMessageCreateAction;
 
 public class Record extends Commands {
 
-    public Record(TrackScheduler scheduler) {
-        super(scheduler);
+    public Record(GuildMusicManager musicManager) {
+        super(musicManager);
     }
 
     @Override
-    public void execute(SlashCommandInteractionEvent event, Kawaine kawaine) {
-        
-        GuildMusicManager musicManager = kawaine.getGuildAudioPlayer(event.getGuild());
+    public void execute(SlashCommandInteractionEvent event) {
 
         String name = event.getOption(Main.PLAYLIST_RECORD_OPTION_NAME).getAsString();
 
         if ( musicManager.record ) {
-            event.getHook().sendMessageEmbeds(MusicEmbded.createEmbdedResponse("A playlist is already being recorded.")).queue();
+
+            MessageSender.errorEvent(musicManager.getMessageSender(), "A playlist is already being recorded.", event);
             return;
         }
 
         musicManager.record = true;
         musicManager.playlist = new Playlist(name);
 
-        event.getHook().sendMessageEmbeds(MusicEmbded.createEmbdedResponse("Start recording")).queue();
+        MessageSender.infoEvent(musicManager.getMessageSender(), "Start recording", event);
     }
 
     @Override
-    public void execute(ButtonInteractionEvent event, Kawaine kawaine) {
-        
-        
+    public void execute(ButtonInteractionEvent event) {
+
+        event.replyModal(MusicModal.createModalPlaylistRecord()).queue();
     }
     
 }

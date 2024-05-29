@@ -1,39 +1,26 @@
 package discord_bot.commands.track;
 
-import java.util.List;
-
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
-import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-
 import discord_bot.commands.Commands;
-import discord_bot.embded.MusicEmbded;
-import discord_bot.enumerate.ButtonEnum;
-import discord_bot.jda_listener.Kawaine;
-import discord_bot.jda_listener.model.GuildMusicManager;
-import discord_bot.jda_listener.model.TrackScheduler;
-import net.dv8tion.jda.api.entities.MessageEmbed;
+import discord_bot.model.GuildMusicManager;
+import discord_bot.model.MessageSender;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 
 public class Queue extends Commands {
 
-    public Queue(TrackScheduler scheduler) {
-        super(scheduler);
+    public Queue(GuildMusicManager musicManager) {
+        super(musicManager);
         //TODO Auto-generated constructor stub
     }
 
     @Override
-    public void execute(SlashCommandInteractionEvent event, Kawaine kawaine) {
-        
-        GuildMusicManager musicManager = kawaine.getGuildAudioPlayer(event.getGuild());
+    public void execute(SlashCommandInteractionEvent event) {
 
-        MessageEmbed mb = MusicEmbded.createEmbdedQueue(musicManager.scheduler.getQueue());
-
-        event.getHook().sendMessageEmbeds(mb).setActionRow(ButtonEnum.getPlayButton()).queue();
+        MessageSender.queueEvent(musicManager.getMessageSender(), musicManager.getScheduler().getQueue(), event);
     }
 
     @Override
-    public void execute(ButtonInteractionEvent event, Kawaine kawaine) {
+    public void execute(ButtonInteractionEvent event) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'execute'");
     }

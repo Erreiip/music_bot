@@ -5,36 +5,42 @@ import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
-import discord_bot.common.IProcessAudio;
-import discord_bot.embded.MusicEmbded;
-import discord_bot.jda_listener.model.GuildMusicManager;
+import discord_bot.jda.Kawaine;
+import discord_bot.model.GuildMusicManager;
+import discord_bot.model.MessageSender;
+import discord_bot.model.MusicEmbded;
+import discord_bot.utils.IProcessAudio;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 public class AudioLoadResultHandlerImpl implements AudioLoadResultHandler {
 
-    private final GuildMusicManager musicManager;
     private final String songIdentifier;
     private final IProcessAudio callback;
     private final SlashCommandInteractionEvent event;
     private final Float speed;
+    private final MessageSender messageSender;
 
-    public AudioLoadResultHandlerImpl(GuildMusicManager musicManager, String songIdentifier, IProcessAudio callback, SlashCommandInteractionEvent event, Float speed) {
+    public AudioLoadResultHandlerImpl(String songIdentifier, IProcessAudio callback, SlashCommandInteractionEvent event, Float speed, MessageSender messageSender) {
 
-        this.musicManager = musicManager;
         this.songIdentifier = songIdentifier;
         this.callback = callback;
         this.event = event;
         this.speed = speed;
+        this.messageSender = messageSender;
     }
 
     @Override
     public void trackLoaded(AudioTrack track) {
 
-        callback.onTrackGet(event, musicManager, track, this.speed);
+        callback.onTrackGet(event, track, this.speed);
     }
 
     @Override
     public void playlistLoaded(AudioPlaylist playlist) {
+
+        System.out.println(playlist);
+        System.out.println(playlist.getTracks());
+        System.out.println(playlist.getName());
 
         AudioTrack firstTrack = playlist.getSelectedTrack();
 
@@ -42,20 +48,19 @@ public class AudioLoadResultHandlerImpl implements AudioLoadResultHandler {
             firstTrack = playlist.getTracks().get(0);
         }
 
-        callback.onTrackGet(event, musicManager, firstTrack, this.speed);
+        callback.onTrackGet(event, firstTrack, this.speed);
     }
 
     @Override
     public void noMatches() {
 
-        event.getHook().sendMessageEmbeds(MusicEmbded.createEmbdedResponse("Nothing found by " + songIdentifier)).queue();
+        MessageSender.errorEvent(this.messageSender, "Nothing found by " + songIdentifier, event);
     }
 
     @Override
     public void loadFailed(FriendlyException exception) {
 
-        event.getHook().sendMessageEmbeds(MusicEmbded.createEmbdedResponse("Could not play: " + exception.getMessage())).queue();
-        exception.printStackTrace();
+        MessageSender.errorEvent(this.messageSender, "An error occurred while loading the playlist : " + exception, event);
     }
     
 }

@@ -3,28 +3,26 @@ package discord_bot.commands.playlists;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 
 import discord_bot.commands.Commands;
-import discord_bot.embded.MusicEmbded;
-import discord_bot.jda_listener.Kawaine;
-import discord_bot.jda_listener.model.GuildMusicManager;
-import discord_bot.jda_listener.model.TrackScheduler;
-import discord_bot.playlist_writer.Playlist;
+import discord_bot.jda.Kawaine;
+import discord_bot.model.GuildMusicManager;
+import discord_bot.model.MessageSender;
+import discord_bot.model.MusicEmbded;
+import discord_bot.model.TrackScheduler;
+import discord_bot.model.playlist_writer.Playlist;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 
 public class Save extends Commands {
 
-    public Save(TrackScheduler scheduler) {
-        super(scheduler);
-        //TODO Auto-generated constructor stub
+    public Save(GuildMusicManager musicManager) {
+        super(musicManager);
     }
 
     @Override
-    public void execute(SlashCommandInteractionEvent event, Kawaine kawaine) {
-        
-        GuildMusicManager musicManager = kawaine.getGuildAudioPlayer(event.getGuild());
+    public void execute(SlashCommandInteractionEvent event) {
 
         if ( ! musicManager.record ) {
-            event.getHook().sendMessageEmbeds(MusicEmbded.createEmbdedResponse("No playlist is being recorded.")).queue();
+            MessageSender.errorEvent(musicManager.getMessageSender(), "No playlist is being recorded.", event);
             return;
         }
 
@@ -33,15 +31,15 @@ public class Save extends Commands {
         try {
             Playlist.writePlaylist(musicManager.playlist);
         } catch (Exception e) {
-            event.getHook().sendMessageEmbeds(MusicEmbded.createEmbdedResponse("An error occurred while saving the playlist.")).queue();
+            MessageSender.errorEvent(musicManager.getMessageSender(), "An error occurred while saving the playlist.", event);
             return;
         }
-
-        event.getHook().sendMessageEmbeds(MusicEmbded.createEmbdedResponse("Playlist saved.")).queue();
+        
+        MessageSender.infoEvent(musicManager.getMessageSender(), "Playlist saved.", event);
     }
 
     @Override
-    public void execute(ButtonInteractionEvent event, Kawaine kawaine) {
+    public void execute(ButtonInteractionEvent event) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'execute'");
     }

@@ -17,7 +17,8 @@ public enum ButtonEnum {
     HELP(6, "❓"),
     CLEAR_QUEUE(7, "Vider la queue"),
     STOP(8, "🛑"),
-    SHUFFLE(9, "🔀");
+    SHUFFLE(9, "🔀"),
+    RECORD(10, "📼"),;
 
     public final int id;
     public final String label;
@@ -43,11 +44,11 @@ public enum ButtonEnum {
 
         List<ItemComponent> items = new ArrayList<>();
 
-        items.add( Button.success(PAUSE.id + "", PAUSE.label) );
-        items.add( Button.success(SKIP.id + "", SKIP.label) );
-        items.add( Button.success(LOOP.id + "", LOOP.label));
-        items.add( Button.success(LAST.id + "", LAST.label) );
-        items.add( Button.success(CLEAR_QUEUE.id + "", CLEAR_QUEUE.label));
+        items.add( Button.secondary(PAUSE.id + "", PAUSE.label) );
+        items.add( Button.secondary(SKIP.id + "", SKIP.label) );
+        items.add( Button.secondary(LOOP.id + "", LOOP.label));
+        items.add( Button.secondary(LAST.id + "", LAST.label) );
+        items.add( Button.secondary(CLEAR_QUEUE.id + "", CLEAR_QUEUE.label));
         
         return items;
     }
@@ -56,9 +57,19 @@ public enum ButtonEnum {
 
         List<ItemComponent> items = new ArrayList<>();
 
-        items.add( Button.success(PLAYLISTS.id + "", PLAYLISTS.label) );
+        items.add( Button.primary(HELP.id + "", HELP.label) );
+        items.add( Button.primary(PLAYLISTS.id + "", PLAYLISTS.label) );
 
         return items;
+    }
 
+    public static List<ItemComponent> getPlaylistsButton() {
+            
+        List<ItemComponent> items = new ArrayList<>();
+
+        items.add( Button.success(HELP.id + "", HELP.label) );
+        items.add( Button.success(RECORD.id + "", RECORD.label) );
+
+        return items;
     }
 }

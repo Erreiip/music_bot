@@ -6,4 +6,7 @@ build
 
 *.class
 
-secret.txt
+*secret.txt
+*secret.json
+
+*env*

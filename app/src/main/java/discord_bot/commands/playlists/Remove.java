@@ -1,25 +1,21 @@
 package discord_bot.commands.playlists;
 
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
-
 import discord_bot.Main;
 import discord_bot.commands.Commands;
-import discord_bot.embded.MusicEmbded;
-import discord_bot.jda_listener.Kawaine;
-import discord_bot.jda_listener.model.TrackScheduler;
-import discord_bot.playlist_writer.Playlist;
+import discord_bot.model.GuildMusicManager;
+import discord_bot.model.MessageSender;
+import discord_bot.model.playlist_writer.Playlist;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
-
 public class Remove extends Commands {
     
-    public Remove(TrackScheduler scheduler) {
-        super(scheduler);
+    public Remove(GuildMusicManager musicManager) {
+        super(musicManager);
         //TODO Auto-generated constructor stub
     }
 
     @Override
-    public void execute(SlashCommandInteractionEvent event, Kawaine kawaine) {
+    public void execute(SlashCommandInteractionEvent event) {
         
         String name = event.getOption(Main.PLAYLIST_ADD_REMOVE_OPTION_NAME).getAsString();
         String trackNameOrIndex = event.getOption(Main.PLAYLIST_REMOVE_OPTION_TITLE).getAsString();
@@ -27,7 +23,12 @@ public class Remove extends Commands {
         Playlist playlist;
 
         try { playlist = Playlist.readPlaylist(name); } 
-        catch (Exception e) { event.getHook().sendMessageEmbeds(MusicEmbded.createEmbdedResponse("An error occurred while loading the playlist : " + e.getMessage())).queue(); return; }
+        catch (Exception e) { 
+
+            MessageSender.errorEvent(musicManager.getMessageSender(), "An error occurred while loading the playlist : " + e.getMessage(), event);
+            
+            return;
+        }
 
         boolean removed = false; 
 
@@ -36,26 +37,25 @@ public class Remove extends Commands {
             int index = Integer.parseInt(trackNameOrIndex);
             removed = playlist.removeTrack(index - 1);
         } else {
-
             removed = playlist.removeTrack(trackNameOrIndex);
         }
 
         if ( ! removed ) {
-            event.getHook().sendMessageEmbeds(MusicEmbded.createEmbdedResponse("Track not found.")).queue();
+            MessageSender.errorEvent(musicManager.getMessageSender(), "Track not found.", event);
             return;
         }
 
         try { Playlist.writePlaylist(playlist); } 
         catch (Exception e) { 
-            event.getHook().sendMessageEmbeds(MusicEmbded.createEmbdedResponse("An error occurred while saving the playlist.")).queue();
+            MessageSender.errorEvent(musicManager.getMessageSender(), "An error occurred while saving the playlist.", event);
             return;
         }
 
-        event.getHook().sendMessageEmbeds(MusicEmbded.createEmbdedResponse("Track removed.")).queue();
+        MessageSender.infoEvent(musicManager.getMessageSender(), "Track removed.", event);
     }
 
     @Override
-    public void execute(ButtonInteractionEvent event, Kawaine kawaine) {
+    public void execute(ButtonInteractionEvent event) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'execute'");
     }

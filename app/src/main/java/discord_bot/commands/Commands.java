@@ -16,8 +16,9 @@ import discord_bot.commands.track.Play;
 import discord_bot.commands.track.Queue;
 import discord_bot.commands.track.Skip;
 import discord_bot.commands.track.Stop;
-import discord_bot.jda_listener.Kawaine;
-import discord_bot.jda_listener.model.TrackScheduler;
+import discord_bot.jda.Kawaine;
+import discord_bot.model.GuildMusicManager;
+import discord_bot.model.TrackScheduler;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 
@@ -44,38 +45,38 @@ public abstract class Commands implements ButtonCommands {
     public static final int RECORD = 14;
     public static final int PLAYLISTS = 15;
 
-    TrackScheduler scheduler;
+    protected GuildMusicManager musicManager;
 
-    public Commands(TrackScheduler scheduler) {
-        this.scheduler = scheduler;
+    public Commands(GuildMusicManager musicManager) {
+        this.musicManager = musicManager;
     }
     
-    public abstract void execute(SlashCommandInteractionEvent event, Kawaine kawaine);
+    public abstract void execute(SlashCommandInteractionEvent event);
 
-    public abstract void execute(ButtonInteractionEvent event, Kawaine kawaine);
+    public abstract void execute(ButtonInteractionEvent event);
 
-    public static Commands[] getCommands(TrackScheduler scheduler) {
+    public static Commands[] getCommands(GuildMusicManager musicManager) {
 
         return new Commands[] {
-            new Play(scheduler),
-            new Skip(scheduler),
-            new Pause(scheduler),
-            new ClearQueue(scheduler),
-            new Last(scheduler),
-            new Queue(scheduler),
-            new Stop(scheduler),
-            new Loop(scheduler),
+            new Play(musicManager),
+            new Skip(musicManager),
+            new Pause(musicManager),
+            new ClearQueue(musicManager),
+            new Last(musicManager),
+            new Queue(musicManager),
+            new Stop(musicManager),
+            new Loop(musicManager),
             //Playlist commands
-            new Add(scheduler),
-            new Create(scheduler),
-            new Load(scheduler),
-            new Remove(scheduler),
-            new Save(scheduler),
-            new See(scheduler),
-            new Record(scheduler),
-            new Playlists(scheduler),
+            new Add(musicManager),
+            new Create(musicManager),
+            new Load(musicManager),
+            new Remove(musicManager),
+            new Save(musicManager),
+            new See(musicManager),
+            new Record(musicManager),
+            new Playlists(musicManager),
             
-            new Help(scheduler)
+            new Help(musicManager)
         };
     }
 }

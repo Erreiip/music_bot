@@ -1,53 +1,37 @@
 package discord_bot.commands.track;
 
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
-
 import discord_bot.commands.Commands;
-import discord_bot.embded.MusicEmbded;
-import discord_bot.enumerate.ButtonEnum;
-import discord_bot.jda_listener.Kawaine;
-import discord_bot.jda_listener.model.GuildMusicManager;
-import discord_bot.jda_listener.model.TrackScheduler;
-import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent;
-import net.dv8tion.jda.api.events.interaction.command.GenericCommandInteractionEvent;
+import discord_bot.model.GuildMusicManager;
+import discord_bot.model.MessageSender;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.interactions.callbacks.IDeferrableCallback;
 
 public class Pause extends Commands {
     
-    public Pause(TrackScheduler scheduler) {
-        super(scheduler);
+    public Pause(GuildMusicManager musicManager) {
+        super(musicManager);
     }
 
     @Override
-    public void execute(SlashCommandInteractionEvent event, Kawaine kawaine) {
-        
-        GuildMusicManager musicManager = kawaine.getGuildAudioPlayer(event.getGuild());
-        
+    public void execute(SlashCommandInteractionEvent event) {
+    
         musicManager.player.setPaused(!musicManager.player.isPaused());
 
-        sendResponse(event, musicManager);
+        sendResponse(event);
     }
 
     @Override
-    public void execute(ButtonInteractionEvent event, Kawaine kawaine) {
-        
-        GuildMusicManager musicManager = kawaine.getGuildAudioPlayer(event.getGuild());
+    public void execute(ButtonInteractionEvent event) {
         
         musicManager.player.setPaused(!musicManager.player.isPaused());
 
-        sendResponse(event, musicManager);
+        sendResponse(event);
     }
 
-    public void sendResponse(IDeferrableCallback event, GuildMusicManager musicManager) {
+    public void sendResponse(IDeferrableCallback event) {
 
-        MessageEmbed mb = MusicEmbded.createEmbdedResponse("Player is now " + (musicManager.player.isPaused() ? "paused" : "resumed"));
-
-        event.getHook().sendMessageEmbeds(mb).queue();
+        MessageSender.infoEvent(musicManager.getMessageSender(), "Player is now " + (musicManager.player.isPaused() ? "paused" : "resumed"), event);
     }
 
-    
-    
 }

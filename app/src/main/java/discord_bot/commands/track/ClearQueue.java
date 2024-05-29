@@ -1,41 +1,35 @@
 package discord_bot.commands.track;
 
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
-
 import discord_bot.commands.Commands;
-import discord_bot.embded.MusicEmbded;
-import discord_bot.jda_listener.Kawaine;
-import discord_bot.jda_listener.model.GuildMusicManager;
-import discord_bot.jda_listener.model.TrackScheduler;
+import discord_bot.model.GuildMusicManager;
+import discord_bot.model.MessageSender;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.interactions.callbacks.IDeferrableCallback;
 
 public class ClearQueue extends Commands {
 
-    public ClearQueue(TrackScheduler scheduler) {
-        super(scheduler);
+    public ClearQueue(GuildMusicManager musicManager) {
+        super(musicManager);
     }
 
     @Override
-    public void execute(SlashCommandInteractionEvent event, Kawaine kawaine) {
+    public void execute(SlashCommandInteractionEvent event) {
         
-        clearQueue((IDeferrableCallback) event, kawaine);
+        clearQueue((IDeferrableCallback) event);
     }
 
     @Override
-    public void execute(ButtonInteractionEvent event, Kawaine kawaine) {
+    public void execute(ButtonInteractionEvent event) {
         
-        clearQueue((IDeferrableCallback) event, kawaine);
+        clearQueue((IDeferrableCallback) event);
     }
 
-    public void clearQueue(IDeferrableCallback event, Kawaine kawaine) {
+    public void clearQueue(IDeferrableCallback event) {
 
-        GuildMusicManager musicManager = kawaine.getGuildAudioPlayer(event.getGuild());
+        musicManager.getScheduler().clearQueue();
 
-        musicManager.scheduler.clearQueue();
-
-        event.getHook().sendMessageEmbeds(MusicEmbded.createEmbdedResponse("Queue cleared")).queue();
+        MessageSender.infoEvent(musicManager.getMessageSender(), "Queue cleared.", event);
     }
     
 }
