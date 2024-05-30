@@ -71,7 +71,11 @@ public class Play extends Commands implements IProcessAudio, IPlayListener {
     @Override
     public void onPlay(IDeferrableCallback event) {
 
+        System.out.println("onPlay");
+
         MessageSender.playEvent(musicManager.getMessageSender(), musicManager.getScheduler().getCurrentTrack().getInfo(), event);
+        
+        System.out.println("onPlay end");
     }
 
     @Override

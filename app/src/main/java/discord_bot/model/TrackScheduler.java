@@ -45,6 +45,8 @@ public class TrackScheduler extends AudioEventAdapter implements ISkipListenable
         this.event = null;
 
         this.queue = new ArrayList<>();
+
+        this.loadingTest = 3;
     }
 
     public boolean queueWithoutFire(AudioTrack track, float speed) {
@@ -90,7 +92,10 @@ public class TrackScheduler extends AudioEventAdapter implements ISkipListenable
 
     public boolean nextTrack() {
 
+        System.out.println("nextTrack " + queue.isEmpty() + " " + this.loop);
+
         if (queue.isEmpty() && ! this.loop) {
+            
             this.onNoTrack();
             this.player.stopTrack();
             return false;
@@ -169,25 +174,31 @@ public class TrackScheduler extends AudioEventAdapter implements ISkipListenable
     @Override
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
 
+        System.out.println("endReason1 " + endReason == AudioTrackEndReason.LOAD_FAILED + " " + (loadingTest > 0));
         if (endReason == AudioTrackEndReason.LOAD_FAILED && loadingTest > 0) {
-            this.queue.add(0, new Couple<AudioTrack,Float>(this.currentTrack, this.currentTrackSpeed));
+            this.queue.add(0, new Couple<AudioTrack, Float>(this.currentTrack, this.currentTrackSpeed));
             this.nextTrack();
             this.loadingTest--;
             return;
-        } 
-
-        if ( loadingTest == 0 ) {
-
-            System.out.println("PROBLEME DE CHARGEMENT DE LA MUSIQUE");
         }
-
+        
+        System.out.println("endReason2 " + (loadingTest == 0));
+        if (loadingTest == 0) {
+            player.startTrack(track, false);
+            System.out.println(track);
+            System.out.println("PROBLEME DE CHARGEMENT DE LA MUSIQUE");
+            this.loadingTest = 3;
+        }
+        
+        System.out.println("endReason3 " + endReason + " " + endReason.mayStartNext + " " + this.loop);
         if (endReason.mayStartNext || endReason == AudioTrackEndReason.FINISHED && this.loop) {
+            System.out.println("rentre");
             this.loadingTest = 3;
             nextTrack();
             return;
         }
 
-        this.onNoTrack();
+        //this.onNoTrack();
     }
 
     public boolean isLooped() {
@@ -316,11 +327,13 @@ public class TrackScheduler extends AudioEventAdapter implements ISkipListenable
 
     @Override
     public void onNoTrack() {
+
+        System.out.println("NO TRACK");
+        System.out.println(listenersNoTrack);
         
         for (INoTrackListener listener : listenersNoTrack) {
             listener.onNoTrack();
         }
     }
 
-    
 }

@@ -34,6 +34,8 @@ public class MessageSender {
     private void removeEvent(Message message) {
         
         if (message == null) return;
+        
+        System.out.println(message);
 
         message.delete().complete();
     }
@@ -45,6 +47,12 @@ public class MessageSender {
         this.removeEvent(lInfoEvent);
         this.removeEvent(lErrorEvent);
         this.removeEvent(lHelpEvent);
+
+        lPlayevent = null;
+        lQueueEvent = null;
+        lInfoEvent = null;
+        lErrorEvent = null;
+        lHelpEvent = null;
     }
 
     private synchronized void sendPlayEvent(WebhookMessageCreateAction<Message> message) {
@@ -117,6 +125,8 @@ public class MessageSender {
     private synchronized void sendInfoEvent(MessageCreateAction message) {
         
         this.removeEvent(lInfoEvent);
+
+        System.out.println("passé");
 
         lInfoEvent = message.complete();
 
@@ -210,9 +220,13 @@ public class MessageSender {
 
     public static void infoEvent(MessageSender sender, String message) {
         
+        System.out.println("infoEvent");
+
         MessageCreateAction msg = sender.lastMessageChannel.sendMessageEmbeds(
             MusicEmbded.createEmbdedResponse(message)
         ).addActionRow(ButtonEnum.getHelpButton());
+
+        System.out.println("infoEvent end");
 
         sender.sendInfoEvent(msg);
     }
