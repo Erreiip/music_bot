@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.checkerframework.checker.units.qual.A;
-
 import com.github.natanbc.lavadsp.timescale.TimescalePcmAudioFilter;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
@@ -21,7 +19,6 @@ import discord_bot.listeners.commands_listeners.skip.ISkipListener;
 import discord_bot.listeners.no_track.INoTrackListenable;
 import discord_bot.listeners.no_track.INoTrackListener;
 import discord_bot.utils.Couple;
-import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent;
 import net.dv8tion.jda.api.interactions.callbacks.IDeferrableCallback;
 
@@ -36,6 +33,8 @@ public class TrackScheduler extends AudioEventAdapter implements ISkipListenable
 
     private AudioTrack currentTrack;
     private Float currentTrackSpeed;
+
+    private int loadingTest;
 
     public TrackScheduler(AudioPlayer player, AudioPlayer secondPlayer) {
 
@@ -91,8 +90,6 @@ public class TrackScheduler extends AudioEventAdapter implements ISkipListenable
 
     public boolean nextTrack() {
 
-        System.out.println("TrackScheduler: nextTrack: " + this.queue.size());
-
         if (queue.isEmpty() && ! this.loop) {
             this.onNoTrack();
             this.player.stopTrack();
@@ -111,7 +108,7 @@ public class TrackScheduler extends AudioEventAdapter implements ISkipListenable
         }
         
         changePlayerSpeed(currentTrackSpeed);
-        player.startTrack(this.currentTrack, false);
+        player.startTrack(currentTrack, false);
 
         this.onSkip((IDeferrableCallback) event);
 
@@ -127,7 +124,7 @@ public class TrackScheduler extends AudioEventAdapter implements ISkipListenable
     
     public boolean addLastTrack() {
 
-        if (this.currentTrack == null) return false;
+        if (this.player.getPlayingTrack() == null) return false;
 
         this.queue(currentTrack, currentTrackSpeed);
 
@@ -164,7 +161,7 @@ public class TrackScheduler extends AudioEventAdapter implements ISkipListenable
     }
     
     public void clearQueue() {
-     
+
         this.setLoop(false);
         this.queue.clear();
     }
@@ -172,17 +169,25 @@ public class TrackScheduler extends AudioEventAdapter implements ISkipListenable
     @Override
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
 
-        if (endReason == AudioTrackEndReason.LOAD_FAILED ) {
-            System.out.println("TrackScheduler: onTrackEnd: LOAD_FAILED");
-            this.queueWithoutFire(track, 1);
+        if (endReason == AudioTrackEndReason.LOAD_FAILED && loadingTest > 0) {
+            this.queue.add(0, new Couple<AudioTrack,Float>(this.currentTrack, this.currentTrackSpeed));
             this.nextTrack();
+            this.loadingTest--;
             return;
         } 
 
+        if ( loadingTest == 0 ) {
+
+            System.out.println("PROBLEME DE CHARGEMENT DE LA MUSIQUE");
+        }
+
         if (endReason.mayStartNext || endReason == AudioTrackEndReason.FINISHED && this.loop) {
+            this.loadingTest = 3;
             nextTrack();
             return;
         }
+
+        this.onNoTrack();
     }
 
     public boolean isLooped() {

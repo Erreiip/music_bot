@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import discord_bot.Main;
 import discord_bot.utils.database.Database;
 import discord_bot.utils.spotify.SpotifyAuthenticator;
 import discord_bot.utils.youtube.ApiYoutube;
@@ -27,7 +26,7 @@ public class SongIdentifier {
 
     public static String getSongIdentifier(String songIdentifier) {
 
-        if ( PATTERN_URL.matcher(songIdentifier).matches() ) {
+        if ( PATTERN_URL.matcher(songIdentifier).matches() && ! PATTERN_SPOTIFY.matcher(songIdentifier).matches() ) {
 
             return songIdentifier;
         }
@@ -38,14 +37,23 @@ public class SongIdentifier {
                 String song = Database.getInstance().getQuery(songIdentifier);
                 if (song != null) return song;
             } catch(Exception e) { e.printStackTrace(); } 
-        }       
+        }
+
+        String songQuery = songIdentifier;
+
+        if ( PATTERN_SPOTIFY.matcher(songIdentifier).matches() ) {
+
+            songIdentifier = querySpotify(songIdentifier);
+        }
 
         Couple<String, String> query = queryByName(songIdentifier);
 
         if (query == null) return null;
 
+        System.out.println("SongIdentifier: getSongIdentifier: " + songQuery + " -> " + query.second);
+
         if ( ! Env.isDebug() ) {
-            Database.addTrack(songIdentifier, query.second);
+            Database.addTrack(songQuery, query.second);
         }
 
         return query.second;
@@ -90,6 +98,13 @@ public class SongIdentifier {
             e.printStackTrace();
             return null;
         }
+    }
+
+    private static String querySpotify(String songIdentifier) {
+
+        SpotifyAuthenticator spotifyAuthenticator = SpotifyAuthenticator.getInstance();
+
+        return spotifyAuthenticator.getTitle(songIdentifier);
     }
     
 }

@@ -127,7 +127,7 @@ public class GuildMusicManager implements ITimeoputListener, INoTrackListener {
     public void onTimeoutNoSong() {
 
         MessageSender.infoEvent(messageSender, "Le bot s'est déconnecté du à l'inactivité");
-        this.audioManager.closeAudioConnection();
+        if (this.scheduler.getQueue().isEmpty() ) this.audioManager.closeAudioConnection();
     }
 
     public void onNoTrack() {

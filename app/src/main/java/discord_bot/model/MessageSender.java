@@ -35,7 +35,7 @@ public class MessageSender {
         
         if (message == null) return;
 
-        message.delete().queue();
+        message.delete().complete();
     }
 
     private void removeAllEvents() {
