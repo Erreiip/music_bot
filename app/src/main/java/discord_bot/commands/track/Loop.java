@@ -31,6 +31,7 @@ public class Loop extends Commands implements ILoopListener {
     @Override
     public void onLoop(IDeferrableCallback event) {
 
+        musicManager.getMessageSender().editLastPlayEvent(musicManager.getScheduler().getCurrentTrack().getInfo(), musicManager.getScheduler().isLooped());
         MessageSender.infoEvent(musicManager.getMessageSender(), "Loop is now " + (musicManager.getScheduler().isLooped() ? "enabled" : "disabled"), event);
     }
 

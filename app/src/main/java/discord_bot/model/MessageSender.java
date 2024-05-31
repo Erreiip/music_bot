@@ -6,11 +6,12 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 
 import discord_bot.enumerate.ButtonEnum;
+import discord_bot.utils.message_event.MessageEvent;
+import discord_bot.utils.message_event.MessageP;
+import discord_bot.utils.message_event.WebHookMessageP;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.channel.unions.MessageChannelUnion;
 import net.dv8tion.jda.api.interactions.callbacks.IDeferrableCallback;
-import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
-import net.dv8tion.jda.api.requests.restaction.WebhookMessageCreateAction;
 
 public class MessageSender {
 
@@ -34,14 +35,12 @@ public class MessageSender {
     private void removeEvent(Message message) {
         
         if (message == null) return;
-        
-        System.out.println(message);
 
-        message.delete().complete();
+        message.delete().queue();
     }
 
     private void removeAllEvents() {
-        
+
         this.removeEvent(lPlayevent);
         this.removeEvent(lQueueEvent);
         this.removeEvent(lInfoEvent);
@@ -54,57 +53,16 @@ public class MessageSender {
         lErrorEvent = null;
         lHelpEvent = null;
     }
+    
+    public void disconnect() {
 
-    private synchronized void sendPlayEvent(WebhookMessageCreateAction<Message> message) {
-        
-        this.removeAllEvents();
-
-        lPlayevent = message.complete();
-
-        lastMessageChannel = lPlayevent.getChannel();
-    }
-
-    private synchronized void sendQueueEvent(WebhookMessageCreateAction<Message> message) {
-        
+        this.removeEvent(lPlayevent);
         this.removeEvent(lQueueEvent);
-
-        lQueueEvent = message.complete();
-
-        lastMessageChannel = lQueueEvent.getChannel();
-    }
-
-    private synchronized void sendInfoEvent(WebhookMessageCreateAction<Message> message) {
-        
-        this.removeEvent(lInfoEvent);
-
-        lInfoEvent = message.complete();
-
-        lastMessageChannel = lInfoEvent.getChannel();
-    }
-
-    private synchronized void sendErrorEvent(WebhookMessageCreateAction<Message> message) {
-        
         this.removeEvent(lErrorEvent);
-
-        lErrorEvent = message.complete();
-
-        lastMessageChannel = lErrorEvent.getChannel();
-    }
-
-    private synchronized void sendHelpEvent(WebhookMessageCreateAction<Message> message) {
-        
         this.removeEvent(lHelpEvent);
-
-        lHelpEvent = message.complete();
-
-        lastMessageChannel = lHelpEvent.getChannel();
     }
 
-    /*
-     * Pue la merde, incapable de faire une 
-     * interface car jda pu la merde
-     */
-    private synchronized void sendPlayEvent(MessageCreateAction message) {
+    private synchronized void sendPlayEvent(MessageEvent message) {
         
         this.removeAllEvents();
 
@@ -113,7 +71,7 @@ public class MessageSender {
         lastMessageChannel = lPlayevent.getChannel();
     }
 
-    private synchronized void sendQueueEvent(MessageCreateAction message) {
+    private synchronized void sendQueueEvent(MessageEvent message) {
         
         this.removeEvent(lQueueEvent);
 
@@ -122,18 +80,16 @@ public class MessageSender {
         lastMessageChannel = lQueueEvent.getChannel();
     }
 
-    private synchronized void sendInfoEvent(MessageCreateAction message) {
+    private synchronized void sendInfoEvent(MessageEvent message) {
         
         this.removeEvent(lInfoEvent);
-
-        System.out.println("passé");
 
         lInfoEvent = message.complete();
 
         lastMessageChannel = lInfoEvent.getChannel();
     }
 
-    private synchronized void sendErrorEvent(MessageCreateAction message) {
+    private synchronized void sendErrorEvent(MessageEvent message) {
         
         this.removeEvent(lErrorEvent);
 
@@ -142,7 +98,7 @@ public class MessageSender {
         lastMessageChannel = lErrorEvent.getChannel();
     }
 
-    private synchronized void sendHelpEvent(MessageCreateAction message) {
+    private synchronized void sendHelpEvent(MessageEvent message) { 
         
         this.removeEvent(lHelpEvent);
 
@@ -155,97 +111,110 @@ public class MessageSender {
     /*
      * Static methods
      * */
-    public static void playEvent(MessageSender sender, AudioTrackInfo info, IDeferrableCallback event) {
+    public static void playEvent(MessageSender sender, AudioTrackInfo info, boolean looped, IDeferrableCallback event) {
 
-        WebhookMessageCreateAction<Message> msg = event.getHook().sendMessageEmbeds(
-            MusicEmbded.createEmbded(info)  
-        ).addActionRow(ButtonEnum.getPlayButton());
+        MessageEvent messageEvent;
 
-        sender.sendPlayEvent(msg);
+        if (event != null) {
+            messageEvent = new WebHookMessageP( event.getHook().sendMessageEmbeds(
+                MusicEmbded.createEmbded(info, looped)  
+            ));
+        } else {
+            messageEvent = new MessageP( sender.lastMessageChannel.sendMessageEmbeds(
+                MusicEmbded.createEmbded(info, looped)
+            ));
+        }
+        
+        ButtonEnum.setButtonPlay(messageEvent);
+
+        sender.sendPlayEvent(messageEvent);
     }
 
     public static void queueEvent(MessageSender sender, List<AudioTrack> info, IDeferrableCallback event) {
 
-        WebhookMessageCreateAction<Message> msg = event.getHook().sendMessageEmbeds(
-            MusicEmbded.createEmbdedQueue(info)
-        ).addActionRow(ButtonEnum.getPlayButton()); // TODO CHANGER CA
+        MessageEvent messageEvent;
 
-        sender.sendQueueEvent(msg);
+        if (event != null) {
+            messageEvent = new WebHookMessageP( event.getHook().sendMessageEmbeds(
+                MusicEmbded.createEmbdedQueue(info)  
+            ));
+        } else {
+            messageEvent = new MessageP( sender.lastMessageChannel.sendMessageEmbeds(
+                MusicEmbded.createEmbdedQueue(info)
+            ));
+        }
+
+        ButtonEnum.setButtonPlay(messageEvent);
+
+        sender.sendQueueEvent(messageEvent);
     }
 
     public static void infoEvent(MessageSender sender, String message, IDeferrableCallback event) {
-        
-        WebhookMessageCreateAction<Message> msg = event.getHook().sendMessageEmbeds(
-            MusicEmbded.createEmbdedResponse(message)
-        ).addActionRow(ButtonEnum.getHelpButton());
 
-        sender.sendInfoEvent(msg);
+        MessageEvent messageEvent;
+
+        if (event != null) {
+            messageEvent = new WebHookMessageP( event.getHook().sendMessageEmbeds(
+                MusicEmbded.createEmbdedResponse(message)  
+            ));
+        } else {
+            messageEvent = new MessageP( sender.lastMessageChannel.sendMessageEmbeds(
+                MusicEmbded.createEmbdedResponse(message)
+            ));
+        }
+
+        ButtonEnum.setButtonHelp(messageEvent);
+
+        sender.sendInfoEvent(messageEvent);
     }
 
     public static void errorEvent(MessageSender sender, String message, IDeferrableCallback event) {
 
-        WebhookMessageCreateAction<Message> msg = event.getHook().sendMessageEmbeds(
-            MusicEmbded.createEmbdedError(message)
-        ).addActionRow(ButtonEnum.getHelpButton());
+        MessageEvent messageEvent;
 
-        sender.sendErrorEvent(msg);
+        if (event != null) {
+            messageEvent = new WebHookMessageP( event.getHook().sendMessageEmbeds(
+                MusicEmbded.createEmbdedError(message) 
+            ));
+        } else {
+            messageEvent = new MessageP( sender.lastMessageChannel.sendMessageEmbeds(
+                MusicEmbded.createEmbdedError(message)
+            ));
+        }
+
+        ButtonEnum.setButtonHelp(messageEvent);
+
+        sender.sendErrorEvent(messageEvent);
     }
 
     public static void helpEvent(MessageSender sender, IDeferrableCallback event) {
 
-        MessageCreateAction msg = sender.lastMessageChannel.sendMessageEmbeds(
-            MusicEmbded.createEmbdedHelp()
-        ).addActionRow(ButtonEnum.getHelpButton());
+        MessageEvent messageEvent;
 
-        sender.sendHelpEvent(msg);
+        if (event != null) {
+            messageEvent = new WebHookMessageP( event.getHook().sendMessageEmbeds(
+                MusicEmbded.createEmbdedHelp() 
+            ));
+        } else {
+            messageEvent = new MessageP( sender.lastMessageChannel.sendMessageEmbeds(
+                MusicEmbded.createEmbdedHelp()
+            ));
+        }
+
+        ButtonEnum.setButtonHelp(messageEvent);
+
+        sender.sendHelpEvent(messageEvent);
     }
+    
+    /*
+     * Edit
+     * */
 
-    public static void playEvent(MessageSender sender, AudioTrackInfo info) {
+    public void editLastPlayEvent(AudioTrackInfo info, boolean looped) {
 
-        MessageCreateAction msg = sender.lastMessageChannel.sendMessageEmbeds(
-            MusicEmbded.createEmbded(info)  
-        ).addActionRow(ButtonEnum.getPlayButton());
+        if (lPlayevent == null)
+            return;
 
-        sender.sendPlayEvent(msg);
-    }
-
-    public static void queueEvent(MessageSender sender, List<AudioTrack> info) {
-
-        MessageCreateAction msg = sender.lastMessageChannel.sendMessageEmbeds(
-            MusicEmbded.createEmbdedQueue(info)
-        ).addActionRow(ButtonEnum.getPlayButton()); // TODO CHANGER CA
-
-        sender.sendQueueEvent(msg);
-    }
-
-    public static void infoEvent(MessageSender sender, String message) {
-        
-        System.out.println("infoEvent");
-
-        MessageCreateAction msg = sender.lastMessageChannel.sendMessageEmbeds(
-            MusicEmbded.createEmbdedResponse(message)
-        ).addActionRow(ButtonEnum.getHelpButton());
-
-        System.out.println("infoEvent end");
-
-        sender.sendInfoEvent(msg);
-    }
-
-    public static void errorEvent(MessageSender sender, String message) {
-
-        MessageCreateAction msg = sender.lastMessageChannel.sendMessageEmbeds(
-            MusicEmbded.createEmbdedError(message)
-        ).addActionRow(ButtonEnum.getHelpButton());
-
-        sender.sendErrorEvent(msg);
-    }
-
-    public static void helpEvent(MessageSender sender) {
-
-        MessageCreateAction msg = sender.lastMessageChannel.sendMessageEmbeds(
-            MusicEmbded.createEmbdedHelp()
-        ).addActionRow(ButtonEnum.getHelpButton());
-
-        sender.sendHelpEvent(msg);
+        lPlayevent.editMessageEmbeds(MusicEmbded.createEmbded(info, looped)).queue();
     }
 }

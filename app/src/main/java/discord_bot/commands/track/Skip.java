@@ -1,16 +1,9 @@
 package discord_bot.commands.track;
 
-import org.checkerframework.checker.units.qual.K;
-
 import discord_bot.commands.Commands;
-import discord_bot.enumerate.ButtonEnum;
-import discord_bot.jda.Kawaine;
 import discord_bot.listeners.commands_listeners.skip.ISkipListener;
 import discord_bot.model.GuildMusicManager;
 import discord_bot.model.MessageSender;
-import discord_bot.model.MusicEmbded;
-import discord_bot.model.TrackScheduler;
-import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.interactions.callbacks.IDeferrableCallback;
@@ -26,7 +19,7 @@ public class Skip extends Commands implements ISkipListener {
     @Override
     public void onSkip(IDeferrableCallback event) {
         
-        MessageSender.playEvent(musicManager.getMessageSender(), musicManager.getScheduler().getCurrentTrack().getInfo(), event);
+        MessageSender.playEvent(musicManager.getMessageSender(), musicManager.getScheduler().getCurrentTrack().getInfo(), musicManager.getScheduler().isLooped(), event);
     }
 
     @Override

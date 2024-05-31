@@ -330,10 +330,9 @@ public class TrackScheduler extends AudioEventAdapter implements ISkipListenable
 
         System.out.println("NO TRACK");
         System.out.println(listenersNoTrack);
-        
+
         for (INoTrackListener listener : listenersNoTrack) {
             listener.onNoTrack();
         }
     }
-
 }

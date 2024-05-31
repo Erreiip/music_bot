@@ -17,7 +17,7 @@ public class MusicEmbded {
 
     public final static String GIF_SONG = "https://i0.wp.com/www.cbvinylrecordart.com/blog/wp-content/uploads/2015/06/donuts.gif"; 
 
-    public final static Color COLOR = Color.WHITE;
+    public final static Color COLOR = Color.RED;
     
     public static MessageEmbed createEmbded() {
 
@@ -29,9 +29,9 @@ public class MusicEmbded {
             .build();
     } 
 
-    public static MessageEmbed createEmbded(AudioTrackInfo track) {
+    public static MessageEmbed createEmbded(AudioTrackInfo track, boolean looped) {
 
-        EmbedBuilder eb  = new EmbedBuilder();
+        EmbedBuilder eb = new EmbedBuilder();
         setColor(eb);
 
         eb.setAuthor("PLAY", "http://erreip.ciliste.games/shesh/", GIF_SONG);
@@ -41,11 +41,12 @@ public class MusicEmbded {
 
         eb.addField("Author", track.author, true);
         eb.addField("Duration", getTimestamp(track.length), true);
-        
+        eb.addField("Looped", String.valueOf(looped), true);
+
         eb.setThumbnail(getThumbnail(track.identifier));
 
         return eb.build();
-    } 
+    }
 
     public static MessageEmbed createEmbdedResponse(String response) {
 
