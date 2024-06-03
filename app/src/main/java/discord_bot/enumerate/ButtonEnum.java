@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import discord_bot.utils.message_event.MessageEvent;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.interactions.components.ItemComponent;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
@@ -13,14 +12,14 @@ public enum ButtonEnum {
     ADD_PLAYLIST(0, "➕"),
     SKIP(1, "⏭️"),
     PAUSE(2, "⏯️"),
-    LOOP(3, "🔃"),
+    LOOP(3, "🔁"),
     LAST(4, "Ajouter le dernier"),
     PLAYLISTS(5, "🎶"),
-    HELP(6, "❓"),
-    CLEAR_QUEUE(7, "Vider la queue"),
+    HELP(6, "🆘"),
+    CLEAR_QUEUE(7, "🆑"),
     STOP(8, "🛑"),
     SHUFFLE(9, "🔀"),
-    RECORD(10, "📼"),;
+    RECORD(10, "📼");
 
     public final int id;
     public final String label;

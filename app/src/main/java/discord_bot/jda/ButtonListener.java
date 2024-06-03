@@ -3,7 +3,7 @@ package discord_bot.jda;
 import java.util.HashMap;
 import java.util.Map;
 
-import discord_bot.commands.Commands;
+import discord_bot.commands.audio.Commands;
 import discord_bot.enumerate.ButtonEnum;
 import discord_bot.model.GuildMusicManager;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
@@ -23,6 +23,7 @@ public class ButtonListener extends ListenerAdapter {
         buttonMap.put(ButtonEnum.STOP.id, Commands.STOP);
         buttonMap.put(ButtonEnum.PLAYLISTS.id, Commands.PLAYLISTS);
         buttonMap.put(ButtonEnum.HELP.id, Commands.HELP);
+        buttonMap.put(ButtonEnum.SHUFFLE.id, Commands.SHUFFLE);
     }
 
     private Kawaine kawaine;

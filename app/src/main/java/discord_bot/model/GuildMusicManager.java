@@ -4,7 +4,7 @@ import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 
-import discord_bot.commands.Commands;
+import discord_bot.commands.audio.Commands;
 import discord_bot.jda.Kawaine;
 import discord_bot.lava_player.AudioLoadResultHandlerImpl;
 import discord_bot.lava_player.AudioPlayerSendHandler;
@@ -134,9 +134,7 @@ public class GuildMusicManager implements ITimeoputListener, INoTrackListener {
         
         MessageSender.infoEvent(messageSender, "Le bot s'est déconnecté du à l'inactivité", null);
 
-        this.audioManager.closeAudioConnection();
-        this.scheduler.reset();
-        this.messageSender.disconnect();        
+        this.disconnect();       
     }
 
     public void onNoTrack() {
@@ -144,4 +142,12 @@ public class GuildMusicManager implements ITimeoputListener, INoTrackListener {
         MessageSender.infoEvent(messageSender, "La musique est terminée, le bot se déconnectera dans 10 secondes", null);
         new Thread(new TimeoutSong(this)).start();
     }
+
+    public void disconnect() {
+        
+        this.audioManager.closeAudioConnection();
+        this.scheduler.reset();
+        this.messageSender.disconnect();
+    }
+
 }

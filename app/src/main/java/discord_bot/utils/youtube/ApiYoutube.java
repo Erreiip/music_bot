@@ -93,11 +93,22 @@ public class ApiYoutube {
             .execute();
 
         List<String> ret = new ArrayList<>();
+        
+        int maxI = 10;
+        int i = 0;
 
-        for (PlaylistItem item : response.getItems()) {
-            ret.add(item.getSnippet().getResourceId().getVideoId());
-        }
+        do {
+            
+            for (PlaylistItem item : response.getItems()) {
+                ret.add(item.getSnippet().getResourceId().getVideoId());
+            }
+            
+            if (i++ >= maxI) {
+                return ret;
+            }
 
+        } while( response.getNextPageToken() != null && (response = request.setPageToken(response.getNextPageToken()).execute()) != null);
+        
         return ret;
     } 
 }

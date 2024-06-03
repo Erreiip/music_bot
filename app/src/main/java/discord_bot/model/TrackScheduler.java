@@ -171,6 +171,38 @@ public class TrackScheduler extends AudioEventAdapter implements ISkipListenable
         this.queue.clear();
     }
 
+    public boolean isLooped() {
+        return this.loop;
+    }
+
+    public void switchLoop() {
+        setLoop(!this.loop);
+    }
+
+    public void setLoop(boolean state) {
+        
+        if ( loop == state ) return;
+
+        this.loop = state;
+        this.onLoop((IDeferrableCallback) event);
+    }
+
+    public void shuffle() {
+
+        Collections.shuffle(this.queue);
+        this.onPlayQueue((IDeferrableCallback) event);
+    }
+
+    public void reset() {
+        
+        this.clearQueue();
+        this.loop = false;
+        this.currentTrack = null;
+        this.currentTrackSpeed = null;
+        this.event = null;
+        this.player.stopTrack();
+    }
+
     @Override
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
 
@@ -188,6 +220,7 @@ public class TrackScheduler extends AudioEventAdapter implements ISkipListenable
             System.out.println(track);
             System.out.println("PROBLEME DE CHARGEMENT DE LA MUSIQUE");
             this.loadingTest = 3;
+            this.nextTrack();
         }
         
         System.out.println("endReason3 " + endReason + " " + endReason.mayStartNext + " " + this.loop);
@@ -197,34 +230,6 @@ public class TrackScheduler extends AudioEventAdapter implements ISkipListenable
             nextTrack();
             return;
         }
-
-        //this.onNoTrack();
-    }
-
-    public boolean isLooped() {
-        return this.loop;
-    }
-
-    public void switchLoop() {
-        setLoop(!this.loop);
-    }
-
-    public void setLoop(boolean state) {
-        
-        if ( loop == state ) return;
-
-        this.loop = state;
-        this.onLoop((IDeferrableCallback) event);
-    }
-
-    public void reset() {
-        
-        this.clearQueue();
-        this.loop = false;
-        this.currentTrack = null;
-        this.currentTrackSpeed = null;
-        this.event = null;
-        this.player.stopTrack();
     }
 
 

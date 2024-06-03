@@ -5,6 +5,7 @@ import net.dv8tion.jda.api.managers.AudioManager;
 
 import javax.annotation.Nonnull;
 
+import discord_bot.model.GuildMusicManager;
 import net.dv8tion.jda.api.entities.channel.unions.AudioChannelUnion;
 import net.dv8tion.jda.api.events.guild.voice.*;
 
@@ -23,7 +24,8 @@ public class LeaveListener extends ListenerAdapter {
 
         if (event.getChannelLeft() != null && event.getChannelLeft().getMembers().size() == 1) {
 
-            AudioManager audioManager = kawaine.getGuildAudioPlayer(event.getGuild()).getAudioManager();
+            GuildMusicManager musicManager = kawaine.getGuildAudioPlayer(event.getGuild());
+            AudioManager audioManager = musicManager.getAudioManager();
 
             if ( audioManager == null ) {
                 return;
@@ -32,7 +34,7 @@ public class LeaveListener extends ListenerAdapter {
             AudioChannelUnion channel = audioManager.getConnectedChannel();
             
             if ( channel == event.getChannelLeft() ) {
-                audioManager.closeAudioConnection();
+                musicManager.disconnect();
             }
         }
     }

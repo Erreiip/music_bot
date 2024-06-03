@@ -1,5 +1,6 @@
 package discord_bot.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
@@ -15,6 +16,14 @@ import net.dv8tion.jda.api.interactions.callbacks.IDeferrableCallback;
 
 public class MessageSender {
 
+    public enum MessageType {
+        PLAY,
+        QUEUE,
+        INFO,
+        ERROR,
+        HELP
+    }
+
     private Message lPlayevent;
     private Message lQueueEvent;
     private Message lInfoEvent;
@@ -22,6 +31,9 @@ public class MessageSender {
     private Message lHelpEvent;
 
     private MessageChannelUnion lastMessageChannel;
+    private MessageType lastSentMessageType;
+
+    private List<String> idAlreadyResponded;
 
     public MessageSender() {
 
@@ -30,13 +42,18 @@ public class MessageSender {
         this.lInfoEvent = null;
         this.lErrorEvent = null;
         this.lHelpEvent = null;
+
+        this.lastMessageChannel = null;
+        this.lastSentMessageType = null;
+
+        this.idAlreadyResponded = new ArrayList<>();
     }
 
     private void removeEvent(Message message) {
         
         if (message == null) return;
 
-        message.delete().queue();
+        message.delete().complete();
     }
 
     private void removeAllEvents() {
@@ -66,18 +83,20 @@ public class MessageSender {
         
         this.removeAllEvents();
 
-        lPlayevent = message.complete();
+        this.lPlayevent = message.complete();
 
-        lastMessageChannel = lPlayevent.getChannel();
+        this.lastMessageChannel = lPlayevent.getChannel();
+        this.lastSentMessageType = MessageType.PLAY;
     }
 
     private synchronized void sendQueueEvent(MessageEvent message) {
         
         this.removeEvent(lQueueEvent);
 
-        lQueueEvent = message.complete();
+        this.lQueueEvent = message.complete();
 
-        lastMessageChannel = lQueueEvent.getChannel();
+        this.lastMessageChannel = lQueueEvent.getChannel();
+        this.lastSentMessageType = MessageType.QUEUE;
     }
 
     private synchronized void sendInfoEvent(MessageEvent message) {
@@ -87,6 +106,7 @@ public class MessageSender {
         lInfoEvent = message.complete();
 
         lastMessageChannel = lInfoEvent.getChannel();
+        this.lastSentMessageType = MessageType.INFO;
     }
 
     private synchronized void sendErrorEvent(MessageEvent message) {
@@ -96,6 +116,7 @@ public class MessageSender {
         lErrorEvent = message.complete();
 
         lastMessageChannel = lErrorEvent.getChannel();
+        this.lastSentMessageType = MessageType.ERROR;
     }
 
     private synchronized void sendHelpEvent(MessageEvent message) { 
@@ -105,6 +126,7 @@ public class MessageSender {
         lHelpEvent = message.complete();
 
         lastMessageChannel = lHelpEvent.getChannel();
+        this.lastSentMessageType = MessageType.HELP;
     }
 
     
@@ -135,9 +157,18 @@ public class MessageSender {
         MessageEvent messageEvent;
 
         if (event != null) {
+
+            if ( sender.idAlreadyResponded.contains(event.getHook().getId()) && sender.lastSentMessageType == MessageType.QUEUE) {
+                sender.editLastQueueEvent(info);
+                return;
+            }
+            
             messageEvent = new WebHookMessageP( event.getHook().sendMessageEmbeds(
-                MusicEmbded.createEmbdedQueue(info)  
+                MusicEmbded.createEmbdedQueue(info)     
             ));
+            
+            sender.idAlreadyResponded.add(event.getHook().getId());
+
         } else {
             messageEvent = new MessageP( sender.lastMessageChannel.sendMessageEmbeds(
                 MusicEmbded.createEmbdedQueue(info)
@@ -216,5 +247,13 @@ public class MessageSender {
             return;
 
         lPlayevent.editMessageEmbeds(MusicEmbded.createEmbded(info, looped)).queue();
+    }
+
+    public void editLastQueueEvent(List<AudioTrack> info) {
+
+        if (lQueueEvent == null)
+            return;
+
+        lQueueEvent.editMessageEmbeds(MusicEmbded.createEmbdedQueue(info)).queue();
     }
 }

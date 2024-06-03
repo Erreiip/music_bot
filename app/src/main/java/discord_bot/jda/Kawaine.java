@@ -8,7 +8,7 @@ import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 
 import discord_bot.Main;
-import discord_bot.commands.Commands;
+import discord_bot.commands.audio.Commands;
 import discord_bot.model.GuildMusicManager;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -41,6 +41,10 @@ public class Kawaine extends ListenerAdapter {
         commands.put(Main.PLAYLIST_ADD, Commands.ADD);
         commands.put(Main.PLAYLIST_REMOVE, Commands.REMOVE);
         commands.put(Main.HELP, Commands.HELP);
+        commands.put(Main.SHUFFLE, Commands.SHUFFLE);
+        commands.put(Main.REPORT, Commands.REPORT);
+        commands.put(Main.SEE_REPORT, Commands.SEE_REPORT);
+        commands.put(Main.SEE_CACHE, Commands.SEE_CACHE);
     }
 
     private final Map<Float, GuildMusicManager> musicManagers;

@@ -4,6 +4,8 @@ public class Env {
 
     public static String YTB_TOKEN = "YTB_TOKEN";
     public static String DATABASE_URL = "DATABASE_URL";
+    public static String DATABASE_USER = "DATABASE_USER";
+    public static String DATABASE_PASSWORD = "DATABASE_PASSWORD";
     public static String SPOTIFY_PB = "SPOTIFY_PB";
     public static String SPOTIFY_PV = "SPOTIFY_PV";
     public static String DISCORD_TOKEN = "DISCORD_TOKEN";
@@ -27,6 +29,14 @@ public class Env {
 
     public static String getDatabaseUrl() {
         return System.getenv(DATABASE_URL);
+    }
+
+    public static String getDatabaseUser() {
+        return System.getenv(DATABASE_USER);
+    }
+
+    public static String getDatabasePassword() {
+        return System.getenv(DATABASE_PASSWORD);
     }
 
     public static boolean isDebug() {

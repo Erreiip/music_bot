@@ -35,7 +35,11 @@ public class SongIdentifier {
 
             try {
                 String song = Database.getInstance().getQuery(songIdentifier);
+
+                System.out.println("SongIdentifier: getSongIdentifier: " + songIdentifier + " -> " + song);
+
                 if (song != null) return song;
+
             } catch(Exception e) { e.printStackTrace(); } 
         }
 
@@ -49,8 +53,6 @@ public class SongIdentifier {
         Couple<String, String> query = queryByName(songIdentifier);
 
         if (query == null) return null;
-
-        System.out.println("SongIdentifier: getSongIdentifier: " + songQuery + " -> " + query.second);
 
         if ( ! Env.isDebug() ) {
             Database.addTrack(songQuery, query.second);

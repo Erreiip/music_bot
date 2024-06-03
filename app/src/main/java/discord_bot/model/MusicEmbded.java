@@ -41,7 +41,7 @@ public class MusicEmbded {
 
         eb.addField("Author", track.author, true);
         eb.addField("Duration", getTimestamp(track.length), true);
-        eb.addField("Looped", String.valueOf(looped), true);
+        eb.addField("Looped", (looped ? "✅" : "❌"), true);
 
         eb.setThumbnail(getThumbnail(track.identifier));
 

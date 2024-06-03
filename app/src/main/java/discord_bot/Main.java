@@ -1,5 +1,10 @@
 package discord_bot;
 
+import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.ExecutionException;
+
 import javax.security.auth.login.LoginException;
 
 import discord_bot.jda.ButtonListener;
@@ -7,11 +12,17 @@ import discord_bot.jda.CompletionListener;
 import discord_bot.jda.Kawaine;
 import discord_bot.jda.LeaveListener;
 import discord_bot.utils.Env;
+import discord_bot.utils.youtube.ApiYoutube;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.exceptions.RateLimitedException;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.requests.GatewayIntent;
 
 public class Main {
 
@@ -53,6 +64,14 @@ public class Main {
     public static final String PAUSE = "pause";    
     public static final String CLEAR_QUEUE = "clear_queue";
 
+    public static final String SHUFFLE = "shuffle";
+    
+    public static final String REPORT = "report";
+    public static final String REPORT_OPTION_MESSAGE = "message";
+
+    public static final String SEE_CACHE = "see_cache";
+    public static final String SEE_REPORT = "see_report";
+
     public static void main(String[] args) throws LoginException, InterruptedException {
 
         JDA jda = JDABuilder.createDefault(token).build().awaitReady();
@@ -87,9 +106,20 @@ public class Main {
                     .addOption(OptionType.STRING, PLAYLIST_ADD_REMOVE_OPTION_NAME, "name of the playlist", true, true)
                     .addOption(OptionType.STRING, PLAYLIST_REMOVE_OPTION_TITLE, "title or index of the video", true),
                 Commands.slash(PLAYLIST_CREATE, "Create a playlist")
-                    .addOption(OptionType.STRING, PLAYLIST_CREATE_OPTION_NAME, "name of the playlist", true)
+                    .addOption(OptionType.STRING, PLAYLIST_CREATE_OPTION_NAME, "name of the playlist", true),
+                Commands.slash(SHUFFLE, "Shuffle the queue"),
+                Commands.slash(REPORT, "Report a bug or suggest a feature")
+                    .addOption(OptionType.STRING, REPORT_OPTION_MESSAGE, "message", true)
             ).queue();
             
+            if ( guild.getId().equals("1197161539178860595")) {
+
+                guild.updateCommands().addCommands(
+                    Commands.slash(SEE_CACHE, "Display the cache"),
+                    Commands.slash(SEE_REPORT, "Display the reports")
+                ).queue();
+            }
+
         }
         
         Kawaine kawaine = new Kawaine();
@@ -97,7 +127,7 @@ public class Main {
         jda.addEventListener(new ButtonListener(kawaine));
         jda.addEventListener(new CompletionListener(kawaine));
         jda.addEventListener(new LeaveListener(kawaine));
-    } 
+    }
 
     public static boolean isInteger(String s) {
 
