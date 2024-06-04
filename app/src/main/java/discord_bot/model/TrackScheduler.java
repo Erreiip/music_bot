@@ -92,7 +92,7 @@ public class TrackScheduler extends AudioEventAdapter implements ISkipListenable
 
     public boolean nextTrack() {
 
-        System.out.println("nextTrack " + queue.isEmpty() + " " + this.loop);
+        System.out.println("nextTrack : " + queue.isEmpty() + " && " + this.loop);
 
         if (queue.isEmpty() && ! this.loop) {
             
@@ -108,7 +108,7 @@ public class TrackScheduler extends AudioEventAdapter implements ISkipListenable
 
             Couple<AudioTrack, Float> queue = this.queue.remove(0);
 
-            this.currentTrack = queue.first.makeClone();
+            this.currentTrack = queue.first;
             this.currentTrackSpeed = queue.second;
         }
         
@@ -216,11 +216,11 @@ public class TrackScheduler extends AudioEventAdapter implements ISkipListenable
         
         System.out.println("endReason2 " + (loadingTest == 0));
         if (loadingTest == 0) {
-            player.startTrack(track, false);
             System.out.println(track);
             System.out.println("PROBLEME DE CHARGEMENT DE LA MUSIQUE");
             this.loadingTest = 3;
             this.nextTrack();
+            return;
         }
         
         System.out.println("endReason3 " + endReason + " " + endReason.mayStartNext + " " + this.loop);
@@ -334,7 +334,6 @@ public class TrackScheduler extends AudioEventAdapter implements ISkipListenable
     public void onNoTrack() {
 
         System.out.println("NO TRACK");
-        System.out.println(listenersNoTrack);
 
         for (INoTrackListener listener : listenersNoTrack) {
             listener.onNoTrack();

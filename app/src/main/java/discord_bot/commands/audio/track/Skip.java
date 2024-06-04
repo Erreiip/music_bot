@@ -19,7 +19,7 @@ public class Skip extends Commands implements ISkipListener {
     @Override
     public void onSkip(IDeferrableCallback event) {
         
-        //MessageSender.playEvent(musicManager.getMessageSender(), musicManager.getScheduler().getCurrentTrack().getInfo(), musicManager.getScheduler().isLooped(), event);
+        MessageSender.playEvent(musicManager.getMessageSender(), musicManager.getScheduler().getCurrentTrack().getInfo(), musicManager.getScheduler().isLooped(), event);
     }
 
     @Override

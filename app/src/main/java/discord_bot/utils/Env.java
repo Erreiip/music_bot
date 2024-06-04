@@ -40,6 +40,6 @@ public class Env {
     }
 
     public static boolean isDebug() {
-        return System.getenv(DEBUG) != "false";
+        return System.getenv(DEBUG).equals("true");
     }
 }

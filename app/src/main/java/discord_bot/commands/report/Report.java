@@ -19,10 +19,7 @@ public class Report extends Commands {
         
         String message = event.getOption(Main.REPORT_OPTION_MESSAGE).getAsString();
 
-        try {
-            Database.getInstance().insertReport(event.getUser().getName(), message);
-        } catch (Exception e) {
-            e.printStackTrace();
+        if ( ! Database.addReport(event.getUser().getName(), message)) {
             MessageSender.errorEvent(musicManager.getMessageSender(), "An error occurred while sending your report. Please try again later.", event);
             return;
         }

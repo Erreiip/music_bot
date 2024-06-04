@@ -5,6 +5,7 @@ import java.util.List;
 
 import discord_bot.commands.audio.Commands;
 import discord_bot.model.GuildMusicManager;
+import discord_bot.model.MessageSender;
 import discord_bot.model.UtilsEmbed;
 import discord_bot.model.dao.Report;
 import discord_bot.utils.database.Database;
@@ -36,6 +37,11 @@ public class SeeReport extends Commands {
             embeds.add(UtilsEmbed.createReportEmbed(report));
         }
 
+        if (embeds.isEmpty()) {
+            MessageSender.errorEvent(musicManager.getMessageSender(), "No reports found", event);
+            return;
+        }
+        
         event.getHook().sendMessageEmbeds(embeds).queue();
     }
 

@@ -13,13 +13,14 @@ public enum ButtonEnum {
     SKIP(1, "⏭️"),
     PAUSE(2, "⏯️"),
     LOOP(3, "🔁"),
-    LAST(4, "Ajouter le dernier"),
+    LAST(4, "⏮️➕"),
     PLAYLISTS(5, "🎶"),
     HELP(6, "🆘"),
     CLEAR_QUEUE(7, "🆑"),
     STOP(8, "🛑"),
     SHUFFLE(9, "🔀"),
-    RECORD(10, "📼");
+    RECORD(10, "📼"),
+    QUEUE(11, "📜");
 
     public final int id;
     public final String label;
@@ -47,10 +48,11 @@ public enum ButtonEnum {
 
         items.add(Button.success(PAUSE.id + "", PAUSE.label));
         items.add(Button.success(SKIP.id + "", SKIP.label));
+        items.add(Button.success(SHUFFLE.id + "", SHUFFLE.label));
         items.add(Button.success(LOOP.id + "", LOOP.label));
         items.add(Button.success(LAST.id + "", LAST.label));
+        items.add(Button.success(QUEUE.id + "", QUEUE.label));
         items.add(Button.success(CLEAR_QUEUE.id + "", CLEAR_QUEUE.label));
-        items.add(Button.success(SHUFFLE.id + "", SHUFFLE.label));
         items.add(Button.success(STOP.id + "", STOP.label));
 
         return items;

@@ -52,10 +52,13 @@ public class SongIdentifier {
 
         Couple<String, String> query = queryByName(songIdentifier);
 
-        if (query == null) return null;
+        if (query == null) return songIdentifier;
+
+        System.out.println("Env is debug : " + Env.isDebug());
 
         if ( ! Env.isDebug() ) {
             Database.addTrack(songQuery, query.second);
+            System.out.println("SongIdentifier: Add in database: " + songQuery + " -> " + query.second);
         }
 
         return query.second;

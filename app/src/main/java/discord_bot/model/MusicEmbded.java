@@ -102,10 +102,10 @@ public class MusicEmbded {
             ButtonEnum.STOP.label + " stop : stop the music\n " +
             ButtonEnum.SKIP.label + " skip : skip the current song\n " +
             ButtonEnum.LOOP.label + " loop : loop the current song\n " +
-            " ➡️ queue : display the queue\n " +
-            ButtonEnum.LAST.label + " last : display the last song\n " +
+            ButtonEnum.QUEUE.label + " queue : display the queue\n " +
+            ButtonEnum.LAST.label + " last : add the last song\n " +
             ButtonEnum.PAUSE.label + " pause : pause the music\n " +
-            " ➡️ clear_queue : clear the queue\n "
+            ButtonEnum.CLEAR_QUEUE.label + " clear_queue : clear the queue\n "
             );
 
         return eb.build();

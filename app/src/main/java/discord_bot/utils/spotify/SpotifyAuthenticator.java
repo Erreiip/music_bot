@@ -114,7 +114,6 @@ public class SpotifyAuthenticator {
                 getRequest.setHeader("Authorization", "Bearer " + accessToken);
 
                 HttpClient httpClient = HttpClients.createDefault();
-                System.out.println(getRequest);
                 HttpResponse response = httpClient.execute(getRequest);
 
                 HttpEntity entity = response.getEntity();

@@ -1,5 +1,5 @@
 setx DATABASE_URL "postgresql://ytb:sheshGaming@db:5432/youtube"
-setx DATABASE_USER "youtube"
+setx DATABASE_USER "ytb"
 setx DATABASE_PASSWORD "sheshGaming"
 setx DISCORD_TOKEN "MTIzNDU0OTc4MDUwNDY0NTcwNQ.GEwhdD.QWp3xXsgsR-5kqjg8B7TmU7JdVuIOcl4Y7_cZg"
 setx YTB_TOKEN "AIzaSyAq0yKDe2x_Wb5Yb6quZvR9gVIr2WazcNU"

@@ -77,6 +77,16 @@ public class Main {
         JDA jda = JDABuilder.createDefault(token).build().awaitReady();
 
         for (Guild guild : jda.getGuilds()) {
+
+            if ( guild.getId().equals("1197161539178860595")) {
+
+                guild.updateCommands().addCommands(
+                    Commands.slash(SEE_CACHE, "Display the cache"),
+                    Commands.slash(SEE_REPORT, "Display the reports")
+                ).queue();
+                
+                continue;
+            }
             
             guild.updateCommands().addCommands
             (
@@ -111,15 +121,6 @@ public class Main {
                 Commands.slash(REPORT, "Report a bug or suggest a feature")
                     .addOption(OptionType.STRING, REPORT_OPTION_MESSAGE, "message", true)
             ).queue();
-            
-            if ( guild.getId().equals("1197161539178860595")) {
-
-                guild.updateCommands().addCommands(
-                    Commands.slash(SEE_CACHE, "Display the cache"),
-                    Commands.slash(SEE_REPORT, "Display the reports")
-                ).queue();
-            }
-
         }
         
         Kawaine kawaine = new Kawaine();

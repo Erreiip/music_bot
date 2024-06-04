@@ -1,14 +1,11 @@
 package discord_bot.commands.audio.track;
 
 import discord_bot.commands.audio.Commands;
-import discord_bot.jda.Kawaine;
 import discord_bot.model.GuildMusicManager;
 import discord_bot.model.MessageSender;
-import discord_bot.model.TrackScheduler;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.interactions.callbacks.IDeferrableCallback;
-import net.dv8tion.jda.api.managers.AudioManager;
 
 public class Stop extends Commands {
     
@@ -30,10 +27,7 @@ public class Stop extends Commands {
 
     public void stop(IDeferrableCallback event) {
         
-        musicManager.getScheduler().reset();
-
-        AudioManager audioManager = event.getMember().getGuild().getAudioManager();
-        audioManager.closeAudioConnection();
+        musicManager.disconnect();
 
         MessageSender.infoEvent(musicManager.getMessageSender(), "Stopped the player and left the voice channel.", event);
     }

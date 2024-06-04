@@ -78,8 +78,6 @@ public class Database {
 
     public List<Cache> getCaches() throws SQLException {
 
-        System.out.println(mapCache.get(SELECT));
-
         ResultSet resultSet = mapCache.get(SELECT).executeQuery();
 
         List<Cache> caches = new ArrayList<>();
@@ -93,7 +91,7 @@ public class Database {
 
     public String getQuery(String query) throws SQLException {
 
-        mapCache.get(SELECT_WHERE).setString(0, query);
+        mapCache.get(SELECT_WHERE).setString(1, query);
         ResultSet resultSet = mapCache.get(SELECT_WHERE).executeQuery();
         
         String response = null;
@@ -105,23 +103,23 @@ public class Database {
         return response;
     }
 
-    public boolean insertInto(String query, String result) throws SQLException {
+    private boolean insertInto(String query, String result) throws SQLException {
 
-        if ( getQuery(query) != null ) {
+        if (getQuery(query) != null) {
             return false;
         }
 
-        mapCache.get(INSERT).setString(0, query);
-        mapCache.get(INSERT).setString(1, result);
+        mapCache.get(INSERT).setString(1, query);
+        mapCache.get(INSERT).setString(2, result);
         mapCache.get(INSERT).executeUpdate();
         
         return true;
     }
 
-    public boolean insertReport(String username, String report) throws SQLException {
+    private boolean insertReport(String username, String report) throws SQLException {
 
-        mapCache.get(INSERT_REPORT).setString(0, username);
-        mapCache.get(INSERT_REPORT).setString(1, report);
+        mapCache.get(INSERT_REPORT).setString(1, username);
+        mapCache.get(INSERT_REPORT).setString(2, report);
         mapCache.get(INSERT_REPORT).executeUpdate();
         
         return true;
@@ -140,22 +138,26 @@ public class Database {
         return reports;
     }
     
-    public static void addTrack(String query, String uri) {
+    public static boolean addTrack(String query, String uri) {
         
         try {
-            Database.getInstance().insertInto(uri, uri);
+            return Database.getInstance().insertInto(query, uri);
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        return false;
     }
 
-    public static void addReport(String query, String result) {
+    public static boolean addReport(String username, String report) {
         
         try {
-            Database.getInstance().insertInto(query, result);
+            return Database.getInstance().insertInto(username, report);
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        return false;
     }
     
 }
