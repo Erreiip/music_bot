@@ -86,6 +86,13 @@ public class GuildMusicManager implements ITimeoputListener, INoTrackListener {
         scheduler.reset();
     }
 
+    public void disconnect() {
+        
+        this.reset();
+        this.messageSender.disconnect();
+        this.audioManager.closeAudioConnection();
+    }
+
 
     /*
      * Getters and Setters
@@ -142,12 +149,4 @@ public class GuildMusicManager implements ITimeoputListener, INoTrackListener {
         MessageSender.infoEvent(messageSender, "La musique est terminée, le bot se déconnectera dans 10 secondes", null);
         new Thread(new TimeoutSong(this)).start();
     }
-
-    public void disconnect() {
-        
-        this.audioManager.closeAudioConnection();
-        this.scheduler.reset();
-        this.messageSender.disconnect();
-    }
-
 }

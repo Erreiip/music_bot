@@ -54,7 +54,7 @@ public class MessageSender {
         if (message == null)
             return;
 
-        message.delete().complete();
+        message.delete().queue();
     }
 
     private void removeAllEvents() {
@@ -73,7 +73,7 @@ public class MessageSender {
     }
     
     public void disconnect() {
-
+        
         this.removeEvent(lPlayevent);
         this.removeEvent(lQueueEvent);
         this.removeEvent(lErrorEvent);
@@ -81,6 +81,7 @@ public class MessageSender {
 
         this.lastMessageChannel = null;
         this.lastSentMessageType = null;
+        this.idAlreadyResponded.clear();
     }
 
     private synchronized void sendPlayEvent(MessageEvent message) {

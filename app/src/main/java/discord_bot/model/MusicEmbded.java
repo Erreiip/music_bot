@@ -15,7 +15,7 @@ public class MusicEmbded {
     public final static String THUMBNAIL = "https://img.youtube.com/vi/";
     public final static String THUMBNAIL_END = "/maxresdefault.jpg";
 
-    public final static String GIF_SONG = "https://i0.wp.com/www.cbvinylrecordart.com/blog/wp-content/uploads/2015/06/donuts.gif"; 
+    public final static String GIF_SONG = "https://c.tenor.com/BZaWjKzYBLQAAAAd/tenor.gif"; 
 
     public final static Color COLOR = Color.RED;
     
