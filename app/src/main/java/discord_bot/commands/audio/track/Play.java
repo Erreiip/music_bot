@@ -1,8 +1,5 @@
 package discord_bot.commands.audio.track;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
 import discord_bot.Main;
@@ -11,12 +8,10 @@ import discord_bot.listeners.commands_listeners.play.IPlayListener;
 import discord_bot.model.GuildMusicManager;
 import discord_bot.model.MessageSender;
 import discord_bot.utils.IProcessAudio;
-import discord_bot.utils.SongIdentifier;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.interactions.callbacks.IDeferrableCallback;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
-import net.dv8tion.jda.api.managers.AudioManager;
 
 public class Play extends Commands implements IProcessAudio, IPlayListener {
 
@@ -33,6 +28,8 @@ public class Play extends Commands implements IProcessAudio, IPlayListener {
         OptionMapping speedO = event.getOption(Main.PLAY_OPTION_SPEED);
         Float speed = speedO == null ? null : Float.parseFloat(speedO.getAsString());
 
+        musicManager.addSong(event, "ytsearch:" + songIdentifier, speed, this);
+        /*
         AudioManager audioChannel = musicManager.joinChannel(event);
 
         if (audioChannel == null) {
@@ -52,6 +49,7 @@ public class Play extends Commands implements IProcessAudio, IPlayListener {
         for ( String song : songs ) {
             musicManager.addSong(event, song, speed, this);
         }
+        */
     }
 
 

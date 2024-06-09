@@ -37,9 +37,10 @@ dependencies {
     implementation("com.google.api-client:google-api-client-jackson2:1.28.1")
 
     // lava player
-    implementation("com.github.idpromnut:lavaplayer:youtube_details_parse_bug-SNAPSHOT")
+    //implementation("com.github.idpromnut:lavaplayer:youtube_details_parse_bug-SNAPSHOT")
     implementation("com.github.natanbc:lavadsp:0.7.7")
-    implementation("com.github.JustRed23:lavadsp:0.7.7")
+    //implementation("com.github.JustRed23:lavadsp:0.7.7")
+    implementation("com.sedmelluq:lavaplayer:1.3.77")
 
     // jdbc
     implementation("org.postgresql:postgresql:42.3.3")

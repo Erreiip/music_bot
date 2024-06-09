@@ -92,8 +92,6 @@ public class TrackScheduler extends AudioEventAdapter implements ISkipListenable
 
     public boolean nextTrack() {
 
-        System.out.println("nextTrack : " + queue.isEmpty() + " && " + this.loop);
-
         if (queue.isEmpty() && ! this.loop) {
             
             this.onNoTrack();
@@ -108,7 +106,7 @@ public class TrackScheduler extends AudioEventAdapter implements ISkipListenable
 
             Couple<AudioTrack, Float> queue = this.queue.remove(0);
 
-            this.currentTrack = queue.first;
+            this.currentTrack = queue.first.makeClone();
             this.currentTrackSpeed = queue.second;
         }
         
@@ -207,6 +205,10 @@ public class TrackScheduler extends AudioEventAdapter implements ISkipListenable
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
 
         System.out.println("endReason1 " + endReason == AudioTrackEndReason.LOAD_FAILED + " " + (loadingTest > 0));
+        System.out.println("endReason2 " + (loadingTest == 0));
+        System.out.println("endReason3 " + endReason + " " + endReason.mayStartNext + " " + this.loop);
+
+
         if (endReason == AudioTrackEndReason.LOAD_FAILED && loadingTest > 0) {
             this.queue.add(0, new Couple<AudioTrack, Float>(this.currentTrack, this.currentTrackSpeed));
             this.nextTrack();
@@ -214,7 +216,6 @@ public class TrackScheduler extends AudioEventAdapter implements ISkipListenable
             return;
         }
         
-        System.out.println("endReason2 " + (loadingTest == 0));
         if (loadingTest == 0) {
             System.out.println(track);
             System.out.println("PROBLEME DE CHARGEMENT DE LA MUSIQUE");
@@ -223,7 +224,6 @@ public class TrackScheduler extends AudioEventAdapter implements ISkipListenable
             return;
         }
         
-        System.out.println("endReason3 " + endReason + " " + endReason.mayStartNext + " " + this.loop);
         if (endReason.mayStartNext || endReason == AudioTrackEndReason.FINISHED && this.loop) {
             System.out.println("rentre");
             this.loadingTest = 3;
