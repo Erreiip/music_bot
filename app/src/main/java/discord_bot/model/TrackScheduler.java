@@ -7,6 +7,7 @@ import java.util.List;
 import com.github.natanbc.lavadsp.timescale.TimescalePcmAudioFilter;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
+import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 
@@ -230,6 +231,12 @@ public class TrackScheduler extends AudioEventAdapter implements ISkipListenable
             nextTrack();
             return;
         }
+    }
+    
+    @Override
+    public void onTrackException(AudioPlayer player, AudioTrack track, FriendlyException exception) {
+        System.out.println("onTrackException");
+        exception.printStackTrace();
     }
 
 

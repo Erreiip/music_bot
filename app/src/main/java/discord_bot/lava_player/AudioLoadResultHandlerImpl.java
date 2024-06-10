@@ -5,10 +5,7 @@ import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
-import discord_bot.jda.Kawaine;
-import discord_bot.model.GuildMusicManager;
 import discord_bot.model.MessageSender;
-import discord_bot.model.MusicEmbded;
 import discord_bot.utils.IProcessAudio;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
@@ -60,7 +57,11 @@ public class AudioLoadResultHandlerImpl implements AudioLoadResultHandler {
     @Override
     public void loadFailed(FriendlyException exception) {
 
-        MessageSender.errorEvent(this.messageSender, "An error occurred while loading the playlist : " + exception, event);
+        MessageSender.errorEvent(this.messageSender, "An error occurred while loading the song : " + exception,
+                event);
+
+        exception.printStackTrace();
     }
+    
     
 }
