@@ -2,12 +2,15 @@ package discord_bot;
 
 import javax.security.auth.login.LoginException;
 
+import org.slf4j.Logger;
+
 import discord_bot.jda.ButtonListener;
 import discord_bot.jda.CompletionListener;
 import discord_bot.jda.JoinListener;
 import discord_bot.jda.Kawaine;
 import discord_bot.jda.LeaveListener;
 import discord_bot.utils.Env;
+import discord_bot.utils.youtube.ApiYoutube;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Guild;
@@ -65,7 +68,7 @@ public class Main {
     public static void main(String[] args) throws LoginException, InterruptedException {
 
         JDA jda = JDABuilder.createDefault(token).build().awaitReady();
-
+        
         for (Guild guild : jda.getGuilds()) {
 
             setCommandsOnGuild(guild);

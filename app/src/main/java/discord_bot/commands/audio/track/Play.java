@@ -46,7 +46,7 @@ public class Play extends Commands implements IProcessAudio, IPlayListener {
         if ( SongIdentifier.isPlaylist(songIdentifier) ) {
             songs = SongIdentifier.getPlaylist(songIdentifier);           
         } else {
-            songs.add("ytsearch:" + songIdentifier);
+            songs.add("ytmsearch: " + songIdentifier);
         }
 
         for ( String song : songs ) {

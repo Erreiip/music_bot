@@ -7,6 +7,10 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 
+import dev.lavalink.youtube.YoutubeAudioSourceManager;
+import dev.lavalink.youtube.clients.Music;
+import dev.lavalink.youtube.clients.Web;
+import dev.lavalink.youtube.clients.skeleton.Client;
 import discord_bot.Main;
 import discord_bot.commands.audio.Commands;
 import discord_bot.model.GuildMusicManager;
@@ -20,9 +24,13 @@ public class Kawaine extends ListenerAdapter {
     private static final Map<String, Integer> commands = new HashMap<>();
 
     static {
+        
         playerManager = new DefaultAudioPlayerManager();
+        YoutubeAudioSourceManager ytSourceManager = new YoutubeAudioSourceManager(true, new Client[] {new Music(), new Web()});
 
-        AudioSourceManagers.registerRemoteSources(playerManager);
+        //AudioSourceManagers.registerRemoteSources(playerManager, com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager.class);
+        AudioSourceManagers.registerLocalSource(playerManager);
+        playerManager.registerSourceManager(ytSourceManager);
 
         commands.put(Main.PLAY, Commands.PLAY);
         commands.put(Main.SKIP, Commands.SKIP);

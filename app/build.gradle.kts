@@ -18,7 +18,7 @@ repositories {
     mavenCentral()
     maven("https://m2.dv8tion.net/releases")
     maven("https://jitpack.io")
-    maven("https://s01.oss.sonatype.org/content/repositories/snapshots")
+    maven("https://maven.lavalink.dev/releases")
 }
 
 dependencies {
@@ -38,11 +38,15 @@ dependencies {
     implementation("com.google.api-client:google-api-client-jackson2:1.28.1")
 
     // lava player
-    implementation("com.github.natanbc:lavadsp:0.7.7")
-    implementation("dev.arbjerg:lavaplayer:727959e9f621fc457b3a5adafcfffb55fdeaa538-SNAPSHOT")
+    //implementation("com.github.natanbc:lavadsp:0.7.7")
+    implementation("dev.arbjerg:lavaplayer:2.2.0")
+    implementation("dev.lavalink.youtube:v2:1.3.0")
 
     // jdbc
     implementation("org.postgresql:postgresql:42.3.3")
+
+    //slf4j
+    runtimeOnly("ch.qos.logback:logback-classic:1.4.0")
 }
 
 application {

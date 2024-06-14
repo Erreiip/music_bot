@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.github.natanbc.lavadsp.timescale.TimescalePcmAudioFilter;
+//import com.github.natanbc.lavadsp.timescale.TimescalePcmAudioFilter;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
@@ -23,7 +23,8 @@ import discord_bot.utils.Couple;
 import net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent;
 import net.dv8tion.jda.api.interactions.callbacks.IDeferrableCallback;
 
-public class TrackScheduler extends AudioEventAdapter implements ISkipListenable, IPlayListenable, ILoopListenable, INoTrackListenable {
+public class TrackScheduler extends AudioEventAdapter
+        implements ISkipListenable, IPlayListenable, ILoopListenable, INoTrackListenable {
 
     private final AudioPlayer player;
     private final AudioPlayer secondPlayer;
@@ -68,7 +69,7 @@ public class TrackScheduler extends AudioEventAdapter implements ISkipListenable
     }
 
     public void queueWithoutFire(AudioTrack track, Float speed, GenericInteractionCreateEvent event) {
-            
+
         this.event = event;
 
         this.queueWithoutFire(track, speed);
@@ -76,12 +77,12 @@ public class TrackScheduler extends AudioEventAdapter implements ISkipListenable
 
     public void queue(AudioTrack track, Float speed) {
 
-        if ( ! this.queueWithoutFire(track, speed) ) {
-            this.onPlayQueue((IDeferrableCallback)event);
+        if (!this.queueWithoutFire(track, speed)) {
+            this.onPlayQueue((IDeferrableCallback) event);
             return;
         }
-    
-        this.onPlay((IDeferrableCallback)event);
+
+        this.onPlay((IDeferrableCallback) event);
     }
 
     public void queue(AudioTrack track, Float speed, GenericInteractionCreateEvent event) {
@@ -93,8 +94,8 @@ public class TrackScheduler extends AudioEventAdapter implements ISkipListenable
 
     public boolean nextTrack() {
 
-        if (queue.isEmpty() && ! this.loop) {
-            
+        if (queue.isEmpty() && !this.loop) {
+
             this.onNoTrack();
             this.player.stopTrack();
             return false;
@@ -110,7 +111,7 @@ public class TrackScheduler extends AudioEventAdapter implements ISkipListenable
             this.currentTrack = queue.first.makeClone();
             this.currentTrackSpeed = queue.second;
         }
-        
+
         changePlayerSpeed(currentTrackSpeed);
         player.startTrack(currentTrack, false);
 
@@ -125,10 +126,11 @@ public class TrackScheduler extends AudioEventAdapter implements ISkipListenable
 
         this.nextTrack();
     }
-    
+
     public boolean addLastTrack() {
 
-        if (this.player.getPlayingTrack() == null) return false;
+        if (this.player.getPlayingTrack() == null)
+            return false;
 
         this.queue(currentTrack, currentTrackSpeed);
 
@@ -153,46 +155,49 @@ public class TrackScheduler extends AudioEventAdapter implements ISkipListenable
 
         return tracks;
     }
-    
+
     private void changePlayerSpeed(Float speed) {
-
+        /*
         player.setFilterFactory((trackPlayed, format, output) -> {
-
-            TimescalePcmAudioFilter audioFilter = new TimescalePcmAudioFilter(output, format.channelCount, format.sampleRate);
+        
+            TimescalePcmAudioFilter audioFilter = new TimescalePcmAudioFilter(output, format.channelCount,
+                    format.sampleRate);
             audioFilter.setSpeed(speed);
             return Collections.singletonList(audioFilter);
         });
+        */
     }
-    
-    public void clearQueue() {
-
+        
+        public void clearQueue() {
+        
         this.setLoop(false);
         this.queue.clear();
-    }
-
-    public boolean isLooped() {
-        return this.loop;
-    }
-
-    public void switchLoop() {
-        setLoop(!this.loop);
-    }
-
-    public void setLoop(boolean state) {
+        }
         
-        if ( loop == state ) return;
-
+        public boolean isLooped() {
+        return this.loop;
+        }
+        
+        public void switchLoop() {
+        setLoop(!this.loop);
+        }
+        
+        public void setLoop(boolean state) {
+        
+        if (loop == state)
+            return;
+        
         this.loop = state;
         this.onLoop((IDeferrableCallback) event);
-    }
-
-    public void shuffle() {
-
+        }
+        
+        public void shuffle() {
+        
         Collections.shuffle(this.queue);
         this.onPlayQueue((IDeferrableCallback) event);
-    }
-
-    public void reset() {
+        }
+        
+        public void reset() {
         
         this.clearQueue();
         this.loop = false;
@@ -200,16 +205,16 @@ public class TrackScheduler extends AudioEventAdapter implements ISkipListenable
         this.currentTrackSpeed = null;
         this.event = null;
         this.player.stopTrack();
-    }
-
-    @Override
-    public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
-
+        }
+        
+        @Override
+        public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
+        /*
         System.out.println("endReason1 " + endReason == AudioTrackEndReason.LOAD_FAILED + " " + (loadingTest > 0));
         System.out.println("endReason2 " + (loadingTest == 0));
         System.out.println("endReason3 " + endReason + " " + endReason.mayStartNext + " " + this.loop);
-
-
+        
+        
         if (endReason == AudioTrackEndReason.LOAD_FAILED && loadingTest > 0) {
             this.queue.add(0, new Couple<AudioTrack, Float>(this.currentTrack, this.currentTrackSpeed));
             this.nextTrack();
@@ -217,6 +222,7 @@ public class TrackScheduler extends AudioEventAdapter implements ISkipListenable
             return;
         }
         
+        */
         if (loadingTest == 0) {
             System.out.println(track);
             System.out.println("PROBLEME DE CHARGEMENT DE LA MUSIQUE");
@@ -238,11 +244,11 @@ public class TrackScheduler extends AudioEventAdapter implements ISkipListenable
         System.out.println("onTrackException");
         exception.printStackTrace();
     }
-
-
+    
+    
     /*
-     * ISkipListenable
-     * */
+    * ISkipListenable
+    * */
     private List<ISkipListener> listenersSkip = new ArrayList<>();
 
     @Override
@@ -263,27 +269,26 @@ public class TrackScheduler extends AudioEventAdapter implements ISkipListenable
         }
     }
 
-
     /*
      * IPlayListenable
      */
     List<IPlayListener> listenersPlay = new ArrayList<>();
-     
+
     @Override
     public void addPlayListener(IPlayListener listener) {
-        
+
         listenersPlay.add(listener);
     }
 
     @Override
     public void removePlayListener(IPlayListener listener) {
-       
+
         listenersPlay.remove(listener);
     }
 
     @Override
     public void onPlay(IDeferrableCallback event) {
-        
+
         for (IPlayListener listener : listenersPlay) {
             listener.onPlay(event);
         }
@@ -291,7 +296,7 @@ public class TrackScheduler extends AudioEventAdapter implements ISkipListenable
 
     @Override
     public void onPlayQueue(IDeferrableCallback event) {
-        
+
         for (IPlayListener listener : listenersPlay) {
             listener.onPlayQueue(event);
         }
@@ -302,7 +307,7 @@ public class TrackScheduler extends AudioEventAdapter implements ISkipListenable
      */
 
     List<ILoopListener> listenersLoop = new ArrayList<>();
-    
+
     @Override
     public void addLoopListener(ILoopListener listener) {
         listenersLoop.add(listener);
@@ -315,7 +320,7 @@ public class TrackScheduler extends AudioEventAdapter implements ISkipListenable
 
     @Override
     public void onLoop(IDeferrableCallback event) {
-        
+
         for (ILoopListener listener : listenersLoop) {
             listener.onLoop(event);
         }
