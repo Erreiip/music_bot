@@ -31,37 +31,12 @@ public class SongIdentifier {
             return songIdentifier;
         }
 
-        if ( ! Env.isDebug() ) {
-
-            try {
-                String song = Database.getInstance().getQuery(songIdentifier);
-
-                System.out.println("SongIdentifier: getSongIdentifier: " + songIdentifier + " -> " + song);
-
-                if (song != null) return song;
-
-            } catch(Exception e) { e.printStackTrace(); } 
-        }
-
-        String songQuery = songIdentifier;
-
         if ( PATTERN_SPOTIFY.matcher(songIdentifier).matches() ) {
 
             songIdentifier = querySpotify(songIdentifier);
         }
 
-        Couple<String, String> query = queryByName(songIdentifier);
-
-        if (query == null) return songIdentifier;
-
-        System.out.println("Env is debug : " + Env.isDebug());
-
-        if ( ! Env.isDebug() ) {
-            Database.addTrack(songQuery, query.second);
-            System.out.println("SongIdentifier: Add in database: " + songQuery + " -> " + query.second);
-        }
-
-        return query.second;
+        return "ytsearch: " + songIdentifier;
     }
 
     public static List<String> getPlaylist(String songIdentifier) {
