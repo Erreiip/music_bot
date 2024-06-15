@@ -54,7 +54,7 @@ public class MessageSender {
         if (message == null)
             return;
 
-        message.delete().queue();
+        try { message.delete().complete(); } catch (Exception e) { e.printStackTrace(); }
     }
 
     private void removeAllEvents() {
@@ -163,7 +163,7 @@ public class MessageSender {
 
         if (event != null) {
 
-            if ( sender.idAlreadyResponded.contains(event.getHook().getId()) && sender.lastSentMessageType == MessageType.QUEUE) {
+            if ( sender.idAlreadyResponded.contains(event.getId()) && sender.lastSentMessageType == MessageType.QUEUE) {
                 sender.editLastQueueEvent(info);
                 return;
             }
@@ -172,7 +172,7 @@ public class MessageSender {
                 MusicEmbded.createEmbdedQueue(info)     
             ));
             
-            sender.idAlreadyResponded.add(event.getHook().getId());
+            sender.idAlreadyResponded.add(event.getId());
 
         } else {
             messageEvent = new MessageP( sender.lastMessageChannel.sendMessageEmbeds(

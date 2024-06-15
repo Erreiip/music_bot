@@ -11,12 +11,10 @@ import discord_bot.listeners.commands_listeners.play.IPlayListener;
 import discord_bot.model.GuildMusicManager;
 import discord_bot.model.MessageSender;
 import discord_bot.utils.IProcessAudio;
-import discord_bot.utils.SongIdentifier;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.interactions.callbacks.IDeferrableCallback;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
-import net.dv8tion.jda.api.managers.AudioManager;
 
 public class Play extends Commands implements IProcessAudio, IPlayListener {
 
@@ -27,22 +25,16 @@ public class Play extends Commands implements IProcessAudio, IPlayListener {
     }
 
     @Override
-    public void execute(SlashCommandInteractionEvent event) {
+    public void executeCommands(SlashCommandInteractionEvent event) {
 
         String songIdentifier = event.getOption(Main.PLAY_OPTION_QUERY).getAsString();
         OptionMapping speedO = event.getOption(Main.PLAY_OPTION_SPEED);
         Float speed = speedO == null ? null : Float.parseFloat(speedO.getAsString());
-
-        AudioManager audioChannel = musicManager.joinChannel(event);
-
-        if (audioChannel == null) {
-            
-            MessageSender.errorEvent(musicManager.getMessageSender(), "You must be in a voice channel to use this command", event);
-            return;
-        }
         
         List<String> songs = new ArrayList<>();
 
+        musicManager.addSong(event, songIdentifier, speed, this);
+        /*
         if ( SongIdentifier.isPlaylist(songIdentifier) ) {
             songs = SongIdentifier.getPlaylist(songIdentifier);           
         } else {
@@ -52,6 +44,7 @@ public class Play extends Commands implements IProcessAudio, IPlayListener {
         for ( String song : songs ) {
             musicManager.addSong(event, song, speed, this);
         }
+        */
     }
 
 
@@ -81,7 +74,7 @@ public class Play extends Commands implements IProcessAudio, IPlayListener {
     }
 
     @Override
-    public void execute(ButtonInteractionEvent event) {
+    public void executeCommands(ButtonInteractionEvent event) {
         // TODO on ne sait pas si opn, garde ou pas encore
         throw new UnsupportedOperationException("Unimplemented method 'execute'");
     }

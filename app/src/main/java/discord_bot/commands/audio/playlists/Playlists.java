@@ -17,7 +17,7 @@ public class Playlists extends Commands {
     }
 
     @Override
-    public void execute(SlashCommandInteractionEvent event) {
+    public void executeCommands(SlashCommandInteractionEvent event) {
         try {
             getPlaylists(event);
         } catch (Exception e) {
@@ -26,7 +26,7 @@ public class Playlists extends Commands {
     }
 
     @Override
-    public void execute(ButtonInteractionEvent event) {
+    public void executeCommands(ButtonInteractionEvent event) {
         try {
             getPlaylists(event);
         } catch (Exception e) {

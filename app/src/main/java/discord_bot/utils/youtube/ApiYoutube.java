@@ -58,19 +58,6 @@ public class ApiYoutube {
             .setApplicationName(APPLICATION_NAME)
             .build();
     }
-    
-    public static Couple<String, String> search(String query) throws IOException {
-
-        SearchListResponse response =  request.setKey(DEVELOPER_KEY)
-                .setQ(query)
-                .setMaxResults(1L)
-                .execute();
-
-        String URL = "https://www.youtube.com/watch?v=" + response.getItems().get(0).getId().getVideoId();
-        String title = response.getItems().get(0).getSnippet().getTitle();
-
-        return new Couple<>(title, URL);
-    }
 
     public static List<String> getPlaylistItems(String songIdentifier) throws IOException {
         

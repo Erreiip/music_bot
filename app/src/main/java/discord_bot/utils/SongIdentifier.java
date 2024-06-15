@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import discord_bot.utils.database.Database;
 import discord_bot.utils.spotify.SpotifyAuthenticator;
 import discord_bot.utils.youtube.ApiYoutube;
 
@@ -54,8 +53,6 @@ public class SongIdentifier {
             for ( String song : spotifySong ) {
 
                 playlist.add(getSongIdentifier(song));
-
-                System.out.println(song + "/" + getSongIdentifier(song));
             }
 
         } else {
@@ -68,16 +65,6 @@ public class SongIdentifier {
         }
 
         return playlist;
-    }
-
-    private static Couple<String, String> queryByName(String name) {
-
-        try {
-            return ApiYoutube.search(name);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
     }
 
     private static String querySpotify(String songIdentifier) {

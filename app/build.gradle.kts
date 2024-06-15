@@ -46,7 +46,7 @@ dependencies {
     implementation("org.postgresql:postgresql:42.3.3")
 
     //slf4j
-    runtimeOnly("ch.qos.logback:logback-classic:1.4.0")
+    //debug runtimeOnly("ch.qos.logback:logback-classic:1.4.0")
 }
 
 application {

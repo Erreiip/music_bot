@@ -17,7 +17,7 @@ public class MusicEmbded {
 
     public final static String GIF_SONG = "https://c.tenor.com/BZaWjKzYBLQAAAAd/tenor.gif"; 
 
-    public final static Color COLOR = Color.RED;
+    public final static Color COLOR = Color.MAGENTA;
     
     public static MessageEmbed createEmbded() {
 
@@ -79,10 +79,18 @@ public class MusicEmbded {
 
         eb.setAuthor("QUEUE", "http://erreip.ciliste.games/shesh/", GIF_SONG);
 
-        String description = "";
-        for (AudioTrack track : queue) {
 
-            description += "➡️ " + track.getInfo().title + "\n";
+        if ( queue.isEmpty() ) {
+            eb.setDescription("The queue is empty");
+            return eb.build();
+        }
+        
+        int size = Math.max(queue.size(), 50); // TODO CHANGER CA
+
+        String description = "⏏️ " + queue.get(0).getInfo().title + "\n";
+        for (int i = 1; i < size; i++) {
+
+            description += "➡️ " + queue.get(i).getInfo().title + "\n";
         }
 
         eb.setDescription(description);
@@ -106,7 +114,7 @@ public class MusicEmbded {
             ButtonEnum.LAST.label + " last : add the last song\n " +
             ButtonEnum.PAUSE.label + " pause : pause the music\n " +
             ButtonEnum.CLEAR_QUEUE.label + " clear_queue : clear the queue\n "
-            );
+        );
 
         return eb.build();
     }

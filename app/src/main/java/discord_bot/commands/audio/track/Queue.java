@@ -10,19 +10,18 @@ public class Queue extends Commands {
 
     public Queue(GuildMusicManager musicManager) {
         super(musicManager);
-        //TODO Auto-generated constructor stub
     }
 
     @Override
-    public void execute(SlashCommandInteractionEvent event) {
+    public void executeCommands(SlashCommandInteractionEvent event) {
 
         MessageSender.queueEvent(musicManager.getMessageSender(), musicManager.getScheduler().getQueue(), event);
     }
 
     @Override
-    public void execute(ButtonInteractionEvent event) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'execute'");
+    public void executeCommands(ButtonInteractionEvent event) {
+        
+        MessageSender.queueEvent(musicManager.getMessageSender(), musicManager.getScheduler().getQueue(), event);
     }
     
 }

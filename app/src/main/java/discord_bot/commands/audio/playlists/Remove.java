@@ -15,7 +15,7 @@ public class Remove extends Commands {
     }
 
     @Override
-    public void execute(SlashCommandInteractionEvent event) {
+    public void executeCommands(SlashCommandInteractionEvent event) {
         
         String name = event.getOption(Main.PLAYLIST_ADD_REMOVE_OPTION_NAME).getAsString();
         String trackNameOrIndex = event.getOption(Main.PLAYLIST_REMOVE_OPTION_TITLE).getAsString();
@@ -52,11 +52,5 @@ public class Remove extends Commands {
         }
 
         MessageSender.infoEvent(musicManager.getMessageSender(), "Track removed.", event);
-    }
-
-    @Override
-    public void execute(ButtonInteractionEvent event) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'execute'");
     }
 }

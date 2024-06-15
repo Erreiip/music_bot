@@ -23,13 +23,13 @@ public class Skip extends Commands implements ISkipListener {
     }
 
     @Override
-    public void execute(ButtonInteractionEvent event) {
+    public void executeCommands(ButtonInteractionEvent event) {
         
         sendSkipMessage(event);
     }
 
     @Override
-    public void execute(SlashCommandInteractionEvent event) {
+    public void executeCommands(SlashCommandInteractionEvent event) {
 
         sendSkipMessage(event);
     }

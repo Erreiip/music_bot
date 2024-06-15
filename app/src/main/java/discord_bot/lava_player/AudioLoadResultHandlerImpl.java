@@ -35,10 +35,6 @@ public class AudioLoadResultHandlerImpl implements AudioLoadResultHandler {
     @Override
     public void playlistLoaded(AudioPlaylist playlist) {
 
-        System.out.println(playlist);
-        System.out.println(playlist.getTracks());
-        System.out.println(playlist.getName());
-
         AudioTrack firstTrack = playlist.getSelectedTrack();
 
         if (firstTrack == null) {

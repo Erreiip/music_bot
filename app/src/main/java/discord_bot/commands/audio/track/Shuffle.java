@@ -12,13 +12,13 @@ public class Shuffle extends Commands {
     }
 
     @Override
-    public void execute(SlashCommandInteractionEvent event) {
+    public void executeCommands(SlashCommandInteractionEvent event) {
         
         shuffle();
     }
 
     @Override
-    public void execute(ButtonInteractionEvent event) {
+    public void executeCommands(ButtonInteractionEvent event) {
         
         shuffle();
     }

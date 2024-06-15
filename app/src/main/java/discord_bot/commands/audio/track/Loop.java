@@ -17,13 +17,13 @@ public class Loop extends Commands implements ILoopListener {
     }
 
     @Override
-    public void execute(SlashCommandInteractionEvent event) {
+    public void executeCommands(SlashCommandInteractionEvent event) {
         
         musicManager.getScheduler().switchLoop();
     }
 
     @Override
-    public void execute(ButtonInteractionEvent event) {
+    public void executeCommands(ButtonInteractionEvent event) {
             
         musicManager.getScheduler().switchLoop();
     }

@@ -14,13 +14,13 @@ public class Last extends Commands {
     }
 
     @Override
-    public void execute(SlashCommandInteractionEvent event) {
+    public void executeCommands(SlashCommandInteractionEvent event) {
         
         addLastTrack((IDeferrableCallback) event);
     }
 
     @Override
-    public void execute(ButtonInteractionEvent event) {
+    public void executeCommands(ButtonInteractionEvent event) {
         
         addLastTrack((IDeferrableCallback) event);
     }
@@ -28,6 +28,7 @@ public class Last extends Commands {
     public void addLastTrack(IDeferrableCallback event) {
 
         if ( musicManager.getScheduler().addLastTrack() == false) {
+            
             MessageSender.errorEvent(musicManager.getMessageSender(), "No track to add", event);
         }
     }

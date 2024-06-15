@@ -6,7 +6,6 @@ import discord_bot.model.GuildMusicManager;
 import discord_bot.model.MessageSender;
 import discord_bot.model.playlist_writer.Playlist;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 
 public class Create extends Commands {
 
@@ -15,7 +14,7 @@ public class Create extends Commands {
     }
 
    @Override
-    public void execute(SlashCommandInteractionEvent event) {
+    public void executeCommands(SlashCommandInteractionEvent event) {
      
         String name = event.getOption(Main.PLAYLIST_CREATE_OPTION_NAME).getAsString();
 
@@ -27,12 +26,6 @@ public class Create extends Commands {
         }
 
         MessageSender.infoEvent(musicManager.getMessageSender(), "Playlist created.", event);
-    }
-
-    @Override
-    public void execute(ButtonInteractionEvent event) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'execute'");
     }
     
 }

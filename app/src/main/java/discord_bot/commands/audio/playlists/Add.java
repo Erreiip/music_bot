@@ -22,7 +22,7 @@ public class Add extends Commands implements IProcessAudio {
     }
 
     @Override
-    public void execute(SlashCommandInteractionEvent event) {
+    public void executeCommands(SlashCommandInteractionEvent event) {
         
         String name = event.getOption(Main.PLAYLIST_ADD_REMOVE_OPTION_NAME).getAsString();
         String url = event.getOption(Main.PLAYLIST_ADD_OPTION_URL).getAsString();
@@ -47,12 +47,6 @@ public class Add extends Commands implements IProcessAudio {
         for ( String song : songs ) {
             musicManager.addSong(event, song, null, this);
         }
-    }
-
-    @Override
-    public void execute(ButtonInteractionEvent event) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'execute'");
     }
 
     @Override

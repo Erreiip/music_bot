@@ -15,7 +15,7 @@ public class Report extends Commands {
     }
 
     @Override
-    public void execute(SlashCommandInteractionEvent event) {
+    public void executeCommands(SlashCommandInteractionEvent event) {
         
         String message = event.getOption(Main.REPORT_OPTION_MESSAGE).getAsString();
 
@@ -28,7 +28,7 @@ public class Report extends Commands {
     }
 
     @Override
-    public void execute(ButtonInteractionEvent event) {
+    public void executeCommands(ButtonInteractionEvent event) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'execute'");
     }

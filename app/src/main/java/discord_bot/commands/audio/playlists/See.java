@@ -10,7 +10,6 @@ import discord_bot.model.GuildMusicManager;
 import discord_bot.model.MessageSender;
 import discord_bot.model.playlist_writer.Playlist;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 
 public class See extends Commands {
     
@@ -19,7 +18,7 @@ public class See extends Commands {
     }
 
     @Override
-    public void execute(SlashCommandInteractionEvent event) {
+    public void executeCommands(SlashCommandInteractionEvent event) {
         
         String name = event.getOption(Main.PLAYLISTS_SEE_OPTION_NAME).getAsString();
 
@@ -39,11 +38,5 @@ public class See extends Commands {
         tracks.forEach(track -> builder.append(":arrow_forward: ").append(track.title).append("\n"));
 
         MessageSender.infoEvent(musicManager.getMessageSender(), builder.toString(), event);
-    }
-
-    @Override
-    public void execute(ButtonInteractionEvent event) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'execute'");
     }
 }

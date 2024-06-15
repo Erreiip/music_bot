@@ -14,13 +14,13 @@ public class ClearQueue extends Commands {
     }
 
     @Override
-    public void execute(SlashCommandInteractionEvent event) {
+    public void executeCommands(SlashCommandInteractionEvent event) {
         
         clearQueue((IDeferrableCallback) event);
     }
 
     @Override
-    public void execute(ButtonInteractionEvent event) {
+    public void executeCommands(ButtonInteractionEvent event) {
         
         clearQueue((IDeferrableCallback) event);
     }

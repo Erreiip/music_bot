@@ -13,7 +13,7 @@ import discord_bot.listeners.leave.TimeoutSong;
 import discord_bot.listeners.no_track.INoTrackListener;
 import discord_bot.model.playlist_writer.Playlist;
 import discord_bot.utils.IProcessAudio;
-import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.managers.AudioManager;
@@ -58,7 +58,7 @@ public class GuildMusicManager implements ITimeoputListener, INoTrackListener {
 
         if (memberChannel == null) {
             
-            MessageSender.errorEvent(this.getMessageSender(), "An error occurred while saving the playlist.", event);
+            MessageSender.errorEvent(this.getMessageSender(), "An error occurred while joining channel.", event);
             return null;
         }
                                         
@@ -92,6 +92,23 @@ public class GuildMusicManager implements ITimeoputListener, INoTrackListener {
         this.reset();
         this.messageSender.disconnect();
         this.audioManager.closeAudioConnection();
+    }
+
+    public boolean isInSameChannel(Member member) {
+
+        AudioChannel memberChannel = member.getVoiceState().getChannel();
+
+        if ( memberChannel == null ) {
+            
+            return false;
+        }
+
+        if ( audioManager == null || audioManager.getConnectedChannel() == null) {
+            
+            return true;
+        }
+        
+        return audioManager.getConnectedChannel().getIdLong() == memberChannel.getIdLong();
     }
 
 

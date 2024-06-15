@@ -22,10 +22,12 @@ import discord_bot.commands.audio.track.Stop;
 import discord_bot.commands.report.Report;
 import discord_bot.commands.report.SeeReport;
 import discord_bot.model.GuildMusicManager;
+import discord_bot.model.MessageSender;
+import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 
-public abstract class Commands implements ButtonCommands {
+public abstract class Commands implements ButtonCommands, ModalCommands {
 
     public static final int HELP = 16;
 
@@ -60,9 +62,44 @@ public abstract class Commands implements ButtonCommands {
         this.musicManager = musicManager;
     }
     
-    public abstract void execute(SlashCommandInteractionEvent event);
+    public final void execute(SlashCommandInteractionEvent event) {
 
-    public abstract void execute(ButtonInteractionEvent event);
+        if ( musicManager.isInSameChannel(event.getMember())) {
+            this.executeCommands(event);
+            return;
+        }
+
+        MessageSender.errorEvent(musicManager.getMessageSender(), "You must be in the same channel as the bot to use this command", event);
+    }
+
+    @Override
+    public final void execute(ButtonInteractionEvent event) {
+
+        if ( musicManager.isInSameChannel(event.getMember())) {
+            this.executeCommands(event);
+            return;
+        }
+
+        MessageSender.errorEvent(musicManager.getMessageSender(), "You must be in the same channel as the bot to use this command", event);
+    }
+
+    @Override
+    public final void execute(ModalInteractionEvent event) {
+        
+        if ( musicManager.isInSameChannel(event.getMember())) {
+            this.executeCommands(event);
+            return;
+        }
+
+        MessageSender.errorEvent(musicManager.getMessageSender(), "You must be in the same channel as the bot to use this command", event);
+    }
+
+    public void executeCommands(SlashCommandInteractionEvent event) {}
+
+    public void executeCommands(ButtonInteractionEvent event) {}
+
+    public void executeCommands(ModalInteractionEvent event) {}
+
 
     public static Commands[] getCommands(GuildMusicManager musicManager) {
 

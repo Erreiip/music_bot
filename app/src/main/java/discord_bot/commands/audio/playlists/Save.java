@@ -1,16 +1,10 @@
 package discord_bot.commands.audio.playlists;
 
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
-
 import discord_bot.commands.audio.Commands;
-import discord_bot.jda.Kawaine;
 import discord_bot.model.GuildMusicManager;
 import discord_bot.model.MessageSender;
-import discord_bot.model.MusicEmbded;
-import discord_bot.model.TrackScheduler;
 import discord_bot.model.playlist_writer.Playlist;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 
 public class Save extends Commands {
 
@@ -19,7 +13,7 @@ public class Save extends Commands {
     }
 
     @Override
-    public void execute(SlashCommandInteractionEvent event) {
+    public void executeCommands(SlashCommandInteractionEvent event) {
 
         if ( ! musicManager.record ) {
             MessageSender.errorEvent(musicManager.getMessageSender(), "No playlist is being recorded.", event);
@@ -36,12 +30,5 @@ public class Save extends Commands {
         }
         
         MessageSender.infoEvent(musicManager.getMessageSender(), "Playlist saved.", event);
-    }
-
-    @Override
-    public void execute(ButtonInteractionEvent event) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'execute'");
-    }
-    
+    }  
 }

@@ -24,7 +24,7 @@ public class Record extends Commands {
     }
 
     @Override
-    public void execute(SlashCommandInteractionEvent event) {
+    public void executeCommands(SlashCommandInteractionEvent event) {
 
         String name = event.getOption(Main.PLAYLIST_RECORD_OPTION_NAME).getAsString();
 
@@ -41,7 +41,7 @@ public class Record extends Commands {
     }
 
     @Override
-    public void execute(ButtonInteractionEvent event) {
+    public void executeCommands(ButtonInteractionEvent event) {
 
         event.replyModal(MusicModal.createModalPlaylistRecord()).queue();
     }
