@@ -7,36 +7,15 @@ import discord_bot.utils.message_event.MessageEvent;
 import net.dv8tion.jda.api.interactions.components.ItemComponent;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
-public enum ButtonEnum {
-
-    ADD_PLAYLIST(0, "➕"),
-    SKIP(1, "⏭️"),
-    PAUSE(2, "⏯️"),
-    LOOP(3, "🔁"),
-    LAST(4, "⏮️➕"),
-    PLAYLISTS(5, "🎶"),
-    HELP(6, "🆘"),
-    CLEAR_QUEUE(7, "🆑"),
-    STOP(8, "🛑"),
-    SHUFFLE(9, "🔀"),
-    RECORD(10, "📼"),
-    QUEUE(11, "📜");
-
-    public final int id;
-    public final String label;
-
-    private ButtonEnum(int id, String label) {
-        this.id = id;
-        this.label = label;
-    }
+public class ButtonEnum {
 
     public static List<ItemComponent> items() {
 
         List<ItemComponent> items = new ArrayList<>();
 
-        for (ButtonEnum button : ButtonEnum.values()) {
+        for (CommandsEnum button : CommandsEnum.values()) {
 
-            items.add(Button.success(button.id + "", button.label));
+            items.add(Button.success(button.buttonId + "", button.buttonlabel));
         }
 
         return items;
@@ -46,14 +25,14 @@ public enum ButtonEnum {
 
         List<ItemComponent> items = new ArrayList<>();
 
-        items.add(Button.success(PAUSE.id + "", PAUSE.label));
-        items.add(Button.success(SKIP.id + "", SKIP.label));
-        items.add(Button.success(SHUFFLE.id + "", SHUFFLE.label));
-        items.add(Button.success(LOOP.id + "", LOOP.label));
-        items.add(Button.success(LAST.id + "", LAST.label));
-        items.add(Button.success(QUEUE.id + "", QUEUE.label));
-        items.add(Button.success(CLEAR_QUEUE.id + "", CLEAR_QUEUE.label));
-        items.add(Button.success(STOP.id + "", STOP.label));
+        items.add(Button.success(CommandsEnum.PAUSE.buttonId + "", CommandsEnum.PAUSE.buttonlabel));
+        items.add(Button.success(CommandsEnum.SKIP.buttonId + "", CommandsEnum.SKIP.buttonlabel));
+        items.add(Button.success(CommandsEnum.SHUFFLE.buttonId + "", CommandsEnum.SHUFFLE.buttonlabel));
+        items.add(Button.success(CommandsEnum.LOOP.buttonId + "", CommandsEnum.LOOP.buttonlabel));
+        items.add(Button.success(CommandsEnum.LAST.buttonId + "", CommandsEnum.LAST.buttonlabel));
+        items.add(Button.success(CommandsEnum.QUEUE.buttonId + "", CommandsEnum.QUEUE.buttonlabel));
+        items.add(Button.success(CommandsEnum.CLEAR_QUEUE.buttonId + "", CommandsEnum.CLEAR_QUEUE.buttonlabel));
+        items.add(Button.success(CommandsEnum.STOP.buttonId + "", CommandsEnum.STOP.buttonlabel));
 
         return items;
     }
@@ -72,8 +51,8 @@ public enum ButtonEnum {
 
         List<ItemComponent> items = new ArrayList<>();
 
-        items.add(Button.primary(HELP.id + "", HELP.label));
-        items.add(Button.primary(PLAYLISTS.id + "", PLAYLISTS.label));
+        items.add(Button.primary(CommandsEnum.HELP.buttonId + "", CommandsEnum.HELP.buttonlabel));
+        items.add(Button.primary(CommandsEnum.PLAYLISTS.buttonId + "", CommandsEnum.PLAYLISTS.buttonlabel));
 
         return items;
     }
@@ -91,8 +70,8 @@ public enum ButtonEnum {
 
         List<ItemComponent> items = new ArrayList<>();
 
-        items.add(Button.success(HELP.id + "", HELP.label));
-        items.add(Button.success(RECORD.id + "", RECORD.label));
+        items.add(Button.success(CommandsEnum.HELP.buttonId + "", CommandsEnum.HELP.buttonlabel));
+        items.add(Button.success(CommandsEnum.RECORD.buttonId + "", CommandsEnum.RECORD.buttonlabel));
 
         return items;
     }

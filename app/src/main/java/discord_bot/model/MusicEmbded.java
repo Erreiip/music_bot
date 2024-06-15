@@ -7,6 +7,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 
 import discord_bot.enumerate.ButtonEnum;
+import discord_bot.enumerate.CommandsEnum;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 
@@ -107,13 +108,13 @@ public class MusicEmbded {
 
         eb.setDescription(
             " ➡️ play [query] : play a song\n " +
-            ButtonEnum.STOP.label + " stop : stop the music\n " +
-            ButtonEnum.SKIP.label + " skip : skip the current song\n " +
-            ButtonEnum.LOOP.label + " loop : loop the current song\n " +
-            ButtonEnum.QUEUE.label + " queue : display the queue\n " +
-            ButtonEnum.LAST.label + " last : add the last song\n " +
-            ButtonEnum.PAUSE.label + " pause : pause the music\n " +
-            ButtonEnum.CLEAR_QUEUE.label + " clear_queue : clear the queue\n "
+            CommandsEnum.STOP.buttonlabel + " stop : stop the music\n " +
+            CommandsEnum.SKIP.buttonlabel + " skip : skip the current song\n " +
+            CommandsEnum.LOOP.buttonlabel + " loop : loop the current song\n " +
+            CommandsEnum.QUEUE.buttonlabel + " queue : display the queue\n " +
+            CommandsEnum.LAST.buttonlabel + " last : add the last song\n " +
+            CommandsEnum.PAUSE.buttonlabel + " pause : pause the music\n " +
+            CommandsEnum.CLEAR_QUEUE.buttonlabel + " clear_queue : clear the queue\n "
         );
 
         return eb.build();
