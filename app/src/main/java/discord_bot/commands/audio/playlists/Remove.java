@@ -11,7 +11,6 @@ public class Remove extends Commands {
     
     public Remove(GuildMusicManager musicManager) {
         super(musicManager);
-        //TODO Auto-generated constructor stub
     }
 
     @Override

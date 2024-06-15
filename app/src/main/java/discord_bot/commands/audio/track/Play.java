@@ -10,7 +10,6 @@ import discord_bot.model.MessageSender;
 import discord_bot.utils.IProcessAudio;
 import discord_bot.utils.SongIdentifier;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.interactions.callbacks.IDeferrableCallback;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 
