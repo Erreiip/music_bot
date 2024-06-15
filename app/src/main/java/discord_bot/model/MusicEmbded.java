@@ -85,7 +85,7 @@ public class MusicEmbded {
             return eb.build();
         }
         
-        int size = Math.max(queue.size(), 50); // TODO CHANGER CA
+        int size = Math.min(queue.size(), 50); // TODO CHANGER CA
 
         String description = "⏏️ " + queue.get(0).getInfo().title + "\n";
         for (int i = 1; i < size; i++) {

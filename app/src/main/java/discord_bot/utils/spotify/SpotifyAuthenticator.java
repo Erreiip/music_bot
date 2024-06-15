@@ -130,7 +130,7 @@ public class SpotifyAuthenticator {
                         
                         if ( track.getBoolean("is_local") ) continue;
                         
-                        tracks.add(track.getString("name") + " " + artist.getString("name"));
+                        tracks.add(artist.getString("name") + "" + track.getString("name"));
                     }
 
                     if (jsonResponse.has("next")) {

@@ -13,6 +13,7 @@ import discord_bot.listeners.leave.TimeoutSong;
 import discord_bot.listeners.no_track.INoTrackListener;
 import discord_bot.model.playlist_writer.Playlist;
 import discord_bot.utils.IProcessAudio;
+import discord_bot.utils.SongIdentifier;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -72,7 +73,14 @@ public class GuildMusicManager implements ITimeoputListener, INoTrackListener {
 
     public void addSong(SlashCommandInteractionEvent event, String songIdentifier, Float speed, IProcessAudio callback) {
 
-        AudioLoadResultHandler handler = new AudioLoadResultHandlerImpl(songIdentifier, callback, event, speed, this.getMessageSender());
+        AudioLoadResultHandler handler = new AudioLoadResultHandlerImpl(
+            songIdentifier,
+            callback,
+            event,
+            speed,
+            this.getMessageSender(),
+            SongIdentifier.isPlaylist(songIdentifier)
+        );
 
         this.joinChannel(event);
 

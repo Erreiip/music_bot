@@ -11,6 +11,7 @@ import discord_bot.listeners.commands_listeners.play.IPlayListener;
 import discord_bot.model.GuildMusicManager;
 import discord_bot.model.MessageSender;
 import discord_bot.utils.IProcessAudio;
+import discord_bot.utils.SongIdentifier;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.interactions.callbacks.IDeferrableCallback;
@@ -30,21 +31,8 @@ public class Play extends Commands implements IProcessAudio, IPlayListener {
         String songIdentifier = event.getOption(Main.PLAY_OPTION_QUERY).getAsString();
         OptionMapping speedO = event.getOption(Main.PLAY_OPTION_SPEED);
         Float speed = speedO == null ? null : Float.parseFloat(speedO.getAsString());
-        
-        List<String> songs = new ArrayList<>();
 
-        musicManager.addSong(event, songIdentifier, speed, this);
-        /*
-        if ( SongIdentifier.isPlaylist(songIdentifier) ) {
-            songs = SongIdentifier.getPlaylist(songIdentifier);           
-        } else {
-            songs.add(SongIdentifier.getSongIdentifier(songIdentifier));
-        }
-
-        for ( String song : songs ) {
-            musicManager.addSong(event, song, speed, this);
-        }
-        */
+        musicManager.addSong(event, SongIdentifier.getSongIdentifier(songIdentifier), speed, this);
     }
 
 

@@ -17,13 +17,17 @@ public class AudioLoadResultHandlerImpl implements AudioLoadResultHandler {
     private final Float speed;
     private final MessageSender messageSender;
 
-    public AudioLoadResultHandlerImpl(String songIdentifier, IProcessAudio callback, SlashCommandInteractionEvent event, Float speed, MessageSender messageSender) {
+    //TODO change this
+    private final boolean isPlaylist;
+
+    public AudioLoadResultHandlerImpl(String songIdentifier, IProcessAudio callback, SlashCommandInteractionEvent event, Float speed, MessageSender messageSender, boolean isPlaylist) {
 
         this.songIdentifier = songIdentifier;
         this.callback = callback;
         this.event = event;
         this.speed = speed;
         this.messageSender = messageSender;
+        this.isPlaylist = isPlaylist;
     }
 
     @Override
@@ -42,6 +46,15 @@ public class AudioLoadResultHandlerImpl implements AudioLoadResultHandler {
         }
 
         callback.onTrackGet(event, firstTrack, this.speed);
+
+        if ( !this.isPlaylist ) return;
+
+        for ( AudioTrack track : playlist.getTracks() ) {
+            
+            if ( track == firstTrack ) continue;
+
+            callback.onTrackGet(event, track, this.speed);
+        }
     }
 
     @Override

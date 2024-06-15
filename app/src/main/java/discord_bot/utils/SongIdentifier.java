@@ -1,13 +1,10 @@
 package discord_bot.utils;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
 import discord_bot.utils.spotify.SpotifyAuthenticator;
-import discord_bot.utils.youtube.ApiYoutube;
-
 public class SongIdentifier {
 
     private static final Pattern PATTERN_SPOTIFY = Pattern.compile("https://open.spotify.com/.*", Pattern.CASE_INSENSITIVE);
@@ -53,14 +50,6 @@ public class SongIdentifier {
             for ( String song : spotifySong ) {
 
                 playlist.add(getSongIdentifier(song));
-            }
-
-        } else {
-
-            try {
-                playlist = ApiYoutube.getPlaylistItems(songIdentifier);
-            } catch (IOException e) {
-                e.printStackTrace();
             }
         }
 
