@@ -1,8 +1,5 @@
 package discord_bot.commands.audio.track;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
 import discord_bot.Main;

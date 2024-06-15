@@ -89,33 +89,6 @@ public class Database {
         return caches;
     }
 
-    public String getQuery(String query) throws SQLException {
-
-        mapCache.get(SELECT_WHERE).setString(1, query);
-        ResultSet resultSet = mapCache.get(SELECT_WHERE).executeQuery();
-        
-        String response = null;
-        if ( resultSet.next() ) {
-            response = resultSet.getString(LBL_RESULT);
-        }
-
-        resultSet.close();
-        return response;
-    }
-
-    private boolean insertInto(String query, String result) throws SQLException {
-
-        if (getQuery(query) != null) {
-            return false;
-        }
-
-        mapCache.get(INSERT).setString(1, query);
-        mapCache.get(INSERT).setString(2, result);
-        mapCache.get(INSERT).executeUpdate();
-        
-        return true;
-    }
-
     private boolean insertReport(String username, String report) throws SQLException {
 
         mapCache.get(INSERT_REPORT).setString(1, username);
@@ -138,21 +111,10 @@ public class Database {
         return reports;
     }
     
-    public static boolean addTrack(String query, String uri) {
-        
-        try {
-            return Database.getInstance().insertInto(query, uri);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return false;
-    }
-
     public static boolean addReport(String username, String report) {
         
         try {
-            return Database.getInstance().insertInto(username, report);
+            return Database.getInstance().insertReport(username, report);
         } catch (SQLException e) {
             e.printStackTrace();
         }

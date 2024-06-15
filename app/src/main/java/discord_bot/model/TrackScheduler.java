@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-//import com.github.natanbc.lavadsp.timescale.TimescalePcmAudioFilter;
+//import com.github.natanbc.lavadsp.timescale.TimescalePcmAudioFilter; TODO: look new versions
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
