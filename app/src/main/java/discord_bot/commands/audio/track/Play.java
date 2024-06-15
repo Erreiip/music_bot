@@ -57,10 +57,4 @@ public class Play extends Commands implements IProcessAudio, IPlayListener {
 
         MessageSender.queueEvent(musicManager.getMessageSender(), musicManager.getScheduler().getQueue(), event);
     }
-
-    @Override
-    public void executeCommands(ButtonInteractionEvent event) {
-        // TODO on ne sait pas si opn, garde ou pas encore
-        throw new UnsupportedOperationException("Unimplemented method 'execute'");
-    }
 }
