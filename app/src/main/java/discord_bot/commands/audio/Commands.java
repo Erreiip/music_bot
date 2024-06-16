@@ -1,7 +1,6 @@
 package discord_bot.commands.audio;
 
 import discord_bot.commands.Help;
-import discord_bot.commands.SeeCache;
 import discord_bot.commands.audio.playlists.Add;
 import discord_bot.commands.audio.playlists.Create;
 import discord_bot.commands.audio.playlists.Load;
@@ -53,7 +52,6 @@ public abstract class Commands implements ButtonCommands, ModalCommands {
     public static final int SHUFFLE = 17;
     public static final int REPORT = 18;
     public static final int SEE_REPORT = 19;
-    public static final int SEE_CACHE = 20;
 
 
     protected GuildMusicManager musicManager;
@@ -127,8 +125,7 @@ public abstract class Commands implements ButtonCommands, ModalCommands {
             new Shuffle(musicManager),
             
             new Report(musicManager),
-            new SeeReport(musicManager),
-            new SeeCache(musicManager)
+            new SeeReport(musicManager)
         };
     }
 }

@@ -36,8 +36,6 @@ public class TrackScheduler extends AudioEventAdapter
     private AudioTrack currentTrack;
     private Float currentTrackSpeed;
 
-    private int loadingTest;
-
     public TrackScheduler(AudioPlayer player, AudioPlayer secondPlayer) {
 
         this.player = player;
@@ -47,8 +45,6 @@ public class TrackScheduler extends AudioEventAdapter
         this.event = null;
 
         this.queue = new ArrayList<>();
-
-        this.loadingTest = 3;
     }
 
     public boolean queueWithoutFire(AudioTrack track, float speed) {
@@ -168,36 +164,36 @@ public class TrackScheduler extends AudioEventAdapter
         */
     }
         
-        public void clearQueue() {
+    public void clearQueue() {
         
         this.setLoop(false);
         this.queue.clear();
-        }
+    }
         
-        public boolean isLooped() {
+    public boolean isLooped() {
         return this.loop;
-        }
+    }
         
-        public void switchLoop() {
+    public void switchLoop() {
         setLoop(!this.loop);
-        }
+    }
         
-        public void setLoop(boolean state) {
+    public void setLoop(boolean state) {
         
         if (loop == state)
             return;
         
         this.loop = state;
         this.onLoop((IDeferrableCallback) event);
-        }
+    }
         
-        public void shuffle() {
+    public void shuffle() {
         
         Collections.shuffle(this.queue);
         this.onPlayQueue((IDeferrableCallback) event);
-        }
+    }
         
-        public void reset() {
+    public void reset() {
         
         this.clearQueue();
         this.loop = false;
@@ -205,35 +201,12 @@ public class TrackScheduler extends AudioEventAdapter
         this.currentTrackSpeed = null;
         this.event = null;
         this.player.stopTrack();
-        }
+    }
         
-        @Override
-        public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
-        /*
-        System.out.println("endReason1 " + endReason == AudioTrackEndReason.LOAD_FAILED + " " + (loadingTest > 0));
-        System.out.println("endReason2 " + (loadingTest == 0));
-        System.out.println("endReason3 " + endReason + " " + endReason.mayStartNext + " " + this.loop);
-        
-        
-        if (endReason == AudioTrackEndReason.LOAD_FAILED && loadingTest > 0) {
-            this.queue.add(0, new Couple<AudioTrack, Float>(this.currentTrack, this.currentTrackSpeed));
-            this.nextTrack();
-            this.loadingTest--;
-            return;
-        }
-        
-        */
-        if (loadingTest == 0) {
-            System.out.println(track);
-            System.out.println("PROBLEME DE CHARGEMENT DE LA MUSIQUE");
-            this.loadingTest = 3;
-            this.nextTrack();
-            return;
-        }
-        
+    @Override
+    public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
+
         if (endReason.mayStartNext || endReason == AudioTrackEndReason.FINISHED && this.loop) {
-            System.out.println("rentre");
-            this.loadingTest = 3;
             nextTrack();
             return;
         }

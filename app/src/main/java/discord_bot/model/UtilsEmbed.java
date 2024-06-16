@@ -3,7 +3,6 @@ package discord_bot.model;
 import java.awt.Color;
 import java.util.List;
 
-import discord_bot.model.dao.Cache;
 import discord_bot.model.dao.Report;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -25,24 +24,6 @@ public class UtilsEmbed {
         eb.addField("Username", report.getUsername(), true);
         eb.addField("For", report.getReport(), false);
 
-        return eb.build();
-    }
-
-    public static MessageEmbed createCacheEmbed(List<Cache> caches) {
-
-        EmbedBuilder eb = new EmbedBuilder();
-        setColor(eb);
-
-        eb.setAuthor("CACHE", "http://erreip.ciliste.games/shesh/", GIF);
-
-        StringBuilder sb = new StringBuilder();
-        for (Cache cache : caches) {
-
-            sb.append(cache.getQuery()).append(" -> ").append(cache.getResult()).append("\n");
-        }
-
-        eb.setDescription(sb.toString());
-        
         return eb.build();
     }
 

@@ -6,7 +6,6 @@ import java.util.List;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 
-import discord_bot.enumerate.ButtonEnum;
 import discord_bot.enumerate.CommandsEnum;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;

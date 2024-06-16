@@ -16,20 +16,14 @@ public class Report extends Commands {
 
     @Override
     public void executeCommands(SlashCommandInteractionEvent event) {
-        
+        /*
         String message = event.getOption(Main.REPORT_OPTION_MESSAGE).getAsString();
 
         if ( ! Database.addReport(event.getUser().getName(), message)) {
             MessageSender.errorEvent(musicManager.getMessageSender(), "An error occurred while sending your report. Please try again later.", event);
             return;
         }
-
+        */
         MessageSender.infoEvent(musicManager.getMessageSender(), "Your report has been sent to the developers. Thank you for your feedback.", event);    
-    }
-
-    @Override
-    public void executeCommands(ButtonInteractionEvent event) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'execute'");
     }
 }

@@ -23,7 +23,7 @@ public class SeeReport extends Commands {
     public void executeCommands(SlashCommandInteractionEvent event) {
 
         List<Report> reports = null;
-        
+        /*
         try { reports = Database.getInstance().getReports(); } 
         catch (Exception e) {
             e.printStackTrace();
@@ -43,13 +43,6 @@ public class SeeReport extends Commands {
         }
         
         event.getHook().sendMessageEmbeds(embeds).queue();
+        */
     }
-
-    @Override
-    public void executeCommands(ButtonInteractionEvent event) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'execute'");
-    }
-
-    
 }
