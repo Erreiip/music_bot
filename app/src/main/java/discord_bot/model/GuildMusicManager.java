@@ -11,7 +11,7 @@ import discord_bot.lava_player.AudioPlayerSendHandler;
 import discord_bot.listeners.leave.ITimeoputListener;
 import discord_bot.listeners.leave.TimeoutSong;
 import discord_bot.listeners.no_track.INoTrackListener;
-import discord_bot.model.playlist_writer.Playlist;
+import discord_bot.model.dao.Playlist;
 import discord_bot.utils.IProcessAudio;
 import discord_bot.utils.SongIdentifier;
 import net.dv8tion.jda.api.entities.Member;
@@ -73,6 +73,12 @@ public class GuildMusicManager implements ITimeoputListener, INoTrackListener {
 
     public void addSong(SlashCommandInteractionEvent event, String songIdentifier, Float speed, IProcessAudio callback) {
 
+        this.joinChannel(event);
+        this.addSongWithoutJoin(event, songIdentifier, speed, callback);
+    }
+
+    public void addSongWithoutJoin(SlashCommandInteractionEvent event, String songIdentifier, Float speed, IProcessAudio callback) {
+
         AudioLoadResultHandler handler = new AudioLoadResultHandlerImpl(
             songIdentifier,
             callback,
@@ -81,8 +87,6 @@ public class GuildMusicManager implements ITimeoputListener, INoTrackListener {
             this.getMessageSender(),
             SongIdentifier.isPlaylist(songIdentifier)
         );
-
-        this.joinChannel(event);
 
         playerManager.loadItemOrdered(this, songIdentifier, handler);
     }

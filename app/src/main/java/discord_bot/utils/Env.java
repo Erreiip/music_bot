@@ -9,10 +9,13 @@ public class Env {
     public static String SPOTIFY_PB = "SPOTIFY_PB";
     public static String SPOTIFY_PV = "SPOTIFY_PV";
     public static String DISCORD_TOKEN = "DISCORD_TOKEN";
+    public static String DISCORD_TOKEN_DEBUG = "DISCORD_TOKEN_DEBUG";
     public static String DEBUG = "DEBUG";
 
     public static String getToken() {
-        return System.getenv(DISCORD_TOKEN);
+
+        if (isDebug()) return System.getenv(DISCORD_TOKEN_DEBUG);
+        else return System.getenv(DISCORD_TOKEN);
     }
 
     public static String getYtbToken() {

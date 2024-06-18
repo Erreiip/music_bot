@@ -26,7 +26,7 @@ public class Database {
         this.mapCache = new HashMap<>();
     }
 
-    public static Database getInstance() {
+    static Database getInstance() {
 
         if (instance == null) {
 

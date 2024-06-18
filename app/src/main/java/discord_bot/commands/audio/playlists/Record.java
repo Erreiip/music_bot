@@ -5,7 +5,6 @@ import discord_bot.commands.audio.Commands;
 import discord_bot.model.GuildMusicManager;
 import discord_bot.model.MessageSender;
 import discord_bot.model.MusicModal;
-import discord_bot.model.playlist_writer.Playlist;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 
@@ -27,7 +26,7 @@ public class Record extends Commands {
         }
 
         musicManager.record = true;
-        musicManager.playlist = new Playlist(name);
+        //musicManager.playlist = new Playlist(name);
 
         MessageSender.infoEvent(musicManager.getMessageSender(), "Start recording", event);
     }

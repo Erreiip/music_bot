@@ -22,6 +22,11 @@ public class PlaylistDatabase {
         database.addPreparedStatement(CREATE_TRACK_KEY, CREATE_TRACK);
 
         database.addPreparedStatement(GET_PLAYLISTS_FROM_GUILD_KEY, GET_PLAYLISTS_FROM_GUILD);
+        database.addPreparedStatement(GET_PLAYLIST_KEY, GET_PLAYLIST);
+        database.addPreparedStatement(GET_TRACKS_FROM_PLAYLIST_KEY, GET_TRACKS_FROM_PLAYLIST);
+        
+        database.addPreparedStatement(REMOVE_PLAYLIST_KEY, REMOVE_PLAYLIST);
+        database.addPreparedStatement(REMOVE_TRACK_KEY, REMOVE_TRACK);
     }
 
     public static PlaylistDatabase getInstance() {
@@ -38,19 +43,19 @@ public class PlaylistDatabase {
      * Inserts
      * */
     private final String CREATE_KEY = TAG + ".createPlaylist";
-    private final String CREATE_PLAYLIST = "INSERT INTO playlists (guild_id, name, owner_id, rights) VALUES (?, ?, ?, ?)";
+    private final String CREATE_PLAYLIST = "INSERT INTO playlists (guild_id, name, user_id, rights) VALUES (?, ?, ?, ?)";
 
     private final String CREATE_TRACK_KEY = TAG + ".createTrack";
     private final String CREATE_TRACK = "INSERT INTO tracks (playlist_guild_id, playlist_name, title, uri) VALUES (?, ?, ?, ?)";
 
-    public boolean createPlaylist(Long guildId, String name, int ownerId, PlaylistRights rights) {
+    public boolean createPlaylist(Long guildId, String name, Long ownerId, PlaylistRights rights) {
         
         PreparedStatement statement = database.mapCache.get(CREATE_KEY);
         
         try {
             statement.setLong(1, guildId);
             statement.setString(2, name);
-            statement.setInt(3, ownerId);
+            statement.setLong(3, ownerId);
             statement.setString(4, rights.value);
 
             statement.executeUpdate();
@@ -107,10 +112,9 @@ public class PlaylistDatabase {
 
             while (result.next()) {
                 playlists.add(new Playlist(
-                    result.getInt("id"),
                     result.getLong("guild_id"),
                     result.getString("name"),
-                    result.getInt("owner_id"),
+                    result.getLong("user_id"),
                     result.getString("rights")
                 ));
             }
@@ -133,10 +137,9 @@ public class PlaylistDatabase {
 
             if (result.next()) {
                 return new Playlist(
-                    result.getInt("id"),
                     result.getLong("guild_id"),
                     result.getString("name"),
-                    result.getInt("owner_id"),
+                    result.getLong("user_id"),
                     result.getString("rights")
                 );
             }
@@ -175,6 +178,50 @@ public class PlaylistDatabase {
         }
 
         return playlist;
+    }
+
+    /*
+     * Remove
+     * */
+    private final String REMOVE_PLAYLIST_KEY = TAG + ".removePlaylist";
+    private final String REMOVE_PLAYLIST = "DELETE FROM playlists WHERE guild_id = ? AND name = ?";
+
+    public boolean removePlaylist(Long guildId, String name) {
+        
+        PreparedStatement statement = database.mapCache.get(REMOVE_PLAYLIST_KEY);
+        
+        try {
+            statement.setLong(1, guildId);
+            statement.setString(2, name);
+
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
+    }
+
+    private final String REMOVE_TRACK_KEY = TAG + ".removeTrack";
+    private final String REMOVE_TRACK = "DELETE FROM tracks WHERE playlist_guild_id = ? AND playlist_name = ? AND title = ?";
+
+    public boolean removeTrackFromPlaylist(Long guildId, String name, String title) {
+        
+        PreparedStatement statement = database.mapCache.get(REMOVE_TRACK_KEY);
+        
+        try {
+            statement.setLong(1, guildId);
+            statement.setString(2, name);
+            statement.setString(3, title);
+
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
     }
 
 }

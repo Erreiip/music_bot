@@ -42,7 +42,7 @@ public class Play extends Commands implements IProcessAudio, IPlayListener {
                 
         musicManager.getScheduler().queue(track, speed != null ? speed : 1, event);
         
-        if (musicManager.record) musicManager.playlist.addTrack(track.getInfo()); 
+        //if (musicManager.record) musicManager.playlist.addTrack(track.getInfo()); 
     }
 
     @Override

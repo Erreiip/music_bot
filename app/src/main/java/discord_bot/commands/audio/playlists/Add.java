@@ -2,6 +2,8 @@ package discord_bot.commands.audio.playlists;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
@@ -9,13 +11,17 @@ import discord_bot.Main;
 import discord_bot.commands.audio.Commands;
 import discord_bot.model.GuildMusicManager;
 import discord_bot.model.MessageSender;
-import discord_bot.model.playlist_writer.Playlist;
 import discord_bot.utils.IProcessAudio;
 import discord_bot.utils.SongIdentifier;
+import discord_bot.utils.database.PlaylistDatabase;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 
 public class Add extends Commands implements IProcessAudio {
+
+    private final Lock lock = new ReentrantLock();
+    
+    private int loadingSongs;
+    private String name;
 
     public Add(GuildMusicManager musicManager) {
         super(musicManager);
@@ -23,6 +29,8 @@ public class Add extends Commands implements IProcessAudio {
 
     @Override
     public void executeCommands(SlashCommandInteractionEvent event) {
+
+        lock.lock();
         
         String name = event.getOption(Main.PLAYLIST_ADD_REMOVE_OPTION_NAME).getAsString();
         String url = event.getOption(Main.PLAYLIST_ADD_OPTION_URL).getAsString();
@@ -35,23 +43,24 @@ public class Add extends Commands implements IProcessAudio {
             songs.add(SongIdentifier.getSongIdentifier(url));
         }
 
-        Playlist playlist;
-
-        try { playlist = Playlist.readPlaylist(name); } 
-        catch (Exception e) { 
-
-            MessageSender.errorEvent(musicManager.getMessageSender(), "An error occurred while loading the playlist : " + e.getMessage(), event);   
-            return; 
-        }
+        this.loadingSongs = songs.size();
+        this.name = name;
 
         for ( String song : songs ) {
-            musicManager.addSong(event, song, null, this);
+            musicManager.addSongWithoutJoin(event, song, null, this);
         }
     }
 
     @Override
     public void onTrackGet(SlashCommandInteractionEvent event, AudioTrack track, Float speed) {
         
-        //TODO : Add the track to the playlist
+        PlaylistDatabase playlistDB = PlaylistDatabase.getInstance();
+        playlistDB.addTrackToPlaylist(event.getGuild().getIdLong(), name, track.getInfo().title, track.getInfo().uri);
+
+        this.loadingSongs--;
+        if (this.loadingSongs == 0) {
+            MessageSender.infoEvent(musicManager.getMessageSender(), "Sons ajouté à " + name, event);
+            lock.unlock();
+        }
     }
 }

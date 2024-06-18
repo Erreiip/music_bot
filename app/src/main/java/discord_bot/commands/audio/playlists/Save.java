@@ -3,7 +3,6 @@ package discord_bot.commands.audio.playlists;
 import discord_bot.commands.audio.Commands;
 import discord_bot.model.GuildMusicManager;
 import discord_bot.model.MessageSender;
-import discord_bot.model.playlist_writer.Playlist;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 public class Save extends Commands {
@@ -14,7 +13,8 @@ public class Save extends Commands {
 
     @Override
     public void executeCommands(SlashCommandInteractionEvent event) {
-
+        
+        /*
         if ( ! musicManager.record ) {
             MessageSender.errorEvent(musicManager.getMessageSender(), "No playlist is being recorded.", event);
             return;
@@ -30,5 +30,6 @@ public class Save extends Commands {
         }
         
         MessageSender.infoEvent(musicManager.getMessageSender(), "Playlist saved.", event);
+        */
     }  
 }

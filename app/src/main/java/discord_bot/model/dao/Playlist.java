@@ -5,15 +5,13 @@ import java.util.List;
 
 public class Playlist {
 
-    private final int id;
-    private final Long guildId;
-    private final String name;
-    private final int ownerId;
-    private final String rights;
+    public final Long guildId;
+    public final String name;
+    public final Long ownerId;
+    public final String rights;
     private List<Track> tracks;
 
-    public Playlist(int id, Long guildId, String name, int ownerId, String rights, List<Track> tracks) {
-        this.id = id;
+    public Playlist(Long guildId, String name, Long ownerId, String rights, List<Track> tracks) {
         this.guildId = guildId;
         this.name = name;
         this.ownerId = ownerId;
@@ -21,9 +19,13 @@ public class Playlist {
         this.tracks = tracks;
     }
 
-    public Playlist(int id, Long guildId, String name, int ownerId, String rights) {
+    public Playlist(Long guildId, String name, Long ownerId, String rights) {
         
-        this(id, guildId, name, ownerId, rights, new ArrayList<>());
+        this(guildId, name, ownerId, rights, new ArrayList<>());
+    }
+
+    public List<Track> getTracks() {
+        return tracks;
     }
 
     public void setTracks(List<Track> tracks) {
@@ -37,9 +39,9 @@ public class Playlist {
     
     public static class Track {
         
-        private final int id;
-        private final String title;
-        private final String uri;
+        public final int id;
+        public final String title;
+        public final String uri;
 
         public Track(int id, String title, String uri) {
             this.id = id;

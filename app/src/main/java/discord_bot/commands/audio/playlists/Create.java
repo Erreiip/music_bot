@@ -2,10 +2,12 @@ package discord_bot.commands.audio.playlists;
 
 import discord_bot.Main;
 import discord_bot.commands.audio.Commands;
+import discord_bot.enumerate.PlaylistRights;
 import discord_bot.model.GuildMusicManager;
 import discord_bot.model.MessageSender;
-import discord_bot.model.playlist_writer.Playlist;
+import discord_bot.utils.database.PlaylistDatabase;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 
 public class Create extends Commands {
 
@@ -17,15 +19,13 @@ public class Create extends Commands {
     public void executeCommands(SlashCommandInteractionEvent event) {
      
         String name = event.getOption(Main.PLAYLIST_CREATE_OPTION_NAME).getAsString();
+        OptionMapping rights = event.getOption(Main.PLAYLIST_CREATE_OPTION_RIGTHS);
 
-        try { Playlist.createPlaylist(name); } 
-        catch (Exception e) { 
+        PlaylistRights playlistRights = rights == null ? PlaylistRights.PRIVATE : PlaylistRights.get(rights.getAsString());
 
-            MessageSender.errorEvent(musicManager.getMessageSender(), "An error occurred while loading the playlist : " + e.getMessage(), event);            
-            return;
-        }
+        PlaylistDatabase playlistDB = PlaylistDatabase.getInstance();
+        playlistDB.createPlaylist(event.getGuild().getIdLong(), name, event.getUser().getIdLong(), playlistRights);
 
         MessageSender.infoEvent(musicManager.getMessageSender(), "Playlist created.", event);
     }
-    
 }
