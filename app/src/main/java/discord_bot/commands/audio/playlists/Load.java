@@ -1,5 +1,7 @@
 package discord_bot.commands.audio.playlists;
 
+import java.util.List;
+
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
 import discord_bot.Main;
@@ -37,5 +39,11 @@ public class Load extends Commands implements IProcessAudio {
             Float speed) {
 
         musicManager.getScheduler().queue(track, speed != null ? speed : 1, event);
+    }
+
+    @Override
+    public void onTrackGet(SlashCommandInteractionEvent event, List<AudioTrack> track) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'onTrackGet'");
     }
 }

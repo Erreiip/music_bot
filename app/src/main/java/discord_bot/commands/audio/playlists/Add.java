@@ -2,6 +2,7 @@ package discord_bot.commands.audio.playlists;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -18,49 +19,53 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 
 public class Add extends Commands implements IProcessAudio {
 
-    private final Lock lock = new ReentrantLock();
+    private final Semaphore semaphore;
     
-    private int loadingSongs;
     private String name;
 
     public Add(GuildMusicManager musicManager) {
         super(musicManager);
+        this.semaphore = new Semaphore(1);
     }
 
     @Override
     public void executeCommands(SlashCommandInteractionEvent event) {
 
-        lock.lock();
+        semaphore.acquireUninterruptibly();
         
         String name = event.getOption(Main.PLAYLIST_ADD_REMOVE_OPTION_NAME).getAsString();
         String url = event.getOption(Main.PLAYLIST_ADD_OPTION_URL).getAsString();
 
-        List<String> songs = new ArrayList<>();
+        String song = SongIdentifier.getSongIdentifier(url);
 
-        if ( SongIdentifier.isPlaylist(url) ) {
-            songs = SongIdentifier.getPlaylist(url);           
-        } else {
-            songs.add(SongIdentifier.getSongIdentifier(url));
-        }
-
-        this.loadingSongs = songs.size();
         this.name = name;
 
-        for ( String song : songs ) {
-            musicManager.addSongWithoutJoin(event, song, null, this);
-        }
+        MessageSender.infoEvent(musicManager.getMessageSender(), "Chargement des sons...", event);
+
+        musicManager.addSongWithoutJoin(event, song, null, this);
     }
 
     @Override
     public void onTrackGet(SlashCommandInteractionEvent event, AudioTrack track, Float speed) {
-        
+
         PlaylistDatabase playlistDB = PlaylistDatabase.getInstance();
         playlistDB.addTrackToPlaylist(event.getGuild().getIdLong(), name, track.getInfo().title, track.getInfo().uri);
 
-        this.loadingSongs--;
-        if (this.loadingSongs == 0) {
-            MessageSender.infoEvent(musicManager.getMessageSender(), "Sons ajouté à " + name, event);
-            lock.unlock();
+        MessageSender.infoEvent(musicManager.getMessageSender(), "Sons ajouté à " + name, event);
+        
+        semaphore.release();
+    }
+
+    @Override
+    public void onTrackGet(SlashCommandInteractionEvent event, List<AudioTrack> track) {
+        
+        PlaylistDatabase playlistDB = PlaylistDatabase.getInstance();
+        for ( AudioTrack audioTrack : track ) {
+            playlistDB.addTrackToPlaylist(event.getGuild().getIdLong(), name, audioTrack.getInfo().title, audioTrack.getInfo().uri);
         }
+
+        MessageSender.infoEvent(musicManager.getMessageSender(), "Sons ajouté à " + name, event);
+
+        semaphore.release();
     }
 }

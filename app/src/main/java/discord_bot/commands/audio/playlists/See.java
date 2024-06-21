@@ -1,9 +1,5 @@
 package discord_bot.commands.audio.playlists;
 
-import java.util.List;
-
-import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
-
 import discord_bot.Main;
 import discord_bot.commands.audio.Commands;
 import discord_bot.model.GuildMusicManager;
@@ -25,6 +21,11 @@ public class See extends Commands {
 
         PlaylistDatabase playlistDB = PlaylistDatabase.getInstance();
         Playlist playlist = playlistDB.getPlaylistWithTracks(event.getGuild().getIdLong(), name);
+
+        if ( playlist == null ) {
+            MessageSender.errorEvent(musicManager.getMessageSender(), "Playlist not found.", event);
+            return;
+        }
         
         StringBuilder builder = new StringBuilder();
 

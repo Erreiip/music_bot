@@ -40,10 +40,10 @@ public class Main {
     public static final String PLAYLIST_CREATE_OPTION_RIGTHS = "rights";
 
     public static final String PLAYLIST_ADD = "p_add";
-    public static final String PLAYLIST_REMOVE = "p_remove";
-    public static final String PLAYLIST_ADD_REMOVE_OPTION_NAME = "name";
     public static final String PLAYLIST_ADD_OPTION_URL = "url";
+    public static final String PLAYLIST_REMOVE = "p_remove";
     public static final String PLAYLIST_REMOVE_OPTION_TITLE = "title";
+    public static final String PLAYLIST_ADD_REMOVE_OPTION_NAME = "name";
 
     public static final String PLAYLIST_SAVE = "p_save";
 
@@ -119,7 +119,7 @@ public class Main {
                 .addOption(OptionType.STRING, PLAYLIST_ADD_OPTION_URL, "url or title of the video", true),
             Commands.slash(PLAYLIST_REMOVE, "Remove a song from a playlist")
                 .addOption(OptionType.STRING, PLAYLIST_ADD_REMOVE_OPTION_NAME, "name of the playlist", true, true)
-                .addOption(OptionType.STRING, PLAYLIST_REMOVE_OPTION_TITLE, "title or index of the video", true),
+                .addOption(OptionType.STRING, PLAYLIST_REMOVE_OPTION_TITLE, "title or index of the video", true, true),
             Commands.slash(PLAYLIST_CREATE, "Create a playlist")
                 .addOption(OptionType.STRING, PLAYLIST_CREATE_OPTION_NAME, "name of the playlist", true)
                 .addOption(OptionType.STRING, PLAYLIST_CREATE_OPTION_RIGTHS, "rights of the playlist", false),

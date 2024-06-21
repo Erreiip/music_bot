@@ -1,5 +1,7 @@
 package discord_bot.commands.audio.track;
 
+import java.util.List;
+
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
 import discord_bot.Main;
@@ -55,5 +57,11 @@ public class Play extends Commands implements IProcessAudio, IPlayListener {
     public void onPlayQueue(IDeferrableCallback event) {
 
         MessageSender.queueEvent(musicManager.getMessageSender(), musicManager.getScheduler().getQueue(), event);
+    }
+
+    @Override
+    public void onTrackGet(SlashCommandInteractionEvent event, List<AudioTrack> track) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'onTrackGet'");
     }
 }

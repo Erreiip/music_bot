@@ -5,6 +5,7 @@ import java.util.List;
 
 import discord_bot.Main;
 import discord_bot.model.dao.Playlist;
+import discord_bot.model.dao.Playlist.Track;
 import discord_bot.utils.database.PlaylistDatabase;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -23,7 +24,7 @@ public class CompletionListener extends ListenerAdapter {
     @Override
     public void onCommandAutoCompleteInteraction(CommandAutoCompleteInteractionEvent event) {
 
-        if ( event.getName().equals(Main.PLAYLISTS_SEE) || (event.getName().equals(Main.PLAYLIST_LOAD) || event.getName().equals(Main.PLAYLIST_ADD) || event.getName().equals(Main.PLAYLIST_REMOVE))) {
+        if ( event.getName().equals(Main.PLAYLISTS_SEE) || (event.getName().equals(Main.PLAYLIST_LOAD) || event.getName().equals(Main.PLAYLIST_ADD) || (event.getName().equals(Main.PLAYLIST_REMOVE) && event.getFocusedOption().getName().equals(Main.PLAYLIST_ADD_REMOVE_OPTION_NAME)))) {
 
             PlaylistDatabase playlistDB = PlaylistDatabase.getInstance();
             List<Playlist> lstPlaylists = playlistDB.getPlaylistsFromGuild(event.getGuild().getIdLong());
@@ -36,6 +37,27 @@ public class CompletionListener extends ListenerAdapter {
                 if (playlistName.startsWith(event.getFocusedOption().getValue())) {
 
                     lstValuable.add(new Command.Choice(playlistName, playlistName));
+                }
+            }
+
+            event.replyChoices(lstValuable).queue();
+        }
+
+        if ( event.getName().equals(Main.PLAYLIST_REMOVE) && event.getFocusedOption().getName().equals(Main.PLAYLIST_REMOVE_OPTION_TITLE) ) {
+
+            PlaylistDatabase playlistDB = PlaylistDatabase.getInstance();
+            Playlist playlist = playlistDB.getPlaylistWithTracks(event.getGuild().getIdLong(), event.getOption(Main.PLAYLIST_ADD_REMOVE_OPTION_NAME).getAsString());
+            
+            if ( playlist == null ) return;
+
+            List<Command.Choice> lstValuable = new ArrayList<>();
+
+
+            for (Track track : playlist.getTracks()) {
+
+                if (track.title.startsWith(event.getFocusedOption().getValue())) {
+
+                    lstValuable.add(new Command.Choice(track.title, track.title));
                 }
             }
 
