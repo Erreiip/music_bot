@@ -33,6 +33,7 @@ public class ButtonEnum {
         items.add(Button.success(CommandsEnum.QUEUE.buttonId + "", CommandsEnum.QUEUE.buttonlabel));
         items.add(Button.success(CommandsEnum.CLEAR_QUEUE.buttonId + "", CommandsEnum.CLEAR_QUEUE.buttonlabel));
         items.add(Button.success(CommandsEnum.STOP.buttonId + "", CommandsEnum.STOP.buttonlabel));
+        items.add(Button.success(CommandsEnum.FROM_QUEUE.buttonId + "", CommandsEnum.FROM_QUEUE.buttonlabel));
 
         return items;
     }

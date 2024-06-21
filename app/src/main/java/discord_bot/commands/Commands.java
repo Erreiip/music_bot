@@ -1,8 +1,8 @@
-package discord_bot.commands.audio;
+package discord_bot.commands;
 
-import discord_bot.commands.Help;
 import discord_bot.commands.audio.playlists.Add;
 import discord_bot.commands.audio.playlists.Create;
+import discord_bot.commands.audio.playlists.FromQueue;
 import discord_bot.commands.audio.playlists.Load;
 import discord_bot.commands.audio.playlists.Playlists;
 import discord_bot.commands.audio.playlists.Record;
@@ -18,6 +18,9 @@ import discord_bot.commands.audio.track.Queue;
 import discord_bot.commands.audio.track.Shuffle;
 import discord_bot.commands.audio.track.Skip;
 import discord_bot.commands.audio.track.Stop;
+import discord_bot.commands.interfaces.ButtonCommands;
+import discord_bot.commands.interfaces.ModalCommands;
+import discord_bot.commands.other.Help;
 import discord_bot.commands.report.Report;
 import discord_bot.commands.report.SeeReport;
 import discord_bot.model.GuildMusicManager;
@@ -52,6 +55,9 @@ public abstract class Commands implements ButtonCommands, ModalCommands {
     public static final int SHUFFLE = 17;
     public static final int REPORT = 18;
     public static final int SEE_REPORT = 19;
+
+    public static final int FROM_QUEUE = 20;
+
 
 
     protected GuildMusicManager musicManager;
@@ -125,7 +131,8 @@ public abstract class Commands implements ButtonCommands, ModalCommands {
             new Shuffle(musicManager),
             
             new Report(musicManager),
-            new SeeReport(musicManager)
+            new SeeReport(musicManager),
+            new FromQueue(musicManager)
         };
     }
 }

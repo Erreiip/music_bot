@@ -1,4 +1,4 @@
-package discord_bot.commands.audio;
+package discord_bot.commands.interfaces;
 
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 

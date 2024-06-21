@@ -1,18 +1,12 @@
 package discord_bot.jda;
 
+import discord_bot.commands.Commands;
+import discord_bot.enumerate.CommandsEnum;
+import discord_bot.model.GuildMusicManager;
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class ModalListener extends ListenerAdapter {
-
-    public enum Modal {
-        FromQueue("FromQueueModal");
-
-        public final String id;
-        private Modal(String id) {
-            this.id = id;
-        }
-    }
 
     Kawaine kawaine;
 
@@ -25,12 +19,13 @@ public class ModalListener extends ListenerAdapter {
     @Override
     public void onModalInteraction(ModalInteractionEvent event) {
 
-        if (event.getModalId().equals("modmail")) {
-            String subject = event.getValue("subject").getAsString();
-            String body = event.getValue("body").getAsString();
+        GuildMusicManager musicManager = kawaine.getGuildAudioPlayer(event.getGuild());
 
-            event.reply("Thanks for your request!").setEphemeral(true).queue();
-        }
+        event.deferEdit().queue();
+        //TODO
+        Commands command = musicManager.getCommand(CommandsEnum.getModalId(event.getModalId()).commandId);
+
+        command.execute(event);
     }
     
 }

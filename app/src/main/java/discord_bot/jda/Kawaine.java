@@ -11,7 +11,7 @@ import dev.lavalink.youtube.YoutubeAudioSourceManager;
 import dev.lavalink.youtube.clients.Music;
 import dev.lavalink.youtube.clients.Web;
 import dev.lavalink.youtube.clients.skeleton.Client;
-import discord_bot.commands.audio.Commands;
+import discord_bot.commands.Commands;
 import discord_bot.enumerate.CommandsEnum;
 import discord_bot.model.GuildMusicManager;
 import net.dv8tion.jda.api.entities.Guild;
@@ -53,9 +53,7 @@ public class Kawaine extends ListenerAdapter {
 
         GuildMusicManager musicManager = getGuildAudioPlayer(event.getGuild());
 
-        System.out.println(CommandsEnum.getCommandId(event.getName()));
-
-        Commands command = musicManager.getCommand(CommandsEnum.getCommandId(event.getName()));
+        Commands command = musicManager.getCommand(CommandsEnum.getCommandId(event.getName()).commandId);
 
         command.execute(event);
     }

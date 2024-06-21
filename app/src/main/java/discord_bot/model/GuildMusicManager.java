@@ -4,7 +4,7 @@ import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 
-import discord_bot.commands.audio.Commands;
+import discord_bot.commands.Commands;
 import discord_bot.jda.Kawaine;
 import discord_bot.lava_player.AudioLoadResultHandlerImpl;
 import discord_bot.lava_player.AudioPlayerSendHandler;

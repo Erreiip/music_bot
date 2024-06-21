@@ -1,6 +1,6 @@
 package discord_bot.commands.audio.playlists;
 
-import discord_bot.commands.audio.Commands;
+import discord_bot.commands.Commands;
 import discord_bot.model.GuildMusicManager;
 import discord_bot.model.MessageSender;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;

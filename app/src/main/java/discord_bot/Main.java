@@ -63,6 +63,8 @@ public class Main {
     public static final String SEE_CACHE = "see_cache";
     public static final String SEE_REPORT = "see_report";
 
+    public static final String FROM_QUEUE = "from_queue";
+
     public static void main(String[] args) throws LoginException, InterruptedException {
 
         JDA jda = JDABuilder.createDefault(token).build().awaitReady();

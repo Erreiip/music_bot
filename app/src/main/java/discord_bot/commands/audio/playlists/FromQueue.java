@@ -1,7 +1,10 @@
 package discord_bot.commands.audio.playlists;
 
-import discord_bot.commands.audio.Commands;
+import org.checkerframework.checker.units.qual.t;
+
+import discord_bot.commands.Commands;
 import discord_bot.model.GuildMusicManager;
+import discord_bot.model.MessageSender;
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.interactions.components.ActionRow;
@@ -31,13 +34,13 @@ public class FromQueue extends Commands {
             .addComponents(ActionRow.of(subject))
             .build();
 
-        event.replyModal(modal);
+        event.replyModal(modal).queue();
     }
 
     @Override
     public void executeCommands(ModalInteractionEvent event) {
         
-        
+        System.out.println("FromQueue executeCommands(ModalInteractionEvent event)");
     }
     
 }

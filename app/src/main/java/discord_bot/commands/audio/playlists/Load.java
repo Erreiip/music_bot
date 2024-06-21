@@ -5,7 +5,7 @@ import java.util.List;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
 import discord_bot.Main;
-import discord_bot.commands.audio.Commands;
+import discord_bot.commands.Commands;
 import discord_bot.model.GuildMusicManager;
 import discord_bot.model.MessageSender;
 import discord_bot.model.dao.Playlist;

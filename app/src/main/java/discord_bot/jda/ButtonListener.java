@@ -1,6 +1,6 @@
 package discord_bot.jda;
 
-import discord_bot.commands.audio.Commands;
+import discord_bot.commands.Commands;
 import discord_bot.enumerate.CommandsEnum;
 import discord_bot.model.GuildMusicManager;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
@@ -20,11 +20,17 @@ public class ButtonListener extends ListenerAdapter {
         
         GuildMusicManager musicManager = kawaine.getGuildAudioPlayer(event.getGuild());
 
-        event.deferEdit().queue();
 
         Integer id = Integer.valueOf(event.getButton().getId());
 
-        Commands command = musicManager.getCommand(CommandsEnum.getButtonId(id));
+        CommandsEnum commandEnum = CommandsEnum.getButtonId(id);
+
+        Commands command = musicManager.getCommand(commandEnum.commandId);
+
+        if ( commandEnum.isHookable ) {
+
+            event.deferEdit().queue();
+        }
 
         command.execute(event);
     }

@@ -1,6 +1,6 @@
 package discord_bot.commands.audio.track;
 
-import discord_bot.commands.audio.Commands;
+import discord_bot.commands.Commands;
 import discord_bot.listeners.commands_listeners.loop.ILoopListener;
 import discord_bot.model.GuildMusicManager;
 import discord_bot.model.MessageSender;
