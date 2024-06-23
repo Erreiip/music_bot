@@ -2,11 +2,12 @@ package discord_bot.commands.audio.playlists;
 
 import discord_bot.Main;
 import discord_bot.commands.Commands;
+import discord_bot.database.PlaylistDatabase;
 import discord_bot.model.GuildMusicManager;
 import discord_bot.model.MessageSender;
 import discord_bot.model.dao.Playlist;
-import discord_bot.utils.database.PlaylistDatabase;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.callbacks.IDeferrableCallback;
 
 public class See extends Commands {
     
@@ -20,10 +21,16 @@ public class See extends Commands {
         String name = event.getOption(Main.PLAYLISTS_SEE_OPTION_NAME).getAsString();
 
         PlaylistDatabase playlistDB = PlaylistDatabase.getInstance();
+
+        See.seePlaylist(musicManager.getMessageSender(), name, playlistDB, event);
+    }
+
+    public static void seePlaylist(MessageSender messageSender, String name, PlaylistDatabase playlistDB, IDeferrableCallback event) {
+
         Playlist playlist = playlistDB.getPlaylistWithTracks(event.getGuild().getIdLong(), name);
 
         if ( playlist == null ) {
-            MessageSender.errorEvent(musicManager.getMessageSender(), "Playlist not found.", event);
+            MessageSender.errorEvent(messageSender, "Playlist not found.", event);
             return;
         }
         
@@ -31,6 +38,6 @@ public class See extends Commands {
 
         playlist.getTracks().forEach(track -> builder.append(":arrow_forward: ").append(track.title).append("\n"));
 
-        MessageSender.infoEvent(musicManager.getMessageSender(), builder.toString(), event);
+        MessageSender.infoEvent(messageSender, builder.toString(), event);
     }
 }

@@ -1,14 +1,14 @@
-package discord_bot.commands.report;
+package discord_bot.commands.other;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import discord_bot.commands.Commands;
+import discord_bot.database.Database;
 import discord_bot.model.GuildMusicManager;
 import discord_bot.model.MessageSender;
 import discord_bot.model.UtilsEmbed;
 import discord_bot.model.dao.Report;
-import discord_bot.utils.database.Database;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;

@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import discord_bot.Main;
+import discord_bot.database.PlaylistDatabase;
 import discord_bot.model.dao.Playlist;
 import discord_bot.model.dao.Playlist.Track;
-import discord_bot.utils.database.PlaylistDatabase;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.Command;

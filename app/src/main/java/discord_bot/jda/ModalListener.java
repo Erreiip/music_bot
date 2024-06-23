@@ -23,7 +23,7 @@ public class ModalListener extends ListenerAdapter {
 
         event.deferEdit().queue();
         //TODO
-        Commands command = musicManager.getCommand(CommandsEnum.getModalId(event.getModalId()).commandId);
+        Commands command = musicManager.getCommand(CommandsEnum.getCommandId(event.getModalId()).commandId);
 
         command.execute(event);
     }

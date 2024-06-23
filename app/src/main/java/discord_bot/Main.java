@@ -7,6 +7,8 @@ import discord_bot.jda.CompletionListener;
 import discord_bot.jda.JoinListener;
 import discord_bot.jda.Kawaine;
 import discord_bot.jda.LeaveListener;
+import discord_bot.jda.ModalListener;
+import discord_bot.jda.SelectListener;
 import discord_bot.utils.Env;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -81,6 +83,8 @@ public class Main {
         jda.addEventListener(new CompletionListener(kawaine));
         jda.addEventListener(new LeaveListener(kawaine));
         jda.addEventListener(new JoinListener());
+        jda.addEventListener(new ModalListener(kawaine));
+        jda.addEventListener(new SelectListener(kawaine));
     }
 
     public static void setCommandsOnGuild(Guild guild) {

@@ -1,10 +1,10 @@
-package discord_bot.commands.report;
+package discord_bot.commands.other;
 
 import discord_bot.Main;
 import discord_bot.commands.Commands;
+import discord_bot.database.Database;
 import discord_bot.model.GuildMusicManager;
 import discord_bot.model.MessageSender;
-import discord_bot.utils.database.Database;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 

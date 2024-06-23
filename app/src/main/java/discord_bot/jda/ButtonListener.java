@@ -19,11 +19,8 @@ public class ButtonListener extends ListenerAdapter {
     public void onButtonInteraction(ButtonInteractionEvent event) {
         
         GuildMusicManager musicManager = kawaine.getGuildAudioPlayer(event.getGuild());
-
-
-        Integer id = Integer.valueOf(event.getButton().getId());
-
-        CommandsEnum commandEnum = CommandsEnum.getButtonId(id);
+        
+        CommandsEnum commandEnum = CommandsEnum.getCommandId(event.getButton().getId());
 
         Commands command = musicManager.getCommand(commandEnum.commandId);
 

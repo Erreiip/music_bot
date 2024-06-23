@@ -20,16 +20,18 @@ import discord_bot.commands.audio.track.Skip;
 import discord_bot.commands.audio.track.Stop;
 import discord_bot.commands.interfaces.ButtonCommands;
 import discord_bot.commands.interfaces.ModalCommands;
+import discord_bot.commands.interfaces.SelectedCommands;
 import discord_bot.commands.other.Help;
-import discord_bot.commands.report.Report;
-import discord_bot.commands.report.SeeReport;
+import discord_bot.commands.other.Report;
+import discord_bot.commands.other.SeeReport;
 import discord_bot.model.GuildMusicManager;
 import discord_bot.model.MessageSender;
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionEvent;
 
-public abstract class Commands implements ButtonCommands, ModalCommands {
+public abstract class Commands implements ButtonCommands, ModalCommands, SelectedCommands {
 
     public static final int HELP = 16;
 
@@ -98,11 +100,24 @@ public abstract class Commands implements ButtonCommands, ModalCommands {
         MessageSender.errorEvent(musicManager.getMessageSender(), "You must be in the same channel as the bot to use this command", event);
     }
 
+    @Override
+    public final void execute(StringSelectInteractionEvent event) {
+        
+        if ( musicManager.isInSameChannel(event.getMember())) {
+            this.executeCommands(event);
+            return;
+        }
+
+        MessageSender.errorEvent(musicManager.getMessageSender(), "You must be in the same channel as the bot to use this command", event);
+    }
+
     public void executeCommands(SlashCommandInteractionEvent event) {}
 
     public void executeCommands(ButtonInteractionEvent event) {}
 
     public void executeCommands(ModalInteractionEvent event) {}
+
+    public void executeCommands(StringSelectInteractionEvent event) {}
 
 
     public static Commands[] getCommands(GuildMusicManager musicManager) {

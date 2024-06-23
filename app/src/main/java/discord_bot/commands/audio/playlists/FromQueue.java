@@ -1,8 +1,14 @@
 package discord_bot.commands.audio.playlists;
 
+import java.util.List;
+
 import org.checkerframework.checker.units.qual.t;
 
+import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+
 import discord_bot.commands.Commands;
+import discord_bot.database.PlaylistDatabase;
+import discord_bot.enumerate.PlaylistRights;
 import discord_bot.model.GuildMusicManager;
 import discord_bot.model.MessageSender;
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
@@ -40,7 +46,18 @@ public class FromQueue extends Commands {
     @Override
     public void executeCommands(ModalInteractionEvent event) {
         
-        System.out.println("FromQueue executeCommands(ModalInteractionEvent event)");
+        String name = event.getInteraction().getValues().get(0).getAsString();
+
+        PlaylistDatabase playlistDB = PlaylistDatabase.getInstance();
+
+        List<AudioTrack> queue = musicManager.getScheduler().getQueue();
+
+        if ( playlistDB.createAndAddTrackToPlaylist(event.getGuild().getIdLong(), name, queue, event.getUser().getIdLong(), PlaylistRights.PUBLIC)) {
+            MessageSender.infoEvent(musicManager.getMessageSender(), "Playlist créée avec succès", event);
+            return;
+        }
+
+        MessageSender.errorEvent(musicManager.getMessageSender(), "Une erreur est survenue lors de la création de la playlist", event);
     }
     
 }

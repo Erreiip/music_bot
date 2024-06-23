@@ -6,11 +6,11 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
 import discord_bot.Main;
 import discord_bot.commands.Commands;
+import discord_bot.database.PlaylistDatabase;
 import discord_bot.model.GuildMusicManager;
 import discord_bot.model.MessageSender;
 import discord_bot.model.dao.Playlist;
 import discord_bot.utils.IProcessAudio;
-import discord_bot.utils.database.PlaylistDatabase;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 public class Load extends Commands implements IProcessAudio {

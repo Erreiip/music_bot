@@ -10,6 +10,7 @@ import discord_bot.enumerate.ButtonEnum;
 import discord_bot.utils.message_event.MessageEvent;
 import discord_bot.utils.message_event.MessageP;
 import discord_bot.utils.message_event.WebHookMessageP;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.channel.unions.MessageChannelUnion;
 import net.dv8tion.jda.api.interactions.callbacks.IDeferrableCallback;
@@ -240,6 +241,26 @@ public class MessageSender {
         ButtonEnum.setButtonHelp(messageEvent);
 
         sender.sendHelpEvent(messageEvent);
+    }
+
+    public static void playlistEvent(MessageSender sender, String message, IDeferrableCallback event, Guild guild) {
+
+        MessageEvent messageEvent;
+
+        if (event != null) {
+            messageEvent = new WebHookMessageP( event.getHook().sendMessageEmbeds(
+                MusicEmbded.createEmbdedResponse(message)  
+            ));
+        } else {
+            messageEvent = new MessageP( sender.lastMessageChannel.sendMessageEmbeds(
+                MusicEmbded.createEmbdedResponse(message)
+            ));
+        }
+
+        //ButtonEnum.setButtonPlaylist(messageEvent, guild);
+        ButtonEnum.setButtonOnPlaylist(messageEvent);
+
+        sender.sendInfoEvent(messageEvent);
     }
     
     /*
