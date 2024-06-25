@@ -16,7 +16,11 @@ import discord_bot.utils.IProcessAudio;
 import discord_bot.utils.SongIdentifier;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel;
+import net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.callbacks.IDeferrableCallback;
+import net.dv8tion.jda.api.interactions.callbacks.IReplyCallback;
+import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
 import net.dv8tion.jda.api.managers.AudioManager;
 
 public class GuildMusicManager implements ITimeoputListener, INoTrackListener {
@@ -53,7 +57,7 @@ public class GuildMusicManager implements ITimeoputListener, INoTrackListener {
         secondPlayer.addListener(scheduler);
     }
 
-    public AudioManager joinChannel(SlashCommandInteractionEvent event) {
+    public AudioManager joinChannel(IReplyCallback event) {
 
         AudioChannel memberChannel = event.getMember().getVoiceState().getChannel();
 
@@ -71,13 +75,13 @@ public class GuildMusicManager implements ITimeoputListener, INoTrackListener {
         return audioManager;
     }
 
-    public void addSong(SlashCommandInteractionEvent event, String songIdentifier, Float speed, IProcessAudio callback) {
+    public void addSong(IReplyCallback event, String songIdentifier, Float speed, IProcessAudio callback) {
 
         this.joinChannel(event);
         this.addSongWithoutJoin(event, songIdentifier, speed, callback);
     }
 
-    public void addSongWithoutJoin(SlashCommandInteractionEvent event, String songIdentifier, Float speed, IProcessAudio callback) {
+    public void addSongWithoutJoin(IReplyCallback event, String songIdentifier, Float speed, IProcessAudio callback) {
 
         AudioLoadResultHandler handler = new AudioLoadResultHandlerImpl(
             songIdentifier,

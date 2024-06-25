@@ -34,7 +34,9 @@ public class Record extends Commands {
     @Override
     public void executeCommands(ButtonInteractionEvent event) {
 
-        event.replyModal(MusicModal.createModalPlaylistRecord()).queue();
+        //event.replyModal(MusicModal.createModalPlaylistRecord()).queue();
+
+        System.out.println(event.getButton().getUrl());
     }
     
 }

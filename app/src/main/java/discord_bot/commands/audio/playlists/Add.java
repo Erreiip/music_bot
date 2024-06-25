@@ -1,10 +1,7 @@
 package discord_bot.commands.audio.playlists;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
@@ -16,6 +13,7 @@ import discord_bot.model.MessageSender;
 import discord_bot.utils.IProcessAudio;
 import discord_bot.utils.SongIdentifier;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.callbacks.IReplyCallback;
 
 public class Add extends Commands implements IProcessAudio {
 
@@ -46,7 +44,7 @@ public class Add extends Commands implements IProcessAudio {
     }
 
     @Override
-    public void onTrackGet(SlashCommandInteractionEvent event, AudioTrack track, Float speed) {
+    public void onTrackGet(IReplyCallback event, AudioTrack track, Float speed) {
 
         PlaylistDatabase playlistDB = PlaylistDatabase.getInstance();
         playlistDB.addTrackToPlaylist(event.getGuild().getIdLong(), name, track.getInfo().title, track.getInfo().uri);
@@ -57,7 +55,7 @@ public class Add extends Commands implements IProcessAudio {
     }
 
     @Override
-    public void onTrackGet(SlashCommandInteractionEvent event, List<AudioTrack> track) {
+    public void onTrackGet(IReplyCallback event, List<AudioTrack> track) {
         
         PlaylistDatabase playlistDB = PlaylistDatabase.getInstance();
         for ( AudioTrack audioTrack : track ) {

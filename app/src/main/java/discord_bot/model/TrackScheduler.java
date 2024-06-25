@@ -20,8 +20,8 @@ import discord_bot.listeners.commands_listeners.skip.ISkipListener;
 import discord_bot.listeners.no_track.INoTrackListenable;
 import discord_bot.listeners.no_track.INoTrackListener;
 import discord_bot.utils.Couple;
-import net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent;
 import net.dv8tion.jda.api.interactions.callbacks.IDeferrableCallback;
+import net.dv8tion.jda.api.interactions.callbacks.IReplyCallback;
 
 public class TrackScheduler extends AudioEventAdapter
         implements ISkipListenable, IPlayListenable, ILoopListenable, INoTrackListenable {
@@ -31,7 +31,7 @@ public class TrackScheduler extends AudioEventAdapter
     private final List<Couple<AudioTrack, Float>> queue;
     private boolean loop;
 
-    private GenericInteractionCreateEvent event;
+    private IReplyCallback event;
 
     private AudioTrack currentTrack;
     private Float currentTrackSpeed;
@@ -64,7 +64,7 @@ public class TrackScheduler extends AudioEventAdapter
         return true;
     }
 
-    public void queueWithoutFire(AudioTrack track, Float speed, GenericInteractionCreateEvent event) {
+    public void queueWithoutFire(AudioTrack track, Float speed, IReplyCallback event) {
 
         this.event = event;
 
@@ -74,14 +74,14 @@ public class TrackScheduler extends AudioEventAdapter
     public void queue(AudioTrack track, Float speed) {
 
         if (!this.queueWithoutFire(track, speed)) {
-            this.onPlayQueue((IDeferrableCallback) event);
+            this.onPlayQueue(event);
             return;
         }
 
-        this.onPlay((IDeferrableCallback) event);
+        this.onPlay(event);
     }
 
-    public void queue(AudioTrack track, Float speed, GenericInteractionCreateEvent event) {
+    public void queue(AudioTrack track, Float speed, IReplyCallback event) {
 
         this.event = event;
 
@@ -111,12 +111,12 @@ public class TrackScheduler extends AudioEventAdapter
         changePlayerSpeed(currentTrackSpeed);
         player.startTrack(currentTrack, false);
 
-        this.onSkip((IDeferrableCallback) event);
+        this.onSkip(event);
 
         return true;
     }
 
-    public void nextTrack(GenericInteractionCreateEvent event) {
+    public void nextTrack(IReplyCallback event) {
 
         this.event = event;
 
@@ -184,13 +184,13 @@ public class TrackScheduler extends AudioEventAdapter
             return;
         
         this.loop = state;
-        this.onLoop((IDeferrableCallback) event);
+        this.onLoop(event);
     }
         
     public void shuffle() {
         
         Collections.shuffle(this.queue);
-        this.onPlayQueue((IDeferrableCallback) event);
+        this.onPlayQueue(event);
     }
         
     public void reset() {

@@ -4,13 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import discord_bot.database.PlaylistDatabase;
+import discord_bot.jda.SelectListener;
 import discord_bot.model.dao.Playlist;
+import discord_bot.utils.ButtonCustom;
 import discord_bot.utils.message_event.MessageEvent;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.interactions.components.ItemComponent;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
+import net.dv8tion.jda.api.interactions.components.buttons.ButtonStyle;
 import net.dv8tion.jda.api.interactions.components.selections.SelectOption;
 import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu;
 
@@ -78,9 +81,9 @@ public class ButtonEnum {
 
         List<ItemComponent> items = new ArrayList<>();
 
-        items.add(Button.success(CommandsEnum.RECORD.label + "", CommandsEnum.RECORD.buttonlabel));
+        items.add(Button.success(CommandsEnum.RECORD.label, CommandsEnum.RECORD.buttonlabel));
         
-        StringSelectMenu.Builder selectMenu = StringSelectMenu.create(CommandsEnum.PLAYLISTS.label)
+        StringSelectMenu.Builder selectMenu = StringSelectMenu.create(SelectListener.PREFIX + CommandsEnum.PLAYLISTS.label)
             .setPlaceholder("Select a playlist");
 
         PlaylistDatabase playlistDB = PlaylistDatabase.getInstance();
@@ -94,7 +97,7 @@ public class ButtonEnum {
                 .withDescription(user.getNickname())
             );
         }
-
+        
         items.add(selectMenu.build());
 
         return items;
@@ -110,20 +113,22 @@ public class ButtonEnum {
         setButton(messageEvent, items);
     }
 
-    public static List<ItemComponent> getOnPlaylistButton() {
+    public static List<ItemComponent> getOnPlaylistButton(String playlistName) {
 
         List<ItemComponent> items = new ArrayList<>();
 
-        items.add(Button.success(CommandsEnum.LOAD.label, Emoji.fromUnicode(CommandsEnum.LOAD.buttonlabel)));
+        ButtonCustom button = new ButtonCustom(ButtonStyle.SUCCESS, CommandsEnum.LOAD.label, playlistName, CommandsEnum.LOAD.buttonlabel);
+
+        items.add(button.get());
 
         return items;
     }
 
-    public static void setButtonOnPlaylist(MessageEvent messageEvent) {
+    public static void setButtonOnPlaylist(MessageEvent messageEvent, String name) {
 
         List<List<ItemComponent>> items = new ArrayList<>();
 
-        items.add(getOnPlaylistButton());
+        items.add(getOnPlaylistButton(name));
         items.add(getHelpButton());
 
         setButton(messageEvent, items);

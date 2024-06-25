@@ -243,6 +243,9 @@ public class MessageSender {
         sender.sendHelpEvent(messageEvent);
     }
 
+    /*
+     * Playlist To delete in the future ca  use it's info event
+     * */
     public static void playlistEvent(MessageSender sender, String message, IDeferrableCallback event, Guild guild) {
 
         MessageEvent messageEvent;
@@ -257,8 +260,26 @@ public class MessageSender {
             ));
         }
 
-        //ButtonEnum.setButtonPlaylist(messageEvent, guild);
-        ButtonEnum.setButtonOnPlaylist(messageEvent);
+        ButtonEnum.setButtonPlaylist(messageEvent, guild);
+
+        sender.sendInfoEvent(messageEvent);
+    }
+
+    public static void onPlaylistEvent(MessageSender sender, String message, IDeferrableCallback event, String playlistName) {
+
+        MessageEvent messageEvent;
+
+        if (event != null) {
+            messageEvent = new WebHookMessageP( event.getHook().sendMessageEmbeds(
+                MusicEmbded.createEmbdedResponse(message)  
+            ));
+        } else {
+            messageEvent = new MessageP( sender.lastMessageChannel.sendMessageEmbeds(
+                MusicEmbded.createEmbdedResponse(message)
+            ));
+        }
+
+        ButtonEnum.setButtonOnPlaylist(messageEvent, playlistName);
 
         sender.sendInfoEvent(messageEvent);
     }

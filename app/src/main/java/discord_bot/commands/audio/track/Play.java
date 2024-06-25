@@ -11,8 +11,10 @@ import discord_bot.model.GuildMusicManager;
 import discord_bot.model.MessageSender;
 import discord_bot.utils.IProcessAudio;
 import discord_bot.utils.SongIdentifier;
+import net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.callbacks.IDeferrableCallback;
+import net.dv8tion.jda.api.interactions.callbacks.IReplyCallback;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 
 public class Play extends Commands implements IProcessAudio, IPlayListener {
@@ -39,7 +41,7 @@ public class Play extends Commands implements IProcessAudio, IPlayListener {
      * of the application
      * */
     @Override
-    public void onTrackGet(SlashCommandInteractionEvent event, AudioTrack track,
+    public void onTrackGet(IReplyCallback event, AudioTrack track,
             Float speed) {
                 
         musicManager.getScheduler().queue(track, speed != null ? speed : 1, event);
@@ -60,7 +62,7 @@ public class Play extends Commands implements IProcessAudio, IPlayListener {
     }
 
     @Override
-    public void onTrackGet(SlashCommandInteractionEvent event, List<AudioTrack> track) {
+    public void onTrackGet(IReplyCallback event, List<AudioTrack> track) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'onTrackGet'");
     }

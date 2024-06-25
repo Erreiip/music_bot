@@ -38,6 +38,6 @@ public class See extends Commands {
 
         playlist.getTracks().forEach(track -> builder.append(":arrow_forward: ").append(track.title).append("\n"));
 
-        MessageSender.infoEvent(messageSender, builder.toString(), event);
+        MessageSender.onPlaylistEvent(messageSender, builder.toString(), event, name);
     }
 }

@@ -8,6 +8,8 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class SelectListener extends ListenerAdapter {
 
+    public static final String PREFIX = "SELECT"; // faire un get pour chaque type dans buttonEnum
+
     Kawaine kawaine;
 
     public SelectListener(Kawaine kawaine) {
@@ -23,9 +25,11 @@ public class SelectListener extends ListenerAdapter {
 
         event.deferReply().queue();
 
-        Commands command = musicManager.getCommand(CommandsEnum.getCommandId(event.getSelectMenu().getId()).commandId);
+        String id = event.getSelectMenu().getId();
+        id = id.substring(PREFIX.length());
+
+        Commands command = musicManager.getCommand(CommandsEnum.getCommandId(id).commandId);
 
         command.execute(event);
     }
-    
 }

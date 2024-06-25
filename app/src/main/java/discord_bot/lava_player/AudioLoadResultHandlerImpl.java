@@ -7,20 +7,22 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
 import discord_bot.model.MessageSender;
 import discord_bot.utils.IProcessAudio;
-import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent;
+import net.dv8tion.jda.api.interactions.callbacks.IDeferrableCallback;
+import net.dv8tion.jda.api.interactions.callbacks.IReplyCallback;
 
 public class AudioLoadResultHandlerImpl implements AudioLoadResultHandler {
 
     private final String songIdentifier;
     private final IProcessAudio callback;
-    private final SlashCommandInteractionEvent event;
+    private final IReplyCallback event;
     private final Float speed;
     private final MessageSender messageSender;
 
     //TODO change this
     private final boolean isPlaylist;
 
-    public AudioLoadResultHandlerImpl(String songIdentifier, IProcessAudio callback, SlashCommandInteractionEvent event, Float speed, MessageSender messageSender, boolean isPlaylist) {
+    public AudioLoadResultHandlerImpl(String songIdentifier, IProcessAudio callback, IReplyCallback event, Float speed, MessageSender messageSender, boolean isPlaylist) {
 
         this.songIdentifier = songIdentifier;
         this.callback = callback;
