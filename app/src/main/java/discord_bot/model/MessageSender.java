@@ -139,7 +139,7 @@ public class MessageSender {
     /*
      * Static methods
      * */
-    public static void playEvent(MessageSender sender, AudioTrackInfo info, boolean looped, IDeferrableCallback event) {
+    public static void playEvent(MessageSender sender, AudioTrackInfo info, boolean looped, List<AudioTrack> recommandations, IDeferrableCallback event) {
 
         MessageEvent messageEvent;
 
@@ -153,7 +153,8 @@ public class MessageSender {
             ));
         }
         
-        ButtonEnum.setButtonPlay(messageEvent);
+        if ( recommandations != null) ButtonEnum.setButtonPlay(messageEvent, recommandations); 
+        else ButtonEnum.setButtonPlay(messageEvent);
 
         sender.sendPlayEvent(messageEvent);
     }

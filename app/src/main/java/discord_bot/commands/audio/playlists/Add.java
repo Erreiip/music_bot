@@ -43,6 +43,10 @@ public class Add extends Commands implements IProcessAudio {
         musicManager.addSongWithoutJoin(event, song, null, this);
     }
 
+
+    /*
+     * IProcessAudio
+     * */
     @Override
     public void onTrackGet(IReplyCallback event, AudioTrack track, Float speed) {
 
@@ -65,5 +69,11 @@ public class Add extends Commands implements IProcessAudio {
         MessageSender.infoEvent(musicManager.getMessageSender(), "Sons ajouté à " + name, event);
 
         semaphore.release();
+    }
+
+    @Override
+    public void onTrackGet(IReplyCallback event, AudioTrack track, List<AudioTrack> recommendations, Float speed) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'onTrackGet'");
     }
 }

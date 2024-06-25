@@ -3,6 +3,10 @@ package discord_bot.enumerate;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.checkerframework.checker.units.qual.t;
+
+import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+
 import discord_bot.database.PlaylistDatabase;
 import discord_bot.jda.SelectListener;
 import discord_bot.model.dao.Playlist;
@@ -14,6 +18,7 @@ import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.interactions.components.ItemComponent;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.interactions.components.buttons.ButtonStyle;
+import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
 import net.dv8tion.jda.api.interactions.components.selections.SelectOption;
 import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu;
 
@@ -48,11 +53,47 @@ public class ButtonEnum {
         return items;
     }
 
+    public static List<ItemComponent> getPlayButton(List<AudioTrack> recommandations) {
+
+        List<ItemComponent> items = getPlayButton();
+
+        StringSelectMenu.Builder selectMenu = StringSelectMenu.create(SelectListener.PREFIX + CommandsEnum.PLAY.label)
+            .setPlaceholder("Add to queue");
+        
+        List<String> tracks = new ArrayList<>();
+        for ( AudioTrack track : recommandations ) {
+
+            if ( tracks.contains(track.getInfo().title)) { continue; }
+
+            selectMenu.addOptions(SelectOption.of(track.getInfo().title, track.getInfo().title)
+                .withEmoji(Emoji.fromUnicode("U+1F3B5"))
+                .withDescription(track.getInfo().author)
+            );
+            tracks.add(track.getInfo().title);
+
+            if ( selectMenu.getOptions().size() >= SelectMenu.OPTIONS_MAX_AMOUNT) { break; }
+        }
+
+        items.add(selectMenu.build());
+
+        return items;
+    }
+
     public static void setButtonPlay(MessageEvent messageEvent) {
 
         List<List<ItemComponent>> items = new ArrayList<>();
 
         items.add(getPlayButton());
+        items.add(getHelpButton());
+
+        setButton(messageEvent, items);
+    }
+
+    public static void setButtonPlay(MessageEvent messageEvent, List<AudioTrack> recommandations) {
+
+        List<List<ItemComponent>> items = new ArrayList<>();
+
+        items.add(getPlayButton(recommandations));
         items.add(getHelpButton());
 
         setButton(messageEvent, items);

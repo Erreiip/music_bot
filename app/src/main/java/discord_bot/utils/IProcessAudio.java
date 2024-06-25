@@ -10,5 +10,7 @@ public interface IProcessAudio {
 
     public void onTrackGet(IReplyCallback event, AudioTrack track, Float speed);
 
+    public void onTrackGet(IReplyCallback event, AudioTrack track, List<AudioTrack> recommendations, Float speed);
+
     public void onTrackGet(IReplyCallback event, List<AudioTrack> track);
 }

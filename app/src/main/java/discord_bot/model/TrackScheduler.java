@@ -28,13 +28,16 @@ public class TrackScheduler extends AudioEventAdapter
 
     private final AudioPlayer player;
     private final AudioPlayer secondPlayer;
-    private final List<Couple<AudioTrack, Float>> queue;
-    private boolean loop;
 
-    private IReplyCallback event;
+    private final List<Couple<AudioTrack, Float>> queue;
+    private final List<List<AudioTrack>> recommandations;
+    private boolean loop;
 
     private AudioTrack currentTrack;
     private Float currentTrackSpeed;
+    private List<AudioTrack> currentRecommandations;
+
+    private IReplyCallback event;
 
     public TrackScheduler(AudioPlayer player, AudioPlayer secondPlayer) {
 
@@ -45,47 +48,7 @@ public class TrackScheduler extends AudioEventAdapter
         this.event = null;
 
         this.queue = new ArrayList<>();
-    }
-
-    public boolean queueWithoutFire(AudioTrack track, float speed) {
-
-        boolean canStart = player.startTrack(track, true);
-
-        if (!canStart) {
-            queue.add(new Couple<AudioTrack, Float>(track, speed));
-            return false;
-        }
-
-        changePlayerSpeed(speed);
-
-        this.currentTrack = track;
-        this.currentTrackSpeed = speed;
-
-        return true;
-    }
-
-    public void queueWithoutFire(AudioTrack track, Float speed, IReplyCallback event) {
-
-        this.event = event;
-
-        this.queueWithoutFire(track, speed);
-    }
-
-    public void queue(AudioTrack track, Float speed) {
-
-        if (!this.queueWithoutFire(track, speed)) {
-            this.onPlayQueue(event);
-            return;
-        }
-
-        this.onPlay(event);
-    }
-
-    public void queue(AudioTrack track, Float speed, IReplyCallback event) {
-
-        this.event = event;
-
-        this.queue(track, speed);
+        this.recommandations = new ArrayList<>();
     }
 
     public boolean nextTrack() {
@@ -106,6 +69,7 @@ public class TrackScheduler extends AudioEventAdapter
 
             this.currentTrack = queue.first.makeClone();
             this.currentTrackSpeed = queue.second;
+            this.currentRecommandations = this.recommandations.remove(0);
         }
 
         changePlayerSpeed(currentTrackSpeed);
@@ -125,16 +89,12 @@ public class TrackScheduler extends AudioEventAdapter
 
     public boolean addLastTrack() {
 
-        if (this.player.getPlayingTrack() == null)
-            return false;
+        if (this.player.getPlayingTrack() == null) return false;
 
         this.queue(currentTrack, currentTrackSpeed);
+        this.recommandations.add(currentRecommandations);
 
         return true;
-    }
-
-    public AudioTrack getCurrentTrack() {
-        return this.currentTrack;
     }
 
     public List<AudioTrack> getQueue() {
@@ -167,7 +127,9 @@ public class TrackScheduler extends AudioEventAdapter
     public void clearQueue() {
         
         this.setLoop(false);
+        
         this.queue.clear();
+        this.recommandations.clear();
     }
         
     public boolean isLooped() {
@@ -180,15 +142,15 @@ public class TrackScheduler extends AudioEventAdapter
         
     public void setLoop(boolean state) {
         
-        if (loop == state)
-            return;
+        if (loop == state) return;
         
         this.loop = state;
         this.onLoop(event);
     }
         
     public void shuffle() {
-        
+
+        // TODO : shuffle queue and recommandations in the same order with seed
         Collections.shuffle(this.queue);
         this.onPlayQueue(event);
     }
@@ -196,10 +158,12 @@ public class TrackScheduler extends AudioEventAdapter
     public void reset() {
         
         this.clearQueue();
+
         this.loop = false;
         this.currentTrack = null;
         this.currentTrackSpeed = null;
         this.event = null;
+
         this.player.stopTrack();
     }
         
@@ -216,6 +180,116 @@ public class TrackScheduler extends AudioEventAdapter
     public void onTrackException(AudioPlayer player, AudioTrack track, FriendlyException exception) {
         System.out.println("onTrackException");
         exception.printStackTrace();
+    }
+
+
+    /*
+     * QueueWithoutFire
+     * */
+    public boolean queueWithoutFire(AudioTrack track, float speed) {
+
+        boolean canStart = player.startTrack(track, true);
+
+        if (!canStart) {
+            queue.add(new Couple<AudioTrack, Float>(track, speed));
+            this.recommandations.add(null);
+            return false;
+        }
+
+        changePlayerSpeed(speed);
+
+        this.currentTrack = track;
+        this.currentTrackSpeed = speed;
+        this.currentRecommandations = null;
+
+        return true;
+    }
+
+    public boolean queueWithoutFire(AudioTrack track, float speed, List<AudioTrack> recommandations) {
+
+        boolean canStart = player.startTrack(track, true);
+
+        if (!canStart) {
+            queue.add(new Couple<AudioTrack, Float>(track, speed));
+            this.recommandations.add(recommandations);
+            return false;
+        }
+
+        changePlayerSpeed(speed);
+
+        this.currentTrack = track;
+        this.currentTrackSpeed = speed;
+        this.currentRecommandations = recommandations;
+
+        return true;
+    }
+
+    public void queueWithoutFire(AudioTrack track, Float speed, List<AudioTrack> recommandations, IReplyCallback event) {
+
+        this.event = event;
+
+        this.queueWithoutFire(track, speed, recommandations);
+    }
+
+    public void queueWithoutFire(AudioTrack track, Float speed, IReplyCallback event) {
+
+        this.event = event;
+
+        this.queueWithoutFire(track, speed);
+    }
+
+
+    /*
+     * Queue
+     * */
+    public void queue(AudioTrack track, Float speed) {
+
+        if (!this.queueWithoutFire(track, speed)) {
+            this.onPlayQueue(event);
+            return;
+        }
+
+        this.onPlay(event);
+    }
+
+    public void queue(AudioTrack track, Float speed, List<AudioTrack> recommandations) {
+
+        if (!this.queueWithoutFire(track, speed, recommandations)) {
+            this.onPlayQueue(event);
+            return;
+        }
+
+        this.onPlay(event);
+    }
+
+    public void queue(AudioTrack track, Float speed, IReplyCallback event) {
+
+        this.event = event;
+
+        this.queue(track, speed);
+    }
+
+    public void queue(AudioTrack track, Float speed, List<AudioTrack> recommandations, IReplyCallback event) {
+
+        this.event = event;
+
+        this.queue(track, speed, recommandations);
+    }
+
+
+    /*
+     * Getters
+     * */
+    public AudioTrack getCurrentTrack() {
+        return this.currentTrack;
+    }
+
+    public Float getCurrentTrackSpeed() {
+        return this.currentTrackSpeed;
+    }
+
+    public List<AudioTrack> getCurrentRecommandations() {
+        return this.currentRecommandations;
     }
     
     

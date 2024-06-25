@@ -48,7 +48,7 @@ public class AudioLoadResultHandlerImpl implements AudioLoadResultHandler {
         }
 
         if ( !this.isPlaylist ) {
-            callback.onTrackGet(event, firstTrack, this.speed);
+            callback.onTrackGet(event, firstTrack, playlist.getTracks(), this.speed);
             return;
         }
 

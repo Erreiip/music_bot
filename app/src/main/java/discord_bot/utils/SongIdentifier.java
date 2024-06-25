@@ -32,7 +32,7 @@ public class SongIdentifier {
             songIdentifier = querySpotify(songIdentifier);
         }
 
-        return "ytsearch: " + songIdentifier;
+        return "ytmsearch: " + songIdentifier;
     }
 
     public static List<String> getPlaylist(String songIdentifier) {

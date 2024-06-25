@@ -11,8 +11,8 @@ import discord_bot.model.GuildMusicManager;
 import discord_bot.model.MessageSender;
 import discord_bot.utils.IProcessAudio;
 import discord_bot.utils.SongIdentifier;
-import net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionEvent;
 import net.dv8tion.jda.api.interactions.callbacks.IDeferrableCallback;
 import net.dv8tion.jda.api.interactions.callbacks.IReplyCallback;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
@@ -35,14 +35,42 @@ public class Play extends Commands implements IProcessAudio, IPlayListener {
         musicManager.addSong(event, SongIdentifier.getSongIdentifier(songIdentifier), speed, this);
     }
 
+    @Override
+    public void executeCommands(StringSelectInteractionEvent event) {
+
+        String name = event.getValues().get(0);
+
+        musicManager.addSong(event, SongIdentifier.getSongIdentifier(name), null, this);
+    }
+
 
     /*
      * Callback
      * of the application
      * */
     @Override
-    public void onTrackGet(IReplyCallback event, AudioTrack track,
-            Float speed) {
+    public void onPlay(IDeferrableCallback event) {
+
+        MessageSender.playEvent(
+            musicManager.getMessageSender(),
+            musicManager.getScheduler().getCurrentTrack().getInfo(),
+            musicManager.getScheduler().isLooped(),
+            musicManager.getScheduler().getCurrentRecommandations(),
+            event
+        );
+    }
+
+    @Override
+    public void onPlayQueue(IDeferrableCallback event) {
+
+        MessageSender.queueEvent(musicManager.getMessageSender(), musicManager.getScheduler().getQueue(), event);
+    }
+
+    /*
+     * IProcessAudio
+     * */
+    @Override
+    public void onTrackGet(IReplyCallback event, AudioTrack track, Float speed) {
                 
         musicManager.getScheduler().queue(track, speed != null ? speed : 1, event);
         
@@ -50,15 +78,9 @@ public class Play extends Commands implements IProcessAudio, IPlayListener {
     }
 
     @Override
-    public void onPlay(IDeferrableCallback event) {
-
-        MessageSender.playEvent(musicManager.getMessageSender(), musicManager.getScheduler().getCurrentTrack().getInfo(), musicManager.getScheduler().isLooped(), event);
-    }
-
-    @Override
-    public void onPlayQueue(IDeferrableCallback event) {
-
-        MessageSender.queueEvent(musicManager.getMessageSender(), musicManager.getScheduler().getQueue(), event);
+    public void onTrackGet(IReplyCallback event, AudioTrack track, List<AudioTrack> recommandations, Float speed) {
+                
+        musicManager.getScheduler().queue(track, speed != null ? speed : 1, recommandations, event);
     }
 
     @Override

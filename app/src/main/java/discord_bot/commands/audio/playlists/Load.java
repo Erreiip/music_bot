@@ -14,9 +14,7 @@ import discord_bot.utils.ButtonCustom;
 import discord_bot.utils.IProcessAudio;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
-import net.dv8tion.jda.api.interactions.callbacks.IDeferrableCallback;
 import net.dv8tion.jda.api.interactions.callbacks.IReplyCallback;
-import net.dv8tion.jda.api.interactions.components.buttons.ButtonInteraction;
 
 public class Load extends Commands implements IProcessAudio {
 
@@ -57,11 +55,20 @@ public class Load extends Commands implements IProcessAudio {
         MessageSender.infoEvent(musicManager.getMessageSender(), "Playlist loaded.", event);
     }
 
+
+    /*
+     * IProcessAudio
+     * */
     @Override
-    public void onTrackGet(IReplyCallback event, AudioTrack track,
-            Float speed) {
+    public void onTrackGet(IReplyCallback event, AudioTrack track, Float speed) {
 
         musicManager.getScheduler().queue(track, speed != null ? speed : 1, event);
+    }
+
+    @Override
+    public void onTrackGet(IReplyCallback event, AudioTrack track, List<AudioTrack> recommendations, Float speed) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'onTrackGet'");
     }
 
     @Override
@@ -69,4 +76,5 @@ public class Load extends Commands implements IProcessAudio {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'onTrackGet'");
     }
+
 }
