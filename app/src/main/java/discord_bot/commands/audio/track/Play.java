@@ -84,8 +84,10 @@ public class Play extends Commands implements IProcessAudio, IPlayListener {
     }
 
     @Override
-    public void onTrackGet(IReplyCallback event, List<AudioTrack> track) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'onTrackGet'");
+    public void onTrackGet(IReplyCallback event, List<AudioTrack> tracks) {
+        
+        for ( AudioTrack track : tracks) {
+            musicManager.getScheduler().queue(track, 1f, event);
+        }
     }
 }

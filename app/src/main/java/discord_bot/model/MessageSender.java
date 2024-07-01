@@ -55,7 +55,11 @@ public class MessageSender {
         if (message == null)
             return;
 
-        try { message.delete().complete(); } catch (Exception e) { e.printStackTrace(); }
+        
+        try { message.delete().complete(); } 
+        catch (Exception e) { 
+            System.out.println(e.getMessage()); 
+        }
     }
 
     private void removeAllEvents() {
@@ -71,6 +75,8 @@ public class MessageSender {
         lInfoEvent = null;
         lErrorEvent = null;
         lHelpEvent = null;
+
+        this.idAlreadyResponded.clear();
     }
     
     public void disconnect() {
@@ -82,6 +88,7 @@ public class MessageSender {
 
         this.lastMessageChannel = null;
         this.lastSentMessageType = null;
+
         this.idAlreadyResponded.clear();
     }
 
@@ -142,8 +149,9 @@ public class MessageSender {
     public static void playEvent(MessageSender sender, AudioTrackInfo info, boolean looped, List<AudioTrack> recommandations, IDeferrableCallback event) {
 
         MessageEvent messageEvent;
-
-        if (event != null) {
+        
+        
+        if (event != null && event.getHook() != null && event.getHook().isExpired() == false ) {
             messageEvent = new WebHookMessageP( event.getHook().sendMessageEmbeds(
                 MusicEmbded.createEmbded(info, looped)  
             ));
@@ -155,7 +163,7 @@ public class MessageSender {
         
         if ( recommandations != null) ButtonEnum.setButtonPlay(messageEvent, recommandations); 
         else ButtonEnum.setButtonPlay(messageEvent);
-
+        
         sender.sendPlayEvent(messageEvent);
     }
 
